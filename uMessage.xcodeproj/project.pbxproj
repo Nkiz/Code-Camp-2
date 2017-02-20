@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58BF81F5E95C9EC600386E7F /* libPods-uMessage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5496BC4B6AF7E2FB4CB2B59 /* libPods-uMessage.a */; };
 		96FBAF281E5AE7C5007361C4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF271E5AE7C5007361C4 /* main.m */; };
 		96FBAF2B1E5AE7C5007361C4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF2A1E5AE7C5007361C4 /* AppDelegate.m */; };
 		96FBAF2E1E5AE7C5007361C4 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF2D1E5AE7C5007361C4 /* RootViewController.m */; };
@@ -17,6 +18,11 @@
 		96FBAF3C1E5AE7C5007361C4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96FBAF3A1E5AE7C5007361C4 /* LaunchScreen.storyboard */; };
 		96FBAF471E5AE7C5007361C4 /* uMessageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF461E5AE7C5007361C4 /* uMessageTests.m */; };
 		96FBAF521E5AE7C5007361C4 /* uMessageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF511E5AE7C5007361C4 /* uMessageUITests.m */; };
+		B42DD69E1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */; };
+		B42DD69F1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */; };
+		B42DD6A01E5B0136000D10C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */; };
+		CDC1058288AF5C7882DD74F3 /* libPods-uMessageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */; };
+		FB8CE5735CC9A8075DFA6436 /* libPods-uMessageUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0C98E3C607F648B7DDEA44 /* libPods-uMessageUITests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +43,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0526750D607FA4F50ED5FC07 /* Pods-uMessageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageTests/Pods-uMessageTests.debug.xcconfig"; sourceTree = "<group>"; };
+		13506C36986656FDA43678DF /* Pods-uMessageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageUITests/Pods-uMessageUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		4EB9D78EE7FD904C75B3B5C1 /* Pods-uMessage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-uMessage/Pods-uMessage.debug.xcconfig"; sourceTree = "<group>"; };
 		96FBAF231E5AE7C5007361C4 /* uMessage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = uMessage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96FBAF271E5AE7C5007361C4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		96FBAF291E5AE7C5007361C4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -57,6 +66,13 @@
 		96FBAF4D1E5AE7C5007361C4 /* uMessageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = uMessageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		96FBAF511E5AE7C5007361C4 /* uMessageUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = uMessageUITests.m; sourceTree = "<group>"; };
 		96FBAF531E5AE7C5007361C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE4E8F2026C11C3DA7A61E35 /* Pods-uMessage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessage.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessage/Pods-uMessage.release.xcconfig"; sourceTree = "<group>"; };
+		B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B4E447F193705B8A4A7F3844 /* Pods-uMessageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageTests/Pods-uMessageTests.release.xcconfig"; sourceTree = "<group>"; };
+		E5496BC4B6AF7E2FB4CB2B59 /* libPods-uMessage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF13F99D827CCC712538E516 /* Pods-uMessageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageUITests/Pods-uMessageUITests.release.xcconfig"; sourceTree = "<group>"; };
+		FE0C98E3C607F648B7DDEA44 /* libPods-uMessageUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessageUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58BF81F5E95C9EC600386E7F /* libPods-uMessage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDC1058288AF5C7882DD74F3 /* libPods-uMessageTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,12 +96,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB8CE5735CC9A8075DFA6436 /* libPods-uMessageUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5F4B7867303A1F883071AE2F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E5496BC4B6AF7E2FB4CB2B59 /* libPods-uMessage.a */,
+				A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */,
+				FE0C98E3C607F648B7DDEA44 /* libPods-uMessageUITests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		96FBAF1A1E5AE7C5007361C4 = {
 			isa = PBXGroup;
 			children = (
@@ -91,6 +120,8 @@
 				96FBAF451E5AE7C5007361C4 /* uMessageTests */,
 				96FBAF501E5AE7C5007361C4 /* uMessageUITests */,
 				96FBAF241E5AE7C5007361C4 /* Products */,
+				E76DCAF4A7E19BE7BA67D67C /* Pods */,
+				5F4B7867303A1F883071AE2F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +150,7 @@
 				96FBAF381E5AE7C5007361C4 /* Assets.xcassets */,
 				96FBAF3A1E5AE7C5007361C4 /* LaunchScreen.storyboard */,
 				96FBAF3D1E5AE7C5007361C4 /* Info.plist */,
+				B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */,
 				96FBAF261E5AE7C5007361C4 /* Supporting Files */,
 			);
 			path = uMessage;
@@ -150,6 +182,19 @@
 			path = uMessageUITests;
 			sourceTree = "<group>";
 		};
+		E76DCAF4A7E19BE7BA67D67C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				4EB9D78EE7FD904C75B3B5C1 /* Pods-uMessage.debug.xcconfig */,
+				AE4E8F2026C11C3DA7A61E35 /* Pods-uMessage.release.xcconfig */,
+				0526750D607FA4F50ED5FC07 /* Pods-uMessageTests.debug.xcconfig */,
+				B4E447F193705B8A4A7F3844 /* Pods-uMessageTests.release.xcconfig */,
+				13506C36986656FDA43678DF /* Pods-uMessageUITests.debug.xcconfig */,
+				EF13F99D827CCC712538E516 /* Pods-uMessageUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -157,9 +202,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 96FBAF561E5AE7C5007361C4 /* Build configuration list for PBXNativeTarget "uMessage" */;
 			buildPhases = (
+				96CBD5298196B4E1B4B1BB99 /* [CP] Check Pods Manifest.lock */,
 				96FBAF1F1E5AE7C5007361C4 /* Sources */,
 				96FBAF201E5AE7C5007361C4 /* Frameworks */,
 				96FBAF211E5AE7C5007361C4 /* Resources */,
+				6740BE0CB4CE4AB91164E6D7 /* [CP] Embed Pods Frameworks */,
+				5176F658792C5660D303B1A6 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -174,9 +222,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 96FBAF591E5AE7C5007361C4 /* Build configuration list for PBXNativeTarget "uMessageTests" */;
 			buildPhases = (
+				075124A3B4562F26DB55FCEA /* [CP] Check Pods Manifest.lock */,
 				96FBAF3E1E5AE7C5007361C4 /* Sources */,
 				96FBAF3F1E5AE7C5007361C4 /* Frameworks */,
 				96FBAF401E5AE7C5007361C4 /* Resources */,
+				54B1124A58203D4B9EAACF5B /* [CP] Embed Pods Frameworks */,
+				1E9B4469443FB8C9B1323A3C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -192,9 +243,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 96FBAF5C1E5AE7C5007361C4 /* Build configuration list for PBXNativeTarget "uMessageUITests" */;
 			buildPhases = (
+				C308913F69B4D55887D6FD15 /* [CP] Check Pods Manifest.lock */,
 				96FBAF491E5AE7C5007361C4 /* Sources */,
 				96FBAF4A1E5AE7C5007361C4 /* Frameworks */,
 				96FBAF4B1E5AE7C5007361C4 /* Resources */,
+				D6C9313D0606A04239EB6FAC /* [CP] Embed Pods Frameworks */,
+				F5C2F6551E1039BAB6B7269F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -257,6 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96FBAF3C1E5AE7C5007361C4 /* LaunchScreen.storyboard in Resources */,
+				B42DD69E1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */,
 				96FBAF391E5AE7C5007361C4 /* Assets.xcassets in Resources */,
 				96FBAF371E5AE7C5007361C4 /* Main.storyboard in Resources */,
 			);
@@ -266,6 +321,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B42DD69F1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,10 +329,149 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B42DD6A01E5B0136000D10C3 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		075124A3B4562F26DB55FCEA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		1E9B4469443FB8C9B1323A3C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-uMessageTests/Pods-uMessageTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5176F658792C5660D303B1A6 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-uMessage/Pods-uMessage-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		54B1124A58203D4B9EAACF5B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-uMessageTests/Pods-uMessageTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6740BE0CB4CE4AB91164E6D7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-uMessage/Pods-uMessage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		96CBD5298196B4E1B4B1BB99 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C308913F69B4D55887D6FD15 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D6C9313D0606A04239EB6FAC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-uMessageUITests/Pods-uMessageUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F5C2F6551E1039BAB6B7269F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-uMessageUITests/Pods-uMessageUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		96FBAF1F1E5AE7C5007361C4 /* Sources */ = {
@@ -432,6 +627,7 @@
 		};
 		96FBAF571E5AE7C5007361C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4EB9D78EE7FD904C75B3B5C1 /* Pods-uMessage.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = uMessage/Info.plist;
@@ -443,6 +639,7 @@
 		};
 		96FBAF581E5AE7C5007361C4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AE4E8F2026C11C3DA7A61E35 /* Pods-uMessage.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = uMessage/Info.plist;
@@ -454,6 +651,7 @@
 		};
 		96FBAF5A1E5AE7C5007361C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0526750D607FA4F50ED5FC07 /* Pods-uMessageTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = uMessageTests/Info.plist;
@@ -466,6 +664,7 @@
 		};
 		96FBAF5B1E5AE7C5007361C4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B4E447F193705B8A4A7F3844 /* Pods-uMessageTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = uMessageTests/Info.plist;
@@ -478,6 +677,7 @@
 		};
 		96FBAF5D1E5AE7C5007361C4 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 13506C36986656FDA43678DF /* Pods-uMessageUITests.debug.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = uMessageUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -489,6 +689,7 @@
 		};
 		96FBAF5E1E5AE7C5007361C4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EF13F99D827CCC712538E516 /* Pods-uMessageUITests.release.xcconfig */;
 			buildSettings = {
 				INFOPLIST_FILE = uMessageUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -517,6 +718,7 @@
 				96FBAF581E5AE7C5007361C4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96FBAF591E5AE7C5007361C4 /* Build configuration list for PBXNativeTarget "uMessageTests" */ = {
 			isa = XCConfigurationList;
@@ -525,6 +727,7 @@
 				96FBAF5B1E5AE7C5007361C4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		96FBAF5C1E5AE7C5007361C4 /* Build configuration list for PBXNativeTarget "uMessageUITests" */ = {
 			isa = XCConfigurationList;
@@ -533,6 +736,7 @@
 				96FBAF5E1E5AE7C5007361C4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

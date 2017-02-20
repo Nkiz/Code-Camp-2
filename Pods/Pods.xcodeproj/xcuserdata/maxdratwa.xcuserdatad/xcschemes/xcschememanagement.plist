@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>GoogleToolboxForMac.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-uMessage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-uMessageTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-uMessageUITests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>CB168656AE89348CDED3D558CD8C0DB5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CFBA644FAA209856C3B68FE56A74DA6C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D5C49D31761C2E74591CC99601683753</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1BBB76ADBF2EF4EF2CE5DF6BBC77296</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
