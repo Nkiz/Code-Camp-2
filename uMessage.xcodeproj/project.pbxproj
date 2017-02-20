@@ -18,9 +18,9 @@
 		96FBAF3C1E5AE7C5007361C4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96FBAF3A1E5AE7C5007361C4 /* LaunchScreen.storyboard */; };
 		96FBAF471E5AE7C5007361C4 /* uMessageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF461E5AE7C5007361C4 /* uMessageTests.m */; };
 		96FBAF521E5AE7C5007361C4 /* uMessageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF511E5AE7C5007361C4 /* uMessageUITests.m */; };
-		B42DD69E1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */; };
-		B42DD69F1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */; };
-		B42DD6A01E5B0136000D10C3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */; };
+		B4D1290E1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
+		B4D1290F1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
+		B4D129101E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
 		CDC1058288AF5C7882DD74F3 /* libPods-uMessageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */; };
 		FB8CE5735CC9A8075DFA6436 /* libPods-uMessageUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0C98E3C607F648B7DDEA44 /* libPods-uMessageUITests.a */; };
 /* End PBXBuildFile section */
@@ -68,7 +68,7 @@
 		96FBAF531E5AE7C5007361C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4E8F2026C11C3DA7A61E35 /* Pods-uMessage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessage.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessage/Pods-uMessage.release.xcconfig"; sourceTree = "<group>"; };
-		B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B4E447F193705B8A4A7F3844 /* Pods-uMessageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageTests/Pods-uMessageTests.release.xcconfig"; sourceTree = "<group>"; };
 		E5496BC4B6AF7E2FB4CB2B59 /* libPods-uMessage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF13F99D827CCC712538E516 /* Pods-uMessageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageUITests/Pods-uMessageUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -150,7 +150,7 @@
 				96FBAF381E5AE7C5007361C4 /* Assets.xcassets */,
 				96FBAF3A1E5AE7C5007361C4 /* LaunchScreen.storyboard */,
 				96FBAF3D1E5AE7C5007361C4 /* Info.plist */,
-				B42DD69D1E5B0136000D10C3 /* GoogleService-Info.plist */,
+				B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */,
 				96FBAF261E5AE7C5007361C4 /* Supporting Files */,
 			);
 			path = uMessage;
@@ -311,7 +311,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96FBAF3C1E5AE7C5007361C4 /* LaunchScreen.storyboard in Resources */,
-				B42DD69E1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */,
+				B4D1290E1E5B337B0079972E /* GoogleService-Info.plist in Resources */,
 				96FBAF391E5AE7C5007361C4 /* Assets.xcassets in Resources */,
 				96FBAF371E5AE7C5007361C4 /* Main.storyboard in Resources */,
 			);
@@ -321,7 +321,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B42DD69F1E5B0136000D10C3 /* GoogleService-Info.plist in Resources */,
+				B4D1290F1E5B337B0079972E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,7 +329,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B42DD6A01E5B0136000D10C3 /* GoogleService-Info.plist in Resources */,
+				B4D129101E5B337B0079972E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
