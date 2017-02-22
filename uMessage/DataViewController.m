@@ -154,7 +154,7 @@ static NSString *const kOK = @"OK";
                                                                     };
                                          
                                          // add user to databse
-                                         [[[_ref child:@"users"] childByAutoId] setValue:userInfo];
+                                         [[[_ref child:@"users"] child:user.uid] setValue:userInfo];
                                          NSLog(@"REGISTER: User added to database.");
                                          
                                          [self showMessagePrompt:@"User erstellt."];
