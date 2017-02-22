@@ -17,5 +17,7 @@
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 - (IBAction)loginTouchUpInside:(id)sender;
 
+@property (strong, nonatomic) FIRDatabaseReference *ref;
+@property (strong, nonatomic) FIRAuthStateDidChangeListenerHandle handle;
 @end
 
