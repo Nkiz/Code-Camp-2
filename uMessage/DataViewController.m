@@ -18,7 +18,9 @@
     [super viewDidLoad];
     
     // reference to database
-    self.ref = [[FIRDatabase database] reference];
+    self.ref     = [[FIRDatabase database] reference];
+    self.userRef = [_ref child:@"users"];
+    self.chatRef = [_ref child:@"chats"];
     
     // login listener
     self.handle = [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
@@ -63,10 +65,8 @@
         NSLog(@"Loggin erfolgreich: UID %@", user.uid);
         [self showMessagePrompt:@"Loggin erfolgreich"];
         /*printf(user.email.UTF8String);*/
-        self.ref = [[FIRDatabase database] reference];
-        self.userRef = [_ref child:@"users"];
         
-        [[_ref child:@"users"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [_userRef observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             // Get user value
             NSDictionary *usersDict = snapshot.value;
             for (NSString *key in usersDict) {

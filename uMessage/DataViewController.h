@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *loginPasswordTextField;
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) FIRDatabaseReference *userRef;
+@property (strong, nonatomic) FIRDatabaseReference *chatRef;
 @property (strong, nonatomic) NSDictionary *userData;
 
 - (IBAction)loginTouchUpInside:(id)sender;
