@@ -173,11 +173,12 @@
                         <outlet property="registerPasswordTextField" destination="ejh-hO-Jwa" id="Yyd-k0-NKu"/>
                         <outlet property="scrollView" destination="kbn-Su-IcX" id="GCQ-qC-lLj"/>
                         <outlet property="uiView" destination="s1b-V9-EN7" id="vn7-JU-kg2"/>
+                        <segue destination="bAN-J9-YOw" kind="show" identifier="LoginToChat" id="VKj-EW-WBC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GmD-Rr-ZGN" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="596" y="-243.32833583208398"/>
+            <point key="canvasLocation" x="617" y="-243"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="NT4-D9-12m">

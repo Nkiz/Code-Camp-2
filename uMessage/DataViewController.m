@@ -7,6 +7,7 @@
 //
 
 #import "DataViewController.h"
+#import "TableViewController.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
 
@@ -39,6 +40,7 @@
         if (user) {
             NSLog(@"LOGIN: User %@ logged in.", user.displayName);
             // go to chats ui
+            [self performSegueWithIdentifier: @"LoginToChat" sender: self];
         }
     }];
 }
@@ -90,17 +92,12 @@
         [self showMessagePrompt:@"Loggin erfolgreich"];
         /*printf(user.email.UTF8String);*/
         
-        [_userRef observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [[_userRef child:user.uid ] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             // Get user value
-            NSDictionary *usersDict = snapshot.value;
-            for (NSString *key in usersDict) {
-                NSDictionary *value = [usersDict objectForKey:key];
-                NSString *authId = [value objectForKey:@"authId"];
-                if([authId isEqualToString:user.uid]){
-                    NSLog(@"Found");
-                    self.userData = value;
-                }
-            }
+            NSDictionary *userDict = snapshot.value;
+            NSLog(@"Found");
+            self.userData = userDict;
+            
         } withCancelBlock:^(NSError * _Nonnull error) {
             NSLog(@"%@", error.localizedDescription);
         }];
