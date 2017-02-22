@@ -35,6 +35,6 @@
 	<key>GOOGLE_APP_ID</key>
 	<string>1:269301381343:ios:e8e693f249e6bc28</string>
 	<key>DATABASE_URL</key>
-	<string>https://umessage-80185.firebaseio.com</string>
+	<string>https://umessage-80185.firebaseio.com/</string>
 </dict>
 </plist>

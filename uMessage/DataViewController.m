@@ -18,7 +18,6 @@
 
 @implementation DataViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -69,6 +68,43 @@
     
 }
 
+//Login Button clicked
+- (IBAction)loginTouchUpInside:(id)sender {
+    //Authentiacation with Email and password
+    [[FIRAuth auth] signInWithEmail: _loginEmailTextField.text
+                           password:_loginPasswordTextField.text
+                         completion:^(FIRUser *user, NSError *error)
+    {
+        
+    if(error)
+    {
+        NSLog(@"Fehler beim einloggen des Users: %@", error.description);
+        [self showMessagePrompt: @"Fehler beim Login"];
+    }else{
+        FIRUser *user = [FIRAuth auth].currentUser;
+        NSLog(@"Loggin erfolgreich: UID %@", user.uid);
+        [self showMessagePrompt:@"Loggin erfolgreich"];
+        /*printf(user.email.UTF8String);*/
+        self.ref = [[FIRDatabase database] reference];
+        self.userRef = [_ref child:@"users"];
+        
+        [[_ref child:@"users"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            // Get user value
+            NSDictionary *usersDict = snapshot.value;
+            for (NSString *key in usersDict) {
+                NSDictionary *value = [usersDict objectForKey:key];
+                NSString *authId = [value objectForKey:@"authId"];
+                if([authId isEqualToString:user.uid]){
+                    NSLog(@"Found");
+                    self.userData = value;
+                }
+            }
+        } withCancelBlock:^(NSError * _Nonnull error) {
+            NSLog(@"%@", error.localizedDescription);
+        }];
+    }
+    }];
+}
 
 static NSString *const kOK = @"OK";
 
