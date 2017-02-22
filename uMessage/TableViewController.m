@@ -69,6 +69,9 @@
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
     
+    NSArray *userListArr = [ message objectForKey:@"userlist"];
+    
+    cell.textLabel.text = userListArr[0];
     //NSString *name = message[@"userlist"];
     //cell.textLabel.text = [name objectAtIndex];
     /*
