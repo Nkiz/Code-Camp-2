@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@import FirebaseDatabase;
 @interface DataViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UILabel *dataLabel;
 @property (strong, nonatomic) id dataObject;
+@property (weak, nonatomic) IBOutlet UITextField *loginEmailTextField;
+@property (weak, nonatomic) IBOutlet UITextField *loginPasswordTextField;
+@property (strong, nonatomic) FIRDatabaseReference *ref;
+- (IBAction)loginTouchUpInside:(id)sender;
 
 @end
 

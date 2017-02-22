@@ -1,24 +1,24 @@
 {
     "chats": {
         "CHID1": {
-            "userlist": ["USID1","USID2"],
+            "userlist": ["q9ptazyibpTs1n7oUkacL5IyM3n1","USID2"],
             "messageList": {
                 "MSGID1": {
                     "msgText": "Hello World",
                     "msgTs": "1487675335",
-                    "userId": "USID1",
+                    "userId": "q9ptazyibpTs1n7oUkacL5IyM3n1",
                     "imgUrl": "",
                     "vidUrl": "",
                     "attUrl": "",
                     "voiceUrl": "",
                     "gpsCoord": "",
-                    "readList": ["USID1","USID2"]
+                    "readList": ["q9ptazyibpTs1n7oUkacL5IyM3n1","USID2"]
                 }
             }
         }
     },
     "users": {
-        "USID1": {
+        "q9ptazyibpTs1n7oUkacL5IyM3n1": {
             "email": "us1@test.de",
             "username": "User1",
             "authId": "AUTHID1",
