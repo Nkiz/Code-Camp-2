@@ -8,7 +8,11 @@
 
 #import "DataViewController.h"
 
-@interface DataViewController ()
+@interface DataViewController () <UITextFieldDelegate, UIScrollViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UIView *uiView;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, atomic) UITextField *activeField;
 
 @end
 
@@ -17,6 +21,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // TextFieldDelegate
+    self.registerEmailTextField.delegate = self;
+    self.registerNicknameTextField.delegate = self;
+    self.registerPasswordTextField.delegate = self;
+    self.scrollView.delegate = self;
     
     // reference to database
     self.ref = [[FIRDatabase database] reference];
@@ -28,7 +38,10 @@
             // go to chats ui
         }
     }];
-    
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dealloc {
@@ -45,6 +58,15 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.dataLabel.text = [self.dataObject description];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
 }
 
 
@@ -104,9 +126,75 @@ static NSString *const kOK = @"OK";
 }
 
 // hide keyboard if you touch outside
+// not working with ScrollView
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    NSLog(@"TouchEvent: end editing.");
     [self.view endEditing:YES];
     [super touchesBegan:touches withEvent:event];
 }
 
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSLog(@"Keyboard was shown.");
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
+    
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+    
+    NSLog(@"Keyboard height is %f / %f", kbSize.height, self.uiView.frame.size.height);
+    
+    // If active text field is hidden by keyboard, scroll it so it's visible
+    // Your app might not need or want this behavior.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= kbSize.height;
+    
+    NSLog(@"Rectangle: %f , %f", aRect.origin.x, aRect.origin.y);
+    
+    NSLog(@"MailField: %f , %f", _activeField.frame.origin.x, _activeField.frame.origin.y);
+    
+    if (!CGRectContainsPoint(aRect, _activeField.frame.origin) ) {
+        NSLog(@"TextField hidden by keyboard");
+        // TODO: scroll to activeField
+        [self.scrollView scrollRectToVisible:_activeField.frame animated:YES];
+    }
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    NSLog(@"Keyboard will be hidden.");
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    self.scrollView.contentInset = contentInsets;
+    self.scrollView.scrollIndicatorInsets = contentInsets;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    NSLog(@"Active Field is set");
+    _activeField = textField;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"TextField should return.");
+    if(textField == _registerEmailTextField) {
+        [_registerNicknameTextField becomeFirstResponder];
+    } else if(textField == _registerNicknameTextField) {
+        [_registerPasswordTextField becomeFirstResponder];
+    } else if(textField == _registerPasswordTextField) {
+        [self.view endEditing:YES];
+        
+        //[self registerTouchUpInside:nil];
+    }
+    return NO;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    NSLog(@"Active Field reset");
+    _activeField = nil;
+}
 @end
