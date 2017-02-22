@@ -20,6 +20,19 @@
     
     // reference to database
     self.ref = [[FIRDatabase database] reference];
+    
+    // login listener
+    self.handle = [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
+        if (user) {
+            NSLog(@"LOGIN: User %@ logged in.", user.displayName);
+            // go to chats ui
+        }
+    }];
+    
+}
+
+- (void)dealloc {
+    [[FIRAuth auth] removeAuthStateDidChangeListener:_handle];
 }
 
 
@@ -52,6 +65,8 @@ static NSString *const kOK = @"OK";
 
 
 - (IBAction)registerTouchUpInside:(UIButton *)sender {
+    [self.view endEditing:YES];
+    
     if(_registerEmailTextField.hasText && _registerNicknameTextField && _registerPasswordTextField.hasText) {
         [[FIRAuth auth] createUserWithEmail:_registerEmailTextField.text
                                    password:_registerPasswordTextField.text
@@ -86,6 +101,12 @@ static NSString *const kOK = @"OK";
                                      }
                                  }];
     }
+}
+
+// hide keyboard if you touch outside
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self.view endEditing:YES];
+    [super touchesBegan:touches withEvent:event];
 }
 
 @end

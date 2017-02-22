@@ -18,6 +18,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *registerPasswordTextField;
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
-
+@property (strong, nonatomic) FIRAuthStateDidChangeListenerHandle handle;
 @end
 
