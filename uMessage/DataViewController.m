@@ -33,7 +33,6 @@
     // reference to database
     self.ref     = [[FIRDatabase database] reference];
     self.userRef = [_ref child:@"users"];
-    self.chatRef = [_ref child:@"chats"];
     
     // login listener
     self.handle = [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {

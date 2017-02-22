@@ -8,7 +8,11 @@
 
 #import "TableViewController.h"
 
-@interface TableViewController ()
+@interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
+    FIRDatabaseHandle _refHandle;
+}
+@property (weak, nonatomic) IBOutlet UITableView *chatTableView;
+@property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
 
 @end
 
@@ -16,12 +20,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.ref     = [[FIRDatabase database] reference];
+    self.chatRef = [_ref child:@"chats"];
     
+    _messages = [[NSMutableArray alloc] init];
+    
+    [_chatTableView registerClass:UITableViewCell.self forCellReuseIdentifier:@"TableViewCell"];
+    
+    _refHandle = [_chatRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        [_messages addObject:snapshot];
+        [_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)dealloc{
+    [_chatRef removeAllObservers];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -95,4 +113,7 @@
 }
 */
 
+- (IBAction)logoutAction:(id)sender {
+    [self performSegueWithIdentifier: @"ChatToLogin" sender: self];
+}
 @end

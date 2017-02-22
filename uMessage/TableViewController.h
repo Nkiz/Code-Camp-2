@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@import FirebaseDatabase;
 
-@interface TableViewController : UITableViewController
+@interface TableViewController : UIViewController
+@property (strong, nonatomic) FIRDatabaseReference *ref;
+@property (strong, nonatomic) FIRDatabaseReference *chatRef;
+- (IBAction)logoutAction:(id)sender;
 
 @end

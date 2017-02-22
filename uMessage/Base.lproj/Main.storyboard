@@ -180,10 +180,10 @@
             </objects>
             <point key="canvasLocation" x="617" y="-243"/>
         </scene>
-        <!--View Controller-->
+        <!--Table View Controller-->
         <scene sceneID="NT4-D9-12m">
             <objects>
-                <viewController id="bAN-J9-YOw" sceneMemberID="viewController">
+                <viewController id="bAN-J9-YOw" customClass="TableViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MBl-Ra-rFF"/>
                         <viewControllerLayoutGuide type="bottom" id="oOP-em-ety"/>
@@ -193,11 +193,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pla-cV-Ffc">
-                                <rect key="frame" x="310" y="6" width="45" height="44"/>
+                                <rect key="frame" x="247" y="6" width="108" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.098039215686274508" green="0.74509803921568629" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <items>
                                     <barButtonItem systemItem="add" id="YcY-TM-JDr"/>
+                                    <barButtonItem title="Logout" id="Pcz-oY-iR9">
+                                        <connections>
+                                            <action selector="logoutAction:" destination="bAN-J9-YOw" id="MT3-DE-HEE"/>
+                                        </connections>
+                                    </barButtonItem>
                                 </items>
                                 <color key="barTintColor" red="0.098039215690000001" green="0.74509803919999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
@@ -216,6 +221,10 @@
                         </subviews>
                         <color key="backgroundColor" red="0.098039215686274508" green="0.74509803921568629" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
+                    <connections>
+                        <outlet property="chatTableView" destination="dak-f2-5Og" id="4GL-iB-Dhr"/>
+                        <segue destination="S4R-Ja-viH" kind="show" identifier="ChatToLogin" id="18b-sC-joA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wfJ-ZO-DQ7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
