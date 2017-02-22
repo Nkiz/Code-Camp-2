@@ -14,7 +14,6 @@
 
 @implementation DataViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -57,20 +56,29 @@
         
     if(error)
     {
-        
+        NSLog(@"Fehler beim einloggen des Users: %@", error.description);
+        [self showMessagePrompt: @"Fehler beim Login"];
     }else{
         FIRUser *user = [FIRAuth auth].currentUser;
-        printf(user.email.UTF8String);
+        NSLog(@"Loggin erfolgreich: UID %@", user.uid);
+        [self showMessagePrompt:@"Loggin erfolgreich"];
+        /*printf(user.email.UTF8String);*/
         self.ref = [[FIRDatabase database] reference];
-        /*FIRDatabaseQuery *recentPostsQuery = [[self.ref child:@"chats"] queryLimitedToFirst:100];
-         // [END recent_posts_query]
-         printf(recentPostsQuery.description.UTF8String);*/
+        self.userRef = [_ref child:@"users"];
         
-        [[[_ref child:@"users"] child:user.uid] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [[_ref child:@"users"] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             // Get user value
-            NSDictionary *postDict = snapshot.value;
-            NSString *tmp = postDict.allValues[1];
-            printf(tmp.UTF8String);
+            NSDictionary *usersDict = snapshot.value;
+            for (NSString *key in usersDict) {
+                NSDictionary *value = [usersDict objectForKey:key];
+                NSString *authId = [value objectForKey:@"authId"];
+                if([authId isEqualToString:user.uid]){
+                    NSLog(@"Found");
+                    self.userData = value;
+                }
+            }
+        } withCancelBlock:^(NSError * _Nonnull error) {
+            NSLog(@"%@", error.localizedDescription);
         }];
     }
     }];
