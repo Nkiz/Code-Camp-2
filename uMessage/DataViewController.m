@@ -7,6 +7,8 @@
 //
 
 #import "DataViewController.h"
+@import FirebaseAuth;
+@import FirebaseDatabase;
 
 @interface DataViewController () <UITextFieldDelegate, UIScrollViewDelegate>
 
