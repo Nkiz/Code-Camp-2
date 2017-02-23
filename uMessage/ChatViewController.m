@@ -10,11 +10,12 @@
 
 @interface ChatViewController ()
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property (strong, nonatomic) IBOutlet UITableView *chatTable;
+@property (strong, nonatomic) IBOutlet UITextField *chatMsg;
 
 @end
 
 @implementation ChatViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -29,4 +30,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+- (IBAction)sendAction:(UIButton *)sender {
+}
+
 @end
