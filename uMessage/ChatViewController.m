@@ -35,6 +35,15 @@
     
     [_chatTable registerClass:[UITableViewCell class]forCellReuseIdentifier:@"TableViewCell"];
     [self loadMessages];
+}
+
+-(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
+    NSLog(@"Chat unwind.");
+}
+
+
+- (IBAction)backButtonPressed:(id)sender {
+    NSLog(@"BackButton pressed");
     
 }
 
