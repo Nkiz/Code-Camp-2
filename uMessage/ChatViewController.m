@@ -23,7 +23,7 @@
     
     //_navigationBar.navigationItem.title = _chatId;
     
-    _navigationBar.topItem.title = self.chatId;
+    _navigationBar.topItem.title = self.chatTitle;
 }
 
 - (void)didReceiveMemoryWarning {

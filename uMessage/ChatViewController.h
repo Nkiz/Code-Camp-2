@@ -14,6 +14,7 @@
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) NSString *chatId;
+@property (strong, nonatomic) NSString *chatTitle;
 
 
 @end
