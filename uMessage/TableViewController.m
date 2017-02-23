@@ -12,7 +12,10 @@
     FIRDatabaseHandle _refHandle;
 }
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
+@property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *chatSnapshot;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
+@property (strong, nonatomic) NSMutableDictionary *myUsers;
+@property (strong, nonatomic) NSMutableDictionary *myUserList;
 
 @end
 
@@ -21,24 +24,78 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.ref     = [[FIRDatabase database] reference];
+    self.userRef = [_ref child:@"users"];
     self.chatRef = [_ref child:@"chats"];
     
     _chatTableView.delegate = self;
     _chatTableView.dataSource = self;
     
+    //Load Database
     _messages = [[NSMutableArray alloc] init];
-    
+    _myUsers = [NSMutableDictionary dictionary];
+    _myUserList = [NSMutableDictionary dictionary];
     [_chatTableView registerClass:UITableViewCell.self forCellReuseIdentifier:@"TableViewCell"];
+    [self configureDatabase];
+    //[self filtermyChat];
     
+}
+
+- (void) configureDatabase{
     _refHandle = [_chatRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
-        [_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        _chatSnapshot = snapshot.key;
+        NSDictionary<NSString *, NSString *> *message = snapshot.value;
+        NSArray *userListArr = [ message objectForKey:@"userlist"];
+        BOOL myChat = false;
+        //check if logged user is in chat-userlist
+        for (int x=0; x<userListArr.count; x++ ) {
+            if([userListArr[x] isEqualToString:[FIRAuth auth].currentUser.uid]){
+                myChat = true;
+                break;
+            }
+        }
+        if(myChat){
+            for(int i=0; i<userListArr.count; i++){
+                if(![userListArr[i] isEqualToString:[FIRAuth auth].currentUser.uid]){
+                    [_myUsers setObject: userListArr[i] forKey:(snapshot.key)];
+                    [[_userRef child:userListArr[i] ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                        // Get user value
+                        
+                        NSDictionary<NSString *, NSString *> *userData = snapshot.value;
+                        NSString *tmpUser = [userData objectForKey:@"authId"];
+                        for (NSString *key in _myUsers) {
+                            if([tmpUser isEqualToString:([_myUsers objectForKey:key])]){
+                                [_myUserList setObject:[userData objectForKey:@"username"] forKey:key];
+                                [self filtermyChat];
+                            }
+                        }
+                    } withCancelBlock:^(NSError * _Nonnull error) {
+                        NSLog(@"%@", error.localizedDescription);
+                    }];
+                }
+            }
+        }
+        /*[[_userRef child:userListArr[i] ] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            // Get user value
+            NSDictionary<NSString *, NSString *> *userData = snapshot.value;
+            NSString *tmpUser = [userData objectForKey:@"authId"];
+            NSMutableArray *columnArray = [NSMutableArray array];
+            if(![tmpUser isEqualToString:[FIRAuth auth].currentUser.uid]){
+                [_myUsers setObject:[userData objectForKey:@"username"] forKey:snapshot.key];
+                NSLog(@"%@", [userData objectForKey:@"username"]);
+            }
+            self.tmpUserData = snapshot.value;
+        } withCancelBlock:^(NSError * _Nonnull error) {
+            NSLog(@"%@", error.localizedDescription);
+        }];*/
+
+        
+        /*[_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];*/
     }];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void) filtermyChat{
+    [_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_myUserList.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (void)dealloc{
@@ -57,21 +114,40 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_messages count];
+    return [_myUserList count];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    BOOL myChat = false;
     // Dequeue cell
     UITableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"TableViewCell" forIndexPath:indexPath];
     
     // Unpack message from Firebase DataSnapshot
-    FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
+    /*FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
-    
     NSArray *userListArr = [ message objectForKey:@"userlist"];
+    NSString *cellTitle;
+    for (int i=0; i< userListArr.count; i++){
+        NSDictionary *userDict;
+        if([userListArr[i] isEqualToString:[FIRAuth auth].currentUser.uid]){
+            myChat = true;
+        }else{
+            [[_userRef child:userListArr[i] ] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                // Get user value
+                self.tmpUserData = snapshot.value;
+            } withCancelBlock:^(NSError * _Nonnull error) {
+                NSLog(@"%@", error.localizedDescription);
+            }];
+            cellTitle = (@", %@", self.tmpUserData);
+        }
+    }
+    if(myChat){
+        cell.textLabel.text = @"test";
+        return cell;
+    }*/
     
-    cell.textLabel.text = userListArr[0];
+    //cell.textLabel.text = userListArr[0];
     //NSString *name = message[@"userlist"];
     //cell.textLabel.text = [name objectAtIndex];
     /*
@@ -93,7 +169,8 @@
         }
     }
     */
-    
+    NSArray *name = [_myUserList allValues];
+    cell.textLabel.text = [name objectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -153,6 +230,12 @@
  */
 
 - (IBAction)logoutAction:(id)sender {
+    NSError *signOutError;
+    BOOL status = [[FIRAuth auth] signOut:&signOutError];
+    if (!status) {
+        NSLog(@"Error signing out: %@", signOutError);
+        return;
+    }
     [self performSegueWithIdentifier: @"ChatToLogin" sender: self];
 }
 @end
