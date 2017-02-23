@@ -43,7 +43,9 @@
 
 
 - (IBAction)backButtonPressed:(id)sender {
-    NSLog(@"BackButton pressed");
+    NSLog(@"BackButton pressed");    
+    
+    [self performSegueWithIdentifier:@"unwindToList" sender:self];
     
 }
 
