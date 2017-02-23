@@ -9,6 +9,7 @@
 #import "ChatViewController.h"
 
 @interface ChatViewController ()
+@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
 
 @end
 
@@ -19,7 +20,9 @@
     
     self.ref     = [[FIRDatabase database] reference];
     
-    //self.title.title = self.chatId;
+    //_navigationBar.navigationItem.title = _chatId;
+    
+    _navigationBar.topItem.title = self.chatId;
 }
 
 - (void)didReceiveMemoryWarning {
