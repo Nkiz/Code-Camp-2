@@ -38,7 +38,7 @@
 }
 
 -(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
-    NSLog(@"Chat unwind.");
+    NSLog(@"Chat unwind");
 }
 
 
