@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+@import FirebaseAuth;
 @import FirebaseDatabase;
 @import FirebaseStorage;
 
 @interface ChatViewController : UIViewController
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
+@property (strong, nonatomic) FIRDatabaseReference *chatRef;
+@property (strong, nonatomic) FIRDatabaseReference *messagesRef;
 @property (strong, nonatomic) NSString *chatId;
 @property (strong, nonatomic) NSString *chatTitle;
 
