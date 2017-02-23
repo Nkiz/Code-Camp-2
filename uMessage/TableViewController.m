@@ -7,6 +7,7 @@
 //
 
 #import "TableViewController.h"
+#import "ChatTableViewCell.h"
 
 @interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
@@ -121,7 +122,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     BOOL myChat = false;
     // Dequeue cell
-    UITableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"TableViewCell" forIndexPath:indexPath];
+    ChatTableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"ChatTableViewCell"forIndexPath:indexPath];
     
     // Unpack message from Firebase DataSnapshot
     /*FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
