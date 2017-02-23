@@ -9,7 +9,8 @@
 #import "ChatViewController.h"
 
 @interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>{
-    FIRDatabaseHandle _refHandle;
+    FIRDatabaseHandle _refAddHandle;
+    FIRDatabaseHandle _refRemoveHandle;
 }
 
 @property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
@@ -35,6 +36,7 @@
     
     [_chatTable registerClass:[UITableViewCell class]forCellReuseIdentifier:@"TableViewCell"];
     [self loadMessages];
+
 }
 
 -(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
@@ -43,10 +45,7 @@
 
 
 - (IBAction)backButtonPressed:(id)sender {
-    NSLog(@"BackButton pressed");    
-    
     [self performSegueWithIdentifier:@"unwindToList" sender:self];
-    
 }
 
 - (IBAction)addButtonPressed:(id)sender {
@@ -62,6 +61,24 @@
 
 
 - (IBAction)sendAction:(UIButton *)sender {
+    // current timestamp
+    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+    NSString *result = [formatter stringFromDate:[NSDate date]];
+    NSDictionary *newMessage = @{@"attUrl": @"",
+                                 @"gpsCoord": @"",
+                                 @"imgUrl": @"",
+                                 @"msgText": _chatMsg.text,
+                                 @"msgTs": result,
+                                 @"readList": @"",
+                                 @"userid": @"",
+                                 @"vid": @"",
+                                 @"voiceUrl": @"",
+                               };
+    
+    // add message to databse
+    [[_messagesRef childByAutoId] setValue:newMessage];
+    _chatMsg.text = @"";
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -81,7 +98,7 @@
 }
 
 - (void) loadMessages{
-    _refHandle = [_messagesRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+    _refAddHandle = [_messagesRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
         [_chatTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
