@@ -33,6 +33,9 @@
     self.userRef = [_ref child:@"users"];
     self.chatRef = [_ref child:@"chats"];
     
+    [self setNeedsStatusBarAppearanceUpdate];
+    
+    
     _chatTableView.delegate = self;
     _chatTableView.dataSource = self;
     
@@ -44,6 +47,11 @@
     [_chatTableView registerClass:[ChatTableViewCell class]forCellReuseIdentifier:@"ChatTableViewCell"];
     [self configureDatabase];
     
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) configureDatabase{
@@ -231,7 +239,7 @@
         NSLog(@"Error signing out: %@", signOutError);
         return;
     }
-    [self performSegueWithIdentifier: @"ChatToLogin" sender: self];
+    [self performSegueWithIdentifier: @"unwindToLogin" sender: self];
 }
 
 
