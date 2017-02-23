@@ -44,6 +44,11 @@
     }];
 }
 
+
+-(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
+    NSLog(@"Login unwind");
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
