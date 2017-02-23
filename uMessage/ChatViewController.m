@@ -38,6 +38,12 @@
     
 }
 
+- (IBAction)addButtonPressed:(id)sender {
+    NSLog(@"AddButton pressed");
+}
+
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
