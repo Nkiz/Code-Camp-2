@@ -8,12 +8,14 @@
 
 #import "TableViewController.h"
 #import "ChatTableViewCell.h"
+#import "ChatViewController.h"
 
 @interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
 }
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
+@property (weak, atomic) NSString *selectedChatId;
 
 @end
 
@@ -123,6 +125,27 @@
     
     return cell;
 }
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // save selected chat id
+    FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
+    self.selectedChatId = messageSnapshot.key;
+    
+    // open chat
+    [self performSegueWithIdentifier:@"ListToChat" sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"ListToChat"])
+    {
+        // send chat id to controller
+        ChatViewController *controller = [segue destinationViewController];
+        controller.chatId = _selectedChatId;
+    }
+}
+
 
 
 /*

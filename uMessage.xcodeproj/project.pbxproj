@@ -21,6 +21,7 @@
 		96FBAF3C1E5AE7C5007361C4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96FBAF3A1E5AE7C5007361C4 /* LaunchScreen.storyboard */; };
 		96FBAF471E5AE7C5007361C4 /* uMessageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF461E5AE7C5007361C4 /* uMessageTests.m */; };
 		96FBAF521E5AE7C5007361C4 /* uMessageUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF511E5AE7C5007361C4 /* uMessageUITests.m */; };
+		B4962FAF1E5F04970028580C /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4962FAE1E5F04970028580C /* ChatViewController.m */; };
 		B4D1290E1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
 		B4D1290F1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
 		B4D129101E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
@@ -76,6 +77,8 @@
 		96FBAF531E5AE7C5007361C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4E8F2026C11C3DA7A61E35 /* Pods-uMessage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessage.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessage/Pods-uMessage.release.xcconfig"; sourceTree = "<group>"; };
+		B4962FAD1E5F03C80028580C /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		B4962FAE1E5F04970028580C /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B4D19EEA1E5DE81A00648DC3 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
 		B4D19EEB1E5DE83700648DC3 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
@@ -157,6 +160,8 @@
 				96FBAF321E5AE7C5007361C4 /* ModelController.h */,
 				96FBAF331E5AE7C5007361C4 /* ModelController.m */,
 				96FBAF351E5AE7C5007361C4 /* Main.storyboard */,
+				B4962FAD1E5F03C80028580C /* ChatViewController.h */,
+				B4962FAE1E5F04970028580C /* ChatViewController.m */,
 				969864641E5C4FE20052D3D8 /* model.json */,
 				96FBAF381E5AE7C5007361C4 /* Assets.xcassets */,
 				96FBAF3A1E5AE7C5007361C4 /* LaunchScreen.storyboard */,
@@ -502,6 +507,7 @@
 				B4D19EEC1E5DE83700648DC3 /* ChatTableViewCell.m in Sources */,
 				96FBAF341E5AE7C5007361C4 /* ModelController.m in Sources */,
 				96FBAF281E5AE7C5007361C4 /* main.m in Sources */,
+				B4962FAF1E5F04970028580C /* ChatViewController.m in Sources */,
 				96FBAF2E1E5AE7C5007361C4 /* RootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
