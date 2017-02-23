@@ -18,13 +18,19 @@
 @implementation ChatViewController
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.ref     = [[FIRDatabase database] reference];
     
-    //_navigationBar.navigationItem.title = _chatId;
-    
+    // set chat title
     _navigationBar.topItem.title = self.chatTitle;
+    
 }
+- (IBAction)backButtonPressed:(id)sender {
+}
+
+- (IBAction)addButtonPressed:(id)sender {
+}
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
