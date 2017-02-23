@@ -24,10 +24,21 @@
     _navigationBar.topItem.title = self.chatTitle;
     
 }
+
+-(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
+    NSLog(@"Chat unwind");
+}
+
+
 - (IBAction)backButtonPressed:(id)sender {
+    NSLog(@"BackButton pressed");
+    
+    [self performSegueWithIdentifier:@"unwindToList" sender:self];
+
 }
 
 - (IBAction)addButtonPressed:(id)sender {
+    NSLog(@"AddButton pressed");
 }
 
 

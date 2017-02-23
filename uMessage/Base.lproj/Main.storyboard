@@ -292,9 +292,11 @@
                         <outlet property="chatMsg" destination="Fki-Pc-GMa" id="PCG-vJ-vnl"/>
                         <outlet property="chatTable" destination="q2V-GI-mNf" id="fPR-Mo-raW"/>
                         <outlet property="navigationBar" destination="AgN-bq-kb4" id="L5z-IZ-bKJ"/>
+                        <segue destination="ZyE-YZ-1Ev" kind="unwind" identifier="unwindToList" unwindAction="prepareForUnwind:" id="Awr-c0-5X1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIM-u7-S49" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="ZyE-YZ-1Ev" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2069.5999999999999" y="-243.32833583208398"/>
         </scene>
