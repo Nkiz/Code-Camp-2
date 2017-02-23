@@ -37,7 +37,6 @@
     _myUserList = [NSMutableDictionary dictionary];
     [_chatTableView registerClass:UITableViewCell.self forCellReuseIdentifier:@"TableViewCell"];
     [self configureDatabase];
-    //[self filtermyChat];
     
 }
 
@@ -55,6 +54,7 @@
                 break;
             }
         }
+        //add chat if logged user included in chat
         if(myChat){
             for(int i=0; i<userListArr.count; i++){
                 if(![userListArr[i] isEqualToString:[FIRAuth auth].currentUser.uid]){
@@ -67,6 +67,7 @@
                         for (NSString *key in _myUsers) {
                             if([tmpUser isEqualToString:([_myUsers objectForKey:key])]){
                                 [_myUserList setObject:[userData objectForKey:@"username"] forKey:key];
+                                //add cell in Table for Chat
                                 [self filtermyChat];
                             }
                         }
@@ -76,22 +77,6 @@
                 }
             }
         }
-        /*[[_userRef child:userListArr[i] ] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-            // Get user value
-            NSDictionary<NSString *, NSString *> *userData = snapshot.value;
-            NSString *tmpUser = [userData objectForKey:@"authId"];
-            NSMutableArray *columnArray = [NSMutableArray array];
-            if(![tmpUser isEqualToString:[FIRAuth auth].currentUser.uid]){
-                [_myUsers setObject:[userData objectForKey:@"username"] forKey:snapshot.key];
-                NSLog(@"%@", [userData objectForKey:@"username"]);
-            }
-            self.tmpUserData = snapshot.value;
-        } withCancelBlock:^(NSError * _Nonnull error) {
-            NSLog(@"%@", error.localizedDescription);
-        }];*/
-
-        
-        /*[_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];*/
     }];
 }
 
@@ -153,25 +138,57 @@
     //cell.textLabel.text = [name objectAtIndex];
     /*
     
-    NSString *name = message[MessageFieldsname];
-    NSString *imageURL = message[MessageFieldsimageURL];
     
-    NSString *text = message[MessageFieldstext];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", name, text];
-    cell.imageView.image = [UIImage imageNamed: @"ic_account_circle"];
-    NSString *photoURL = message[MessageFieldsphotoURL];
-    if (photoURL) {
-        NSURL *URL = [NSURL URLWithString:photoURL];
-        if (URL) {
-            NSData *data = [NSData dataWithContentsOfURL:URL];
-            if (data) {
-                cell.imageView.image = [UIImage imageWithData:data];
-            }
+    // Format Date
+    NSISO8601DateFormatter *dateFormat = [[NSISO8601DateFormatter alloc] init];
+    NSDate *date = [dateFormat dateFromString:message[@"lastMsgTs"]];
+    NSString *dateStr = @"";
+    
+    if([[NSCalendar currentCalendar] isDateInToday:date])
+    {
+        dateStr =  [NSDateFormatter localizedStringFromDate:date
+                                                  dateStyle:NSDateFormatterNoStyle
+                                                  timeStyle:NSDateFormatterShortStyle];
+    } else if([[NSCalendar currentCalendar] isDateInYesterday:date]) {
+        dateStr = @"Gestern";
+    } else {
+        dateStr = [NSDateFormatter localizedStringFromDate:date
+                                       dateStyle:NSDateFormatterShortStyle
+                                       timeStyle:NSDateFormatterNoStyle];
+    }
+    
+    cell.title.text = userListArr[0];
+    cell.message.text = message[@"lastMsg"];
+    cell.date.text = dateStr;
+    
+    // TODO: check if unread
+    if(indexPath.row % 2 == 0) {
+        [cell setRead:NO];
+    }
+    else {
+        [cell setRead:YES];
+    }
+    
+    NSString *imageURL = message[@"img"];
+    
+    if (imageURL) {
+        if ([imageURL hasPrefix:@"gs://"]) {
+            [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
+                                                                  completion:^(NSData *data, NSError *error) {
+                                                                      if (error) {
+                                                                          NSLog(@"Error downloading: %@", error);
+                                                                          return;
+                                                                      }
+                                                                      cell.avatar.image = [UIImage imageWithData: data];
+                                                                  }];
+        } else {
+            cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
     }
     */
     NSArray *name = [_myUserList allValues];
     cell.textLabel.text = [name objectAtIndex:indexPath.row];
+    
     return cell;
 }
 
