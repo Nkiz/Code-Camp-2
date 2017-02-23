@@ -7,6 +7,7 @@
 //
 
 #import "TableViewController.h"
+#import "ChatTableViewCell.h"
 
 @interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
@@ -28,7 +29,7 @@
     
     _messages = [[NSMutableArray alloc] init];
     
-    [_chatTableView registerClass:UITableViewCell.self forCellReuseIdentifier:@"TableViewCell"];
+    [_chatTableView registerClass:[ChatTableViewCell class] forCellReuseIdentifier:@"ChatTableViewCell"];
     
     _refHandle = [_chatRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
@@ -63,7 +64,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     // Dequeue cell
-    UITableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"TableViewCell" forIndexPath:indexPath];
+    ChatTableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"ChatTableViewCell"forIndexPath:indexPath];
     
     // Unpack message from Firebase DataSnapshot
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
@@ -71,28 +72,54 @@
     
     NSArray *userListArr = [ message objectForKey:@"userlist"];
     
-    cell.textLabel.text = userListArr[0];
-    //NSString *name = message[@"userlist"];
-    //cell.textLabel.text = [name objectAtIndex];
-    /*
     
-    NSString *name = message[MessageFieldsname];
-    NSString *imageURL = message[MessageFieldsimageURL];
     
-    NSString *text = message[MessageFieldstext];
-    cell.textLabel.text = [NSString stringWithFormat:@"%@: %@", name, text];
-    cell.imageView.image = [UIImage imageNamed: @"ic_account_circle"];
-    NSString *photoURL = message[MessageFieldsphotoURL];
-    if (photoURL) {
-        NSURL *URL = [NSURL URLWithString:photoURL];
-        if (URL) {
-            NSData *data = [NSData dataWithContentsOfURL:URL];
-            if (data) {
-                cell.imageView.image = [UIImage imageWithData:data];
-            }
+    // Format Date
+    NSISO8601DateFormatter *dateFormat = [[NSISO8601DateFormatter alloc] init];
+    NSDate *date = [dateFormat dateFromString:message[@"lastMsgTs"]];
+    NSString *dateStr = @"";
+    
+    if([[NSCalendar currentCalendar] isDateInToday:date])
+    {
+        dateStr =  [NSDateFormatter localizedStringFromDate:date
+                                                  dateStyle:NSDateFormatterNoStyle
+                                                  timeStyle:NSDateFormatterShortStyle];
+    } else if([[NSCalendar currentCalendar] isDateInYesterday:date]) {
+        dateStr = @"Gestern";
+    } else {
+        dateStr = [NSDateFormatter localizedStringFromDate:date
+                                       dateStyle:NSDateFormatterShortStyle
+                                       timeStyle:NSDateFormatterNoStyle];
+    }
+    
+    cell.title.text = userListArr[0];
+    cell.message.text = message[@"lastMsg"];
+    cell.date.text = dateStr;
+    
+    // TODO: check if unread
+    if(indexPath.row % 2 == 0) {
+        [cell setRead:NO];
+    }
+    else {
+        [cell setRead:YES];
+    }
+    
+    NSString *imageURL = message[@"img"];
+    
+    if (imageURL) {
+        if ([imageURL hasPrefix:@"gs://"]) {
+            [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
+                                                                  completion:^(NSData *data, NSError *error) {
+                                                                      if (error) {
+                                                                          NSLog(@"Error downloading: %@", error);
+                                                                          return;
+                                                                      }
+                                                                      cell.avatar.image = [UIImage imageWithData: data];
+                                                                  }];
+        } else {
+            cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
     }
-    */
     
     return cell;
 }

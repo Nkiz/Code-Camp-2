@@ -24,6 +24,7 @@
 		B4D1290E1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
 		B4D1290F1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
 		B4D129101E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
+		B4D19EEC1E5DE83700648DC3 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4D19EEB1E5DE83700648DC3 /* ChatTableViewCell.m */; };
 		CDC1058288AF5C7882DD74F3 /* libPods-uMessageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */; };
 		FB8CE5735CC9A8075DFA6436 /* libPods-uMessageUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE0C98E3C607F648B7DDEA44 /* libPods-uMessageUITests.a */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,8 @@
 		A4ECD68E1B5A5FF94C0CD8F0 /* libPods-uMessageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4E8F2026C11C3DA7A61E35 /* Pods-uMessage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessage.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessage/Pods-uMessage.release.xcconfig"; sourceTree = "<group>"; };
 		B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B4D19EEA1E5DE81A00648DC3 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatTableViewCell.h; sourceTree = "<group>"; };
+		B4D19EEB1E5DE83700648DC3 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatTableViewCell.m; sourceTree = "<group>"; };
 		B4E447F193705B8A4A7F3844 /* Pods-uMessageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageTests/Pods-uMessageTests.release.xcconfig"; sourceTree = "<group>"; };
 		E5496BC4B6AF7E2FB4CB2B59 /* libPods-uMessage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-uMessage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF13F99D827CCC712538E516 /* Pods-uMessageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageUITests/Pods-uMessageUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -163,6 +166,8 @@
 				969864661E5C503F0052D3D8 /* chatModelBlank.json */,
 				969864711E5DB1020052D3D8 /* TableViewController.h */,
 				969864721E5DB1020052D3D8 /* TableViewController.m */,
+				B4D19EEA1E5DE81A00648DC3 /* ChatTableViewCell.h */,
+				B4D19EEB1E5DE83700648DC3 /* ChatTableViewCell.m */,
 			);
 			path = uMessage;
 			sourceTree = "<group>";
@@ -494,6 +499,7 @@
 				96FBAF311E5AE7C5007361C4 /* DataViewController.m in Sources */,
 				969864731E5DB1020052D3D8 /* TableViewController.m in Sources */,
 				96FBAF2B1E5AE7C5007361C4 /* AppDelegate.m in Sources */,
+				B4D19EEC1E5DE83700648DC3 /* ChatTableViewCell.m in Sources */,
 				96FBAF341E5AE7C5007361C4 /* ModelController.m in Sources */,
 				96FBAF281E5AE7C5007361C4 /* main.m in Sources */,
 				96FBAF2E1E5AE7C5007361C4 /* RootViewController.m in Sources */,

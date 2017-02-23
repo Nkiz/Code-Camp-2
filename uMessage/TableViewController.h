@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @import FirebaseDatabase;
+@import FirebaseStorage;
 
 @interface TableViewController : UIViewController
 @property (strong, nonatomic) FIRDatabaseReference *ref;
