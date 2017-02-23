@@ -16,8 +16,11 @@
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *chatSnapshot;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
+@property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *myMessages;
 @property (strong, nonatomic) NSMutableDictionary *myUsers;
 @property (strong, nonatomic) NSMutableDictionary *myUserList;
+
+@property (weak, atomic) NSString *selectedChatId;
 
 @end
 
@@ -34,9 +37,10 @@
     
     //Load Database
     _messages = [[NSMutableArray alloc] init];
+    _myMessages = [[NSMutableArray alloc] init];
     _myUsers = [NSMutableDictionary dictionary];
     _myUserList = [NSMutableDictionary dictionary];
-    [_chatTableView registerClass:UITableViewCell.self forCellReuseIdentifier:@"TableViewCell"];
+    [_chatTableView registerClass:[ChatTableViewCell class]forCellReuseIdentifier:@"ChatTableViewCell"];
     [self configureDatabase];
     
 }
@@ -51,6 +55,7 @@
         //check if logged user is in chat-userlist
         for (int x=0; x<userListArr.count; x++ ) {
             if([userListArr[x] isEqualToString:[FIRAuth auth].currentUser.uid]){
+                [_myMessages addObject:snapshot];
                 myChat = true;
                 break;
             }
@@ -110,6 +115,10 @@
     // Dequeue cell
     ChatTableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"ChatTableViewCell"forIndexPath:indexPath];
     
+    //Get Data for TableCells
+    NSArray *name = [_myUserList allValues];
+    FIRDataSnapshot *messageSnapshot = _myMessages[indexPath.row];
+     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
     // Unpack message from Firebase DataSnapshot
     /*FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
@@ -138,6 +147,7 @@
     //NSString *name = message[@"userlist"];
     //cell.textLabel.text = [name objectAtIndex];
     /*
+     */
     
     
     // Format Date
@@ -158,7 +168,7 @@
                                        timeStyle:NSDateFormatterNoStyle];
     }
     
-    cell.title.text = userListArr[0];
+    cell.title.text = [name objectAtIndex:indexPath.row];
     cell.message.text = message[@"lastMsg"];
     cell.date.text = dateStr;
     
@@ -186,9 +196,6 @@
             cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
         }
     }
-    */
-    NSArray *name = [_myUserList allValues];
-    cell.textLabel.text = [name objectAtIndex:indexPath.row];
     
     return cell;
 }
