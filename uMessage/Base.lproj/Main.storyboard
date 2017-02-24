@@ -225,12 +225,13 @@
                         <outlet property="chatTableView" destination="dak-f2-5Og" id="4GL-iB-Dhr"/>
                         <segue destination="lkQ-iI-wLp" kind="show" identifier="ListToChat" id="aGA-8o-TpW"/>
                         <segue destination="m1l-IT-ZWW" kind="unwind" identifier="unwindToLogin" unwindAction="prepareForUnwind:" id="op7-pB-88o"/>
+                        <segue destination="PbT-yo-0hx" kind="show" identifier="chatsToSettings" id="zT0-gJ-fgN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wfJ-ZO-DQ7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="m1l-IT-ZWW" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1320.8" y="-243.32833583208398"/>
+            <point key="canvasLocation" x="1332" y="-243"/>
         </scene>
         <!--Chat-->
         <scene sceneID="nEv-uH-aeP">
@@ -305,7 +306,7 @@
         <!--Benutzerbild-->
         <scene sceneID="7br-cX-zyr">
             <objects>
-                <viewController storyboardIdentifier="DataViewController" title="Benutzerbild" id="PbT-yo-0hx" customClass="DataViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PictureViewController" title="Benutzerbild" id="PbT-yo-0hx" customClass="DataViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0R9-Tc-a0Y"/>
                         <viewControllerLayoutGuide type="bottom" id="duL-fU-hdC"/>

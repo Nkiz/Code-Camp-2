@@ -270,6 +270,7 @@
                                handler:^(UIAlertAction * action)
                                {
                                    // TODO: Settings
+                                   [self performSegueWithIdentifier: @"chatsToSettings" sender: self];
                                    
                                    // close menu
                                    [view dismissViewControllerAnimated:YES completion:nil];
