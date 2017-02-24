@@ -146,7 +146,9 @@
 
 -(void)scrollToBottom
 {
-    [_chatTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    if(self.messages.count >0){
+        [_chatTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
 }
 
 - (void)keyboardWasShown:(NSNotification*)aNotification
@@ -330,7 +332,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 - (void)sendPicture:(NSString *)url
 {
-    // stop editing
+    // stop editingT
     [self.view endEditing:YES];
     
     // current timestamp
