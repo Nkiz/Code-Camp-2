@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *chatTable;
 @property (strong, nonatomic) IBOutlet UITextField *chatMsg;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
+@property (strong, nonatomic) IBOutlet UIView *sendView;
 
 @end
 
@@ -53,6 +54,17 @@
     NSLog(@"AddButton pressed");
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -62,6 +74,9 @@
 
 
 - (IBAction)sendAction:(UIButton *)sender {
+    // stop editing
+    [self.view endEditing:YES];
+    
     // current timestamp
     NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
     NSString *result = [formatter stringFromDate:[NSDate date]];
@@ -102,7 +117,53 @@
     _refAddHandle = [_messagesRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
         [_chatTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self scrollToBottom];
     }];
 }
+
+-(void)scrollToBottom
+{
+    [_chatTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+}
+
+- (void)keyboardWasShown:(NSNotification*)aNotification
+{
+    NSLog(@"Keyboard was shown.");
+    NSDictionary* info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    [_chatTable setContentInset:UIEdgeInsetsMake(0, 0, kbSize.height, 0)];
+    
+    CGRect frame = _sendView.frame;
+    frame.origin.y = 608-kbSize.height;
+    _sendView.frame = frame;
+    
+    [self scrollToBottom];
+    
+    NSLog(@"Keyboard height is %f", kbSize.height);
+}
+
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    NSLog(@"Keyboard will be hidden.");
+    [_chatTable setContentInset:UIEdgeInsetsZero];
+    CGRect frame = _sendView.frame;
+    frame.origin.y = 608;
+    _sendView.frame = frame;
+    
+    [self scrollToBottom];
+}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"TextField should return.");
+    if(textField == _chatMsg) {
+        [self sendAction:nil];
+    }
+    return NO;
+}
+
 
 @end
