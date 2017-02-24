@@ -166,7 +166,7 @@
         <!--Chatliste-->
         <scene sceneID="NT4-D9-12m">
             <objects>
-                <viewController title="Chatliste" id="bAN-J9-YOw" customClass="TableViewController" sceneMemberID="viewController">
+                <viewController title="Chatliste" modalTransitionStyle="flipHorizontal" id="bAN-J9-YOw" customClass="TableViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MBl-Ra-rFF"/>
                         <viewControllerLayoutGuide type="bottom" id="oOP-em-ety"/>
@@ -222,7 +222,7 @@
         <!--Chat-->
         <scene sceneID="nEv-uH-aeP">
             <objects>
-                <viewController title="Chat" id="lkQ-iI-wLp" customClass="ChatViewController" sceneMemberID="viewController">
+                <viewController title="Chat" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="flipHorizontal" id="lkQ-iI-wLp" customClass="ChatViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6w5-wO-7Jh"/>
                         <viewControllerLayoutGuide type="bottom" id="FRx-v4-iY1"/>
@@ -260,26 +260,40 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="chatList" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="q2V-GI-mNf">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="chatList" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="q2V-GI-mNf">
                                 <rect key="frame" x="0.0" y="64" width="375" height="545"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="msgSend" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qkj-4l-0mf">
-                                <rect key="frame" x="299" y="617" width="60" height="30"/>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MnS-IP-fCO">
+                                <rect key="frame" x="0.0" y="608" width="375" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Senden"/>
-                                <connections>
-                                    <action selector="sendAction:" destination="lkQ-iI-wLp" eventType="touchUpInside" id="fQ6-6H-QtT"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="chatMsg" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nachricht eingeben" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fki-Pc-GMa">
-                                <rect key="frame" x="16" y="617" width="275" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
-                            </textField>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="chatMsg" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nachricht eingeben" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fki-Pc-GMa">
+                                        <rect key="frame" x="8" y="14" width="261" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="send" enablesReturnKeyAutomatically="YES"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="msgSend" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qkj-4l-0mf">
+                                        <rect key="frame" x="307" y="14" width="60" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" title="Senden"/>
+                                        <connections>
+                                            <action selector="sendAction:" destination="lkQ-iI-wLp" eventType="touchUpInside" id="fQ6-6H-QtT"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N7H-gd-Vko">
+                                        <rect key="frame" x="277" y="18" width="22" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="menuAction:" destination="lkQ-iI-wLp" eventType="touchUpInside" id="je3-rE-VJJ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.97636479139328003" green="0.97653168439865112" blue="0.97635418176651001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -289,6 +303,7 @@
                         <outlet property="chatMsg" destination="Fki-Pc-GMa" id="PCG-vJ-vnl"/>
                         <outlet property="chatTable" destination="q2V-GI-mNf" id="fPR-Mo-raW"/>
                         <outlet property="navigationBar" destination="AgN-bq-kb4" id="L5z-IZ-bKJ"/>
+                        <outlet property="sendView" destination="MnS-IP-fCO" id="EWg-Z5-Cxe"/>
                         <segue destination="ZyE-YZ-1Ev" kind="unwind" identifier="unwindToList" unwindAction="prepareForUnwind:" id="Awr-c0-5X1"/>
                     </connections>
                 </viewController>
