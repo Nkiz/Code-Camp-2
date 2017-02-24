@@ -7,9 +7,10 @@
 //
 
 @import Photos;
+@import CoreLocation;
 #import "ChatViewController.h"
 
-@interface ChatViewController ()<UITextFieldDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate>{
+@interface ChatViewController ()<UITextFieldDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate>{
     FIRDatabaseHandle _refAddHandle;
     FIRDatabaseHandle _refRemoveHandle;
 }
@@ -21,6 +22,8 @@
 @property (strong, nonatomic) IBOutlet UIView *sendView;
 
 @property (strong, nonatomic) FIRStorageReference *storageRef;
+@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) UIAlertController *alert;
 
 @end
 
@@ -191,7 +194,7 @@
                                          picker.sourceType = UIImagePickerControllerSourceTypeCamera;
                                      } else {
                                          picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                                     }                                     
+                                     }
                                      
                                      [self presentViewController:picker animated:YES completion:NULL];
                                                                           
@@ -215,10 +218,18 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction * action)
                                {
-                                   // TODO: location
-                                   
                                    // close menu
                                    [view dismissViewControllerAnimated:YES completion:nil];
+                                   
+                                   _alert =   [UIAlertController
+                                                                 alertControllerWithTitle:@"Bitte warten"
+                                                                 message:@"Sendet den aktuellen Standort."
+                                                                 preferredStyle:UIAlertControllerStyleAlert];
+                                   
+                                   [self presentViewController:_alert animated:YES completion:nil];
+                                   
+                                   [self getCurrentLocation];
+                                   
                                }];
     
     UIAlertAction* cancel = [UIAlertAction
@@ -317,5 +328,57 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 
 }
 
+- (void)sendLocation:(CLLocation*)location
+{
+    // stop editing
+    [self.view endEditing:YES];
+    
+    // current location
+    NSArray<NSString *> *coords = @[[NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]];
+    
+    // current timestamp
+    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+    NSString *result = [formatter stringFromDate:[NSDate date]];
+    NSDictionary *newMessage = @{@"attUrl": @"",
+                                 @"gpsCoord": coords,
+                                 @"imgUrl": @"",
+                                 @"msgText": @"",
+                                 @"msgTs": result,
+                                 @"readList": @[[[FIRAuth auth] currentUser].uid],
+                                 @"userid": [[FIRAuth auth] currentUser].uid,
+                                 @"vid": @"",
+                                 @"voiceUrl": @"",
+                                 };
+    
+    // add message to databse
+    [[_messagesRef childByAutoId] setValue:newMessage];
+    
+    // close alert
+    [_alert dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)getCurrentLocation
+{
+    if(_locationManager == nil) {
+        _locationManager = [[CLLocationManager alloc] init];
+    }
+    
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    _locationManager.distanceFilter = kCLDistanceFilterNone;
+    
+    [self.locationManager requestWhenInUseAuthorization];
+    
+    [_locationManager startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+     didUpdateLocations:(NSArray *)locations {
+    
+    [self sendLocation:[locations lastObject]];
+    
+    [_locationManager stopUpdatingLocation];
+    _locationManager = nil;
+}
 
 @end
