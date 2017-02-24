@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		58BF81F5E95C9EC600386E7F /* libPods-uMessage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5496BC4B6AF7E2FB4CB2B59 /* libPods-uMessage.a */; };
+		9600DDDC1E604E2C00C38A62 /* userpic.png in Resources */ = {isa = PBXBuildFile; fileRef = 9600DDDB1E604E2C00C38A62 /* userpic.png */; };
 		969864651E5C4FE20052D3D8 /* model.json in Resources */ = {isa = PBXBuildFile; fileRef = 969864641E5C4FE20052D3D8 /* model.json */; };
 		969864671E5C503F0052D3D8 /* chatModelBlank.json in Resources */ = {isa = PBXBuildFile; fileRef = 969864661E5C503F0052D3D8 /* chatModelBlank.json */; };
 		969864731E5DB1020052D3D8 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969864721E5DB1020052D3D8 /* TableViewController.m */; };
@@ -51,6 +52,7 @@
 		0526750D607FA4F50ED5FC07 /* Pods-uMessageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageTests/Pods-uMessageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		13506C36986656FDA43678DF /* Pods-uMessageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessageUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-uMessageUITests/Pods-uMessageUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		4EB9D78EE7FD904C75B3B5C1 /* Pods-uMessage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-uMessage.debug.xcconfig"; path = "Pods/Target Support Files/Pods-uMessage/Pods-uMessage.debug.xcconfig"; sourceTree = "<group>"; };
+		9600DDDB1E604E2C00C38A62 /* userpic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = userpic.png; path = uMessage/userpic.png; sourceTree = "<group>"; };
 		969864641E5C4FE20052D3D8 /* model.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = model.json; sourceTree = "<group>"; };
 		969864661E5C503F0052D3D8 /* chatModelBlank.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chatModelBlank.json; sourceTree = "<group>"; };
 		969864711E5DB1020052D3D8 /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
@@ -126,6 +128,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		9600DDDD1E604F4800C38A62 /* pics */ = {
+			isa = PBXGroup;
+			children = (
+				9600DDDB1E604E2C00C38A62 /* userpic.png */,
+			);
+			name = pics;
+			sourceTree = "<group>";
+		};
 		96FBAF1A1E5AE7C5007361C4 = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +145,7 @@
 				96FBAF241E5AE7C5007361C4 /* Products */,
 				E76DCAF4A7E19BE7BA67D67C /* Pods */,
 				5F4B7867303A1F883071AE2F /* Frameworks */,
+				9600DDDD1E604F4800C38A62 /* pics */,
 			);
 			sourceTree = "<group>";
 		};
@@ -155,8 +166,6 @@
 				96FBAF2A1E5AE7C5007361C4 /* AppDelegate.m */,
 				96FBAF2C1E5AE7C5007361C4 /* RootViewController.h */,
 				96FBAF2D1E5AE7C5007361C4 /* RootViewController.m */,
-				96FBAF2F1E5AE7C5007361C4 /* DataViewController.h */,
-				96FBAF301E5AE7C5007361C4 /* DataViewController.m */,
 				96FBAF321E5AE7C5007361C4 /* ModelController.h */,
 				96FBAF331E5AE7C5007361C4 /* ModelController.m */,
 				96FBAF351E5AE7C5007361C4 /* Main.storyboard */,
@@ -173,6 +182,8 @@
 				969864721E5DB1020052D3D8 /* TableViewController.m */,
 				B4D19EEA1E5DE81A00648DC3 /* ChatTableViewCell.h */,
 				B4D19EEB1E5DE83700648DC3 /* ChatTableViewCell.m */,
+				96FBAF2F1E5AE7C5007361C4 /* DataViewController.h */,
+				96FBAF301E5AE7C5007361C4 /* DataViewController.m */,
 			);
 			path = uMessage;
 			sourceTree = "<group>";
@@ -331,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9600DDDC1E604E2C00C38A62 /* userpic.png in Resources */,
 				96FBAF3C1E5AE7C5007361C4 /* LaunchScreen.storyboard in Resources */,
 				969864671E5C503F0052D3D8 /* chatModelBlank.json in Resources */,
 				B4D1290E1E5B337B0079972E /* GoogleService-Info.plist in Resources */,
