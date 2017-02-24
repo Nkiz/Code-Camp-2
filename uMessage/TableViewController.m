@@ -12,7 +12,7 @@
 #import "DataViewController.h"
 #import "ContactViewController.h"
 
-@interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
+@interface TableViewController ()<UITableViewDataSource, UITabBarDelegate, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
 }
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
@@ -22,6 +22,7 @@
 @property (strong, nonatomic) NSMutableDictionary *myUsers;
 @property (strong, nonatomic) NSMutableDictionary *myUserList;
 @property (strong, nonatomic) DataViewController *dv;
+@property (strong, nonatomic) IBOutlet UITabBar *uiBar;
 
 @property (weak, atomic) NSString *selectedChatId;
 @property (weak, atomic) NSString *selectedChatTitle;
@@ -39,9 +40,11 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    
+    _uiBar.delegate = self;
     _chatTableView.delegate = self;
     _chatTableView.dataSource = self;
+    
+    self.uiBar.selectedItem = [self.uiBar.items objectAtIndex:0];
     
     //Load Database
     _messages = [[NSMutableArray alloc] init];
@@ -57,6 +60,10 @@
 {
     return UIStatusBarStyleLightContent;
 }
+/*
+-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    //NSLog(@"%@", tabBarController);
+}*/
 
 - (void) configureDatabase{
     _refHandle = [_chatRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {

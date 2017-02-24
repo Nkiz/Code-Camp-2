@@ -41,6 +41,8 @@
     _chatTable.delegate = self;
     _chatTable.dataSource = self;
     
+    [self setNeedsStatusBarAppearanceUpdate];
+    
     _messages = [[NSMutableArray alloc] init];
     _navigationBar.topItem.title = self.chatTitle;
     
@@ -384,6 +386,8 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [_alert dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+
 - (void)getCurrentLocation
 {
     if(_locationManager == nil) {
@@ -406,6 +410,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     [_locationManager stopUpdatingLocation];
     _locationManager = nil;
+}
+
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 @end
