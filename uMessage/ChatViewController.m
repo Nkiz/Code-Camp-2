@@ -6,9 +6,10 @@
 //  Copyright © 2017 Codecamp. All rights reserved.
 //
 
+@import Photos;
 #import "ChatViewController.h"
 
-@interface ChatViewController ()<UITextFieldDelegate, UIScrollViewDelegate,UITableViewDataSource, UITableViewDelegate>{
+@interface ChatViewController ()<UITextFieldDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate>{
     FIRDatabaseHandle _refAddHandle;
     FIRDatabaseHandle _refRemoveHandle;
 }
@@ -18,6 +19,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *chatMsg;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
 @property (strong, nonatomic) IBOutlet UIView *sendView;
+
+@property (strong, nonatomic) FIRStorageReference *storageRef;
 
 @end
 
@@ -36,6 +39,9 @@
     
     _messages = [[NSMutableArray alloc] init];
     _navigationBar.topItem.title = self.chatTitle;
+    
+    // init Storage
+    self.storageRef = [[FIRStorage storage] reference];
     
     [_chatTable registerClass:[UITableViewCell class]forCellReuseIdentifier:@"TableViewCell"];
     [self loadMessages];
@@ -85,8 +91,8 @@
                                  @"imgUrl": @"",
                                  @"msgText": _chatMsg.text,
                                  @"msgTs": result,
-                                 @"readList": @"",
-                                 @"userid": @"",
+                                 @"readList": @[[[FIRAuth auth] currentUser].uid],
+                                 @"userid": [[FIRAuth auth] currentUser].uid,
                                  @"vid": @"",
                                  @"voiceUrl": @"",
                                };
@@ -163,6 +169,152 @@
         [self sendAction:nil];
     }
     return NO;
+}
+
+
+- (IBAction)menuAction:(UIButton *)sender {
+    UIAlertController * view =   [UIAlertController
+                                 alertControllerWithTitle:nil
+                                 message:nil
+                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    
+    UIAlertAction* photo = [UIAlertAction
+                                 actionWithTitle:@"Foto auswählen"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+                                     picker.delegate = self;
+                                     
+                                     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                                         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                                     } else {
+                                         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                                     }                                     
+                                     
+                                     [self presentViewController:picker animated:YES completion:NULL];
+                                                                          
+                                     // close menu
+                                     [view dismissViewControllerAnimated:YES completion:nil];
+                                 }];
+    
+    
+    UIAlertAction* voice = [UIAlertAction
+                               actionWithTitle:@"TODO: Sprachnachricht"
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction * action)
+                               {
+                                   // TODO: voice msg
+                                   
+                                   // close menu
+                                   [view dismissViewControllerAnimated:YES completion:nil];
+                               }];
+    UIAlertAction* location = [UIAlertAction
+                               actionWithTitle:@"TODO: Standort"
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction * action)
+                               {
+                                   // TODO: location
+                                   
+                                   // close menu
+                                   [view dismissViewControllerAnimated:YES completion:nil];
+                               }];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Abbrechen"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 // close menu
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    
+    [view addAction:photo];
+    [view addAction:voice];
+    [view addAction:location];
+    [view addAction:cancel];
+    [self presentViewController:view animated:YES completion:nil];
+}
+
+
+- (void)imagePickerController:(UIImagePickerController *)picker
+didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+    NSURL *referenceURL = info[UIImagePickerControllerReferenceURL];
+    // if it's a photo from the library, not an image from the camera
+    if (referenceURL) {
+        PHFetchResult* assets = [PHAsset fetchAssetsWithALAssetURLs:@[referenceURL] options:nil];
+        PHAsset *asset = [assets firstObject];
+        [asset requestContentEditingInputWithOptions:nil
+                                   completionHandler:^(PHContentEditingInput *contentEditingInput, NSDictionary *info) {
+                                       NSURL *imageFile = contentEditingInput.fullSizeImageURL;
+                                       NSString *filePath = [NSString stringWithFormat:@"%@/%lld/%@",
+                                                             [FIRAuth auth].currentUser.uid,
+                                                             (long long)([[NSDate date] timeIntervalSince1970] * 1000.0),
+                                                             [referenceURL lastPathComponent]];
+                                       [[_storageRef child:filePath]
+                                        putFile:imageFile metadata:nil
+                                        completion:^(FIRStorageMetadata *metadata, NSError *error) {
+                                            if (error) {
+                                                NSLog(@"Error uploading: %@", error);
+                                                return;
+                                            }
+                                            [self sendPicture:[_storageRef child:metadata.path].description];
+                                        }
+                                        ];
+                                   }];
+    } else {
+        UIImage *image = info[UIImagePickerControllerOriginalImage];
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.8);
+        NSString *imagePath =
+        [NSString stringWithFormat:@"%@/%lld.jpg",
+         [FIRAuth auth].currentUser.uid,
+         (long long)([[NSDate date] timeIntervalSince1970] * 1000.0)];
+        FIRStorageMetadata *metadata = [FIRStorageMetadata new];
+        metadata.contentType = @"image/jpeg";
+        [[_storageRef child:imagePath] putData:imageData metadata:metadata
+                                    completion:^(FIRStorageMetadata * _Nullable metadata, NSError * _Nullable error) {
+                                        if (error) {
+                                            NSLog(@"Error uploading: %@", error);
+                                            return;
+                                        }
+                                        [self sendPicture:[_storageRef child:metadata.path].description];
+                                    }];
+    }
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
+- (void)sendPicture:(NSString *)url
+{
+    // stop editing
+    [self.view endEditing:YES];
+    
+    // current timestamp
+    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+    NSString *result = [formatter stringFromDate:[NSDate date]];
+    NSDictionary *newMessage = @{@"attUrl": @"",
+                                 @"gpsCoord": @"",
+                                 @"imgUrl": url,
+                                 @"msgText": _chatMsg.text,
+                                 @"msgTs": result,
+                                 @"readList": @[[[FIRAuth auth] currentUser].uid],
+                                 @"userid": [[FIRAuth auth] currentUser].uid,
+                                 @"vid": @"",
+                                 @"voiceUrl": @"",
+                                 };
+    
+    // add message to databse
+    [[_messagesRef childByAutoId] setValue:newMessage];
+    _chatMsg.text = @"";
+
 }
 
 

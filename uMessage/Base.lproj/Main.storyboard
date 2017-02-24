@@ -278,7 +278,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="chatMsg" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nachricht eingeben" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fki-Pc-GMa">
-                                        <rect key="frame" x="8" y="15" width="291" height="30"/>
+                                        <rect key="frame" x="8" y="14" width="261" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -290,6 +290,13 @@
                                         <state key="normal" title="Senden"/>
                                         <connections>
                                             <action selector="sendAction:" destination="lkQ-iI-wLp" eventType="touchUpInside" id="fQ6-6H-QtT"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N7H-gd-Vko">
+                                        <rect key="frame" x="277" y="18" width="22" height="22"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="menuAction:" destination="lkQ-iI-wLp" eventType="touchUpInside" id="je3-rE-VJJ"/>
                                         </connections>
                                     </button>
                                 </subviews>
