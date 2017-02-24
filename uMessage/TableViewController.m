@@ -10,6 +10,7 @@
 #import "ChatTableViewCell.h"
 #import "ChatViewController.h"
 #import "DataViewController.h"
+#import "ContactViewController.h"
 
 @interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
@@ -131,36 +132,6 @@
     NSArray *name = [_myUserList allValues];
     FIRDataSnapshot *messageSnapshot = _myMessages[indexPath.row];
      NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
-    // Unpack message from Firebase DataSnapshot
-    /*FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
-    NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
-    NSArray *userListArr = [ message objectForKey:@"userlist"];
-    NSString *cellTitle;
-    for (int i=0; i< userListArr.count; i++){
-        NSDictionary *userDict;
-        if([userListArr[i] isEqualToString:[FIRAuth auth].currentUser.uid]){
-            myChat = true;
-        }else{
-            [[_userRef child:userListArr[i] ] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                // Get user value
-                self.tmpUserData = snapshot.value;
-            } withCancelBlock:^(NSError * _Nonnull error) {
-                NSLog(@"%@", error.localizedDescription);
-            }];
-            cellTitle = (@", %@", self.tmpUserData);
-        }
-    }
-    if(myChat){
-        cell.textLabel.text = @"test";
-        return cell;
-    }*/
-    
-    //cell.textLabel.text = userListArr[0];
-    //NSString *name = message[@"userlist"];
-    //cell.textLabel.text = [name objectAtIndex];
-    /*
-     */
-    
     
     // Format Date
     NSISO8601DateFormatter *dateFormat = [[NSISO8601DateFormatter alloc] init];
@@ -233,6 +204,13 @@
         controller.chatId = _selectedChatId;
         controller.chatTitle = _selectedChatTitle;
     }
+    if([[segue identifier] isEqualToString:@"ListToContact"])
+    {
+        ContactViewController *contactController = [segue destinationViewController];
+        contactController.myMessages = self.myMessages;
+        contactController.myUsers    = self.myUsers;
+        
+    }
 }
 - (IBAction)settingsAction:(UIBarButtonItem *)sender {
     UIAlertController * view=   [UIAlertController
@@ -247,7 +225,7 @@
                              handler:^(UIAlertAction * action)
                              {
                                  // TODO: New Contact
-                                 
+                                 [self performSegueWithIdentifier: @"ListToContact" sender: self];
                                  // close menu
                                  [view dismissViewControllerAnimated:YES completion:nil];
                                  
@@ -260,7 +238,6 @@
                                  handler:^(UIAlertAction * action)
                                  {
                                      // TODO: New Group
-                                     
                                      // close menu
                                      [view dismissViewControllerAnimated:YES completion:nil];
                                  }];
@@ -322,4 +299,9 @@
 -(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
     NSLog(@"List unwind");
 }
+
+- (void)addNewContact{
+    NSLog(@"new Contact");
+}
+
 @end

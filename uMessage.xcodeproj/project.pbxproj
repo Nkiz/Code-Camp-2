@@ -11,6 +11,7 @@
 		969864651E5C4FE20052D3D8 /* model.json in Resources */ = {isa = PBXBuildFile; fileRef = 969864641E5C4FE20052D3D8 /* model.json */; };
 		969864671E5C503F0052D3D8 /* chatModelBlank.json in Resources */ = {isa = PBXBuildFile; fileRef = 969864661E5C503F0052D3D8 /* chatModelBlank.json */; };
 		969864731E5DB1020052D3D8 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969864721E5DB1020052D3D8 /* TableViewController.m */; };
+		969864761E603A3A0052D3D8 /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969864751E603A3A0052D3D8 /* ContactViewController.m */; };
 		96FBAF281E5AE7C5007361C4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF271E5AE7C5007361C4 /* main.m */; };
 		96FBAF2B1E5AE7C5007361C4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF2A1E5AE7C5007361C4 /* AppDelegate.m */; };
 		96FBAF2E1E5AE7C5007361C4 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96FBAF2D1E5AE7C5007361C4 /* RootViewController.m */; };
@@ -55,6 +56,8 @@
 		969864661E5C503F0052D3D8 /* chatModelBlank.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chatModelBlank.json; sourceTree = "<group>"; };
 		969864711E5DB1020052D3D8 /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
 		969864721E5DB1020052D3D8 /* TableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewController.m; sourceTree = "<group>"; };
+		969864741E603A3A0052D3D8 /* ContactViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactViewController.h; sourceTree = "<group>"; };
+		969864751E603A3A0052D3D8 /* ContactViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactViewController.m; sourceTree = "<group>"; };
 		96FBAF231E5AE7C5007361C4 /* uMessage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = uMessage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		96FBAF271E5AE7C5007361C4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		96FBAF291E5AE7C5007361C4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -173,6 +176,8 @@
 				969864721E5DB1020052D3D8 /* TableViewController.m */,
 				B4D19EEA1E5DE81A00648DC3 /* ChatTableViewCell.h */,
 				B4D19EEB1E5DE83700648DC3 /* ChatTableViewCell.m */,
+				969864741E603A3A0052D3D8 /* ContactViewController.h */,
+				969864751E603A3A0052D3D8 /* ContactViewController.m */,
 			);
 			path = uMessage;
 			sourceTree = "<group>";
@@ -505,6 +510,7 @@
 				969864731E5DB1020052D3D8 /* TableViewController.m in Sources */,
 				96FBAF2B1E5AE7C5007361C4 /* AppDelegate.m in Sources */,
 				B4D19EEC1E5DE83700648DC3 /* ChatTableViewCell.m in Sources */,
+				969864761E603A3A0052D3D8 /* ContactViewController.m in Sources */,
 				96FBAF341E5AE7C5007361C4 /* ModelController.m in Sources */,
 				96FBAF281E5AE7C5007361C4 /* main.m in Sources */,
 				B4962FAF1E5F04970028580C /* ChatViewController.m in Sources */,

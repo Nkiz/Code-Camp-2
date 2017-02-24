@@ -226,6 +226,7 @@
                         <segue destination="lkQ-iI-wLp" kind="show" identifier="ListToChat" id="aGA-8o-TpW"/>
                         <segue destination="m1l-IT-ZWW" kind="unwind" identifier="unwindToLogin" unwindAction="prepareForUnwind:" id="op7-pB-88o"/>
                         <segue destination="PbT-yo-0hx" kind="show" identifier="chatsToSettings" id="zT0-gJ-fgN"/>
+                        <segue destination="LRt-Z6-vTS" kind="show" identifier="ListToContact" id="Zqs-1i-NNe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wfJ-ZO-DQ7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -301,7 +302,106 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIM-u7-S49" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="ZyE-YZ-1Ev" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2069.5999999999999" y="-243.32833583208398"/>
+            <point key="canvasLocation" x="2110" y="-243"/>
+        </scene>
+        <!--Contact-->
+        <scene sceneID="PsP-u4-7lP">
+            <objects>
+                <viewController id="LRt-Z6-vTS" userLabel="Contact" customClass="ContactViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pJm-aJ-CCy"/>
+                        <viewControllerLayoutGuide type="bottom" id="94F-ut-pUr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="HbM-Pe-9qb">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9IU-ga-Jzf">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Kontakt" id="UM3-rI-W5N">
+                                        <barButtonItem key="leftBarButtonItem" title="Zurück" id="1WY-4X-L4e">
+                                            <connections>
+                                                <action selector="backButtonPressed:" destination="LRt-Z6-vTS" id="hac-Ym-laM"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="KjQ-Wl-SRw">
+                                            <connections>
+                                                <action selector="addButtonPressed:" destination="lkQ-iI-wLp" id="vbm-Qk-9mG"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zpk-c2-Ogm">
+                                <rect key="frame" x="-1" y="63" width="376" height="604"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idContactNick" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FfY-Ax-eg2">
+                                        <rect key="frame" x="29" y="26" width="319" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idContactMail" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="E-Mail" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="d1N-dw-zHu">
+                                        <rect key="frame" x="29" y="79" width="319" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                    </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="_____________________________________________________" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="61M-Wc-ICZ">
+                                        <rect key="frame" x="0.0" y="193" width="383" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idSeachtContactBtn" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NsF-R9-jh4">
+                                        <rect key="frame" x="29" y="132" width="319" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="0.078431372550000003" green="0.59607843140000005" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <size key="titleShadowOffset" width="1" height="1"/>
+                                        <state key="normal" title="Kontakt suchen">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="loginTouchUpInside:" destination="S4R-Ja-viH" eventType="touchUpInside" id="MWD-cI-fUF"/>
+                                            <action selector="searchContactPressed:" destination="LRt-Z6-vTS" eventType="touchUpInside" id="5vO-tj-RLb"/>
+                                        </connections>
+                                    </button>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idContactTable" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="71" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KyY-9O-bQR">
+                                        <rect key="frame" x="8" y="220" width="360" height="376"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="LRt-Z6-vTS" id="31i-Ip-ESx"/>
+                                            <outlet property="delegate" destination="LRt-Z6-vTS" id="PZE-kQ-IKT"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="10"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="idContactMail" destination="d1N-dw-zHu" id="Apd-oM-1M7"/>
+                        <outlet property="idContactNick" destination="FfY-Ax-eg2" id="z9m-gy-vS8"/>
+                        <outlet property="usersTable" destination="KyY-9O-bQR" id="zJw-Lw-HVu"/>
+                        <segue destination="KEc-PS-PO0" kind="unwind" identifier="ContactToList" unwindAction="prepareForUnwind:" id="9Tx-y6-e1m"/>
+                        <segue destination="lkQ-iI-wLp" kind="show" identifier="ContactToChat" id="k0F-H1-ZWC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O46-23-su7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="KEc-PS-PO0" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1332" y="532"/>
         </scene>
         <!--Benutzerbild-->
         <scene sceneID="7br-cX-zyr">
@@ -387,4 +487,7 @@
     <resources>
         <image name="MenuIcon" width="44" height="44"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="k0F-H1-ZWC"/>
+    </inferredMetricsTieBreakers>
 </document>

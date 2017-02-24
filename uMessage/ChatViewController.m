@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *chatMsg;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
 
+
 @end
 
 @implementation ChatViewController
@@ -79,6 +80,8 @@
     // add message to databse
     [[_messagesRef childByAutoId] setValue:newMessage];
     _chatMsg.text = @"";
+    
+    //TODO Write last message in chat
 
 }
 
