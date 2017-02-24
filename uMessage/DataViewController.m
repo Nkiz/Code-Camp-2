@@ -28,6 +28,8 @@
     self.registerEmailTextField.delegate = self;
     self.registerNicknameTextField.delegate = self;
     self.registerPasswordTextField.delegate = self;
+    self.loginEmailTextField.delegate       = self;
+    self.loginPasswordTextField.delegate    = self;
     self.scrollView.delegate = self;
     
     // reference to database
@@ -50,11 +52,18 @@
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    self.loginEmailTextField.text       = @"";
+    self.loginPasswordTextField.text    = @"";
+    self.registerEmailTextField.text    = @"";
+    self.registerNicknameTextField.text = @"";
+    self.registerPasswordTextField.text = @"";
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dealloc {
     [[FIRAuth auth] removeAuthStateDidChangeListener:_handle];
+
 }
 
 

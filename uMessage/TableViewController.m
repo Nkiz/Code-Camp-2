@@ -9,6 +9,7 @@
 #import "TableViewController.h"
 #import "ChatTableViewCell.h"
 #import "ChatViewController.h"
+#import "DataViewController.h"
 
 @interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
@@ -19,6 +20,7 @@
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *myMessages;
 @property (strong, nonatomic) NSMutableDictionary *myUsers;
 @property (strong, nonatomic) NSMutableDictionary *myUserList;
+@property (strong, nonatomic) DataViewController *dv;
 
 @property (weak, atomic) NSString *selectedChatId;
 @property (weak, atomic) NSString *selectedChatTitle;
@@ -29,6 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.ref     = [[FIRDatabase database] reference];
     self.userRef = [_ref child:@"users"];
     self.chatRef = [_ref child:@"chats"];
