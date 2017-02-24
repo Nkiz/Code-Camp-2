@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@import Firebase;
 @import FirebaseAuth;
 @import FirebaseDatabase;
 @import FirebaseStorage;
