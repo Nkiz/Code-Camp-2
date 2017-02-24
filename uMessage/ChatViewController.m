@@ -8,7 +8,7 @@
 
 #import "ChatViewController.h"
 
-@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>{
+@interface ChatViewController ()<UITextFieldDelegate, UIScrollViewDelegate,UITableViewDataSource, UITableViewDelegate>{
     FIRDatabaseHandle _refAddHandle;
     FIRDatabaseHandle _refRemoveHandle;
 }
@@ -27,6 +27,8 @@
     self.ref         = [[FIRDatabase database] reference];
     self.chatRef     = [_ref child:@"messages"];
     self.messagesRef = [_chatRef child:_chatId];
+    
+    self.chatMsg.delegate = self;
     
     _chatTable.delegate = self;
     _chatTable.dataSource = self;

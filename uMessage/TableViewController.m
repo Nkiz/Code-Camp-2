@@ -231,6 +231,78 @@
         controller.chatTitle = _selectedChatTitle;
     }
 }
+- (IBAction)settingsAction:(UIBarButtonItem *)sender {
+    UIAlertController * view=   [UIAlertController
+                                 alertControllerWithTitle:nil
+                                 message:nil
+                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    
+    UIAlertAction* newContact = [UIAlertAction
+                             actionWithTitle:@"Neuer Kontakt"
+                             style:UIAlertActionStyleDefault
+                             handler:^(UIAlertAction * action)
+                             {
+                                 // TODO: New Contact
+                                 
+                                 // close menu
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    
+    UIAlertAction* newGroup = [UIAlertAction
+                                 actionWithTitle:@"Neue Gruppe"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     // TODO: New Group
+                                     
+                                     // close menu
+                                     [view dismissViewControllerAnimated:YES completion:nil];
+                                 }];
+    UIAlertAction* settings = [UIAlertAction
+                               actionWithTitle:@"Einstellungen"
+                               style:UIAlertActionStyleDefault
+                               handler:^(UIAlertAction * action)
+                               {
+                                   // TODO: Settings
+                                   
+                                   // close menu
+                                   [view dismissViewControllerAnimated:YES completion:nil];
+                               }];
+    
+    
+    UIAlertAction* logout = [UIAlertAction
+                         actionWithTitle:@"Abmelden"
+                         style:UIAlertActionStyleDefault
+                         handler:^(UIAlertAction * action)
+                         {
+                             [self logoutAction:self];
+                             
+                             // close menu
+                             [view dismissViewControllerAnimated:YES completion:nil];
+                             
+                         }];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Abbrechen"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 // close menu
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    
+    [view addAction:newContact];
+    [view addAction:newGroup];
+    [view addAction:settings];
+    [view addAction:logout];
+    [view addAction:cancel];
+    [self presentViewController:view animated:YES completion:nil];
+}
 
 - (IBAction)logoutAction:(id)sender {
     NSError *signOutError;

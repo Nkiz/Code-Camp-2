@@ -27,13 +27,13 @@
     [self.title setTextColor:[UIColor blackColor]];
     
     // Message init
-    self.message = [[UILabel alloc] initWithFrame:CGRectMake(80.0, 38.0, 212.0, 15.0)];
+    self.message = [[UILabel alloc] initWithFrame:CGRectMake(80.0, 38.0, 232.0, 15.0)];
     [self.message setFont:[UIFont systemFontOfSize:12.0]];
     [self.message setTextAlignment:NSTextAlignmentLeft];
     [self.message setTextColor:[UIColor blackColor]];
     
     // Date init
-    self.date = [[UILabel alloc] initWithFrame:CGRectMake(234.0, 22.0, 68.0, 15.0)];
+    self.date = [[UILabel alloc] initWithFrame:CGRectMake(254.0, 22.0, 78.0, 15.0)];
     [self.date setFont:[UIFont systemFontOfSize:12.0]];
     [self.date setTextAlignment:NSTextAlignmentRight];
     [self.date setTextColor:[UIColor lightGrayColor]];
