@@ -118,7 +118,18 @@
     UITableViewCell *cell = [_chatTable dequeueReusableCellWithIdentifier:@"TableViewCell"forIndexPath:indexPath];
     FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
-    cell.textLabel.text = message[@"msgText"];
+    
+    if([message[@"msgText"] isEqual:@""]) {
+        if(![message[@"imgUrl"] isEqual:@""]) {
+            cell.textLabel.text = @"[BILD]";
+        }
+        
+        if(![message[@"gpsCoord"] isEqual:@""]) {
+            cell.textLabel.text = @"[COORD]";
+        }
+    } else {
+        cell.textLabel.text = message[@"msgText"];
+    }
     return cell;
 }
 
@@ -253,7 +264,12 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    [picker dismissViewControllerAnimated:YES completion:NULL];
+    [picker dismissViewControllerAnimated:YES completion:NULL];    
+    
+    _alert =   [UIAlertController
+                alertControllerWithTitle:@"Bitte warten"
+                message:@"Lädt das Bild hoch."
+                preferredStyle:UIAlertControllerStyleAlert];
     
     NSURL *referenceURL = info[UIImagePickerControllerReferenceURL];
     // if it's a photo from the library, not an image from the camera
@@ -270,6 +286,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                        [[_storageRef child:filePath]
                                         putFile:imageFile metadata:nil
                                         completion:^(FIRStorageMetadata *metadata, NSError *error) {
+                                            // close alert
+                                            [_alert dismissViewControllerAnimated:YES completion:nil];
+                                            
                                             if (error) {
                                                 NSLog(@"Error uploading: %@", error);
                                                 return;
@@ -289,6 +308,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
         metadata.contentType = @"image/jpeg";
         [[_storageRef child:imagePath] putData:imageData metadata:metadata
                                     completion:^(FIRStorageMetadata * _Nullable metadata, NSError * _Nullable error) {
+                                        // close alert
+                                        [_alert dismissViewControllerAnimated:YES completion:nil];
+                                        
                                         if (error) {
                                             NSLog(@"Error uploading: %@", error);
                                             return;
