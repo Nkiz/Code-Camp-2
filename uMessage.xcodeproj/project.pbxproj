@@ -662,6 +662,7 @@
 			baseConfigurationReference = 4EB9D78EE7FD904C75B3B5C1 /* Pods-uMessage.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = uMessage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.uni-kassel.eecs.comtec.uMessage";
@@ -674,6 +675,7 @@
 			baseConfigurationReference = AE4E8F2026C11C3DA7A61E35 /* Pods-uMessage.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = uMessage/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "de.uni-kassel.eecs.comtec.uMessage";

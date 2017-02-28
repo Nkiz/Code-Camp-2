@@ -105,10 +105,16 @@
     
     // add message to databse
     [[_messagesRef childByAutoId] setValue:newMessage];
-    _chatMsg.text = @"";
     
-    //TODO Write last message in chat
-
+    //Write last message in chat
+    NSString *msgKey = @"lastMsg";
+    NSString *tsKey = @"lastMsgTs";
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", _chatId, msgKey]: _chatMsg.text,
+                                   [NSString stringWithFormat:@"/chats/%@/%@/", _chatId, tsKey]: result};
+    [_ref updateChildValues:childUpdates];
+    
+    // reset textfield    
+    _chatMsg.text = @"";
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -126,11 +132,11 @@
     
     if([message[@"msgText"] isEqual:@""]) {
         if(![message[@"imgUrl"] isEqual:@""]) {
-            cell.textLabel.text = @"[BILD]";
+            cell.textLabel.text = @"[Foto]";
         }
         
         if(![message[@"gpsCoord"] isEqual:@""]) {
-            cell.textLabel.text = @"[COORD]";
+            cell.textLabel.text = @"[Koordinaten]";
         }
     } else {
         cell.textLabel.text = message[@"msgText"];
@@ -141,9 +147,27 @@
 - (void) loadMessages{
     _refAddHandle = [_messagesRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [_messages addObject:snapshot];
+        
+        [self checkIsRead:snapshot];
+        
         [_chatTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self scrollToBottom];
     }];
+}
+
+-(void)checkIsRead:(FIRDataSnapshot*) msg {
+    NSDictionary<NSString *, NSString *> *message = msg.value;
+    
+    NSArray *readList = (NSArray *) message[@"readList"];
+    NSString *userId = [[FIRAuth auth] currentUser].uid;
+    
+    if(![readList containsObject:userId]) {
+        
+        // update readList in db
+        NSString *key = @"readList";
+        NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/messages/%@/%@/%@/", _chatId, msg.key, key]: [readList arrayByAddingObject:userId]};
+        [_ref updateChildValues:childUpdates];
+    }
 }
 
 -(void)scrollToBottom
@@ -232,7 +256,7 @@
                                    [view dismissViewControllerAnimated:YES completion:nil];
                                }];
     UIAlertAction* location = [UIAlertAction
-                               actionWithTitle:@"TODO: Standort"
+                               actionWithTitle:@"Standort"
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction * action)
                                {
@@ -353,6 +377,15 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     // add message to databse
     [[_messagesRef childByAutoId] setValue:newMessage];
+    
+    
+    //Write last message in chat
+    NSString *msgKey = @"lastMsg";
+    NSString *tsKey = @"lastMsgTs";
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", _chatId, msgKey]: @"[Foto]",
+                                   [NSString stringWithFormat:@"/chats/%@/%@/", _chatId, tsKey]: result};
+    [_ref updateChildValues:childUpdates];
+    
     _chatMsg.text = @"";
 
 }
@@ -381,6 +414,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     // add message to databse
     [[_messagesRef childByAutoId] setValue:newMessage];
+    
+    //Write last message in chat
+    NSString *msgKey = @"lastMsg";
+    NSString *tsKey = @"lastMsgTs";
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", _chatId, msgKey]: @"[Koordinaten]",
+                                   [NSString stringWithFormat:@"/chats/%@/%@/", _chatId, tsKey]: result};
+    [_ref updateChildValues:childUpdates];
     
     // close alert
     [_alert dismissViewControllerAnimated:YES completion:nil];

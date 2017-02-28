@@ -12,7 +12,7 @@
         <!--Anmeldung-->
         <scene sceneID="snT-py-3hH">
             <objects>
-                <viewController storyboardIdentifier="DataViewController" title="Anmeldung" modalTransitionStyle="flipHorizontal" id="S4R-Ja-viH" customClass="DataViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DataViewController" title="Anmeldung" modalTransitionStyle="crossDissolve" id="S4R-Ja-viH" customClass="DataViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fXf-Jd-eTc"/>
                         <viewControllerLayoutGuide type="bottom" id="EPS-s9-h4K"/>
@@ -165,7 +165,7 @@
         <!--Chatliste-->
         <scene sceneID="NT4-D9-12m">
             <objects>
-                <viewController title="Chatliste" modalTransitionStyle="flipHorizontal" id="bAN-J9-YOw" customClass="TableViewController" sceneMemberID="viewController">
+                <viewController title="Chatliste" modalTransitionStyle="crossDissolve" id="bAN-J9-YOw" customClass="TableViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="MBl-Ra-rFF"/>
                         <viewControllerLayoutGuide type="bottom" id="oOP-em-ety"/>
@@ -230,7 +230,7 @@
         <!--Chat-->
         <scene sceneID="nEv-uH-aeP">
             <objects>
-                <viewController title="Chat" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="flipHorizontal" id="lkQ-iI-wLp" customClass="ChatViewController" sceneMemberID="viewController">
+                <viewController title="Chat" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="crossDissolve" id="lkQ-iI-wLp" customClass="ChatViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6w5-wO-7Jh"/>
                         <viewControllerLayoutGuide type="bottom" id="FRx-v4-iY1"/>
@@ -319,7 +319,7 @@
         <!--Contact-->
         <scene sceneID="PsP-u4-7lP">
             <objects>
-                <viewController id="LRt-Z6-vTS" userLabel="Contact" customClass="ContactViewController" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="crossDissolve" id="LRt-Z6-vTS" userLabel="Contact" customClass="ContactViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pJm-aJ-CCy"/>
                         <viewControllerLayoutGuide type="bottom" id="94F-ut-pUr"/>
@@ -418,7 +418,7 @@
         <!--Benutzerbild-->
         <scene sceneID="7br-cX-zyr">
             <objects>
-                <viewController storyboardIdentifier="PictureViewController" title="Benutzerbild" id="PbT-yo-0hx" customClass="DataViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PictureViewController" title="Benutzerbild" modalTransitionStyle="crossDissolve" id="PbT-yo-0hx" customClass="DataViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="0R9-Tc-a0Y"/>
                         <viewControllerLayoutGuide type="bottom" id="duL-fU-hdC"/>
@@ -501,6 +501,6 @@
         <image name="chatIcon" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aGA-8o-TpW"/>
+        <segue reference="k0F-H1-ZWC"/>
     </inferredMetricsTieBreakers>
 </document>
