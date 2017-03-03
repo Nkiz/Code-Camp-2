@@ -9,63 +9,181 @@
 @import Photos;
 @import CoreLocation;
 #import "ChatViewController.h"
+#import "BubbleChatCell.h"
+#import "BubbleImageChatCell.h"
+#import "BubbleLocationChatCell.h"
 
-@interface ChatViewController ()<UITextFieldDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate>{
+@interface ChatViewController () <UITextFieldDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate> {
     FIRDatabaseHandle _refAddHandle;
     FIRDatabaseHandle _refRemoveHandle;
 }
 
-@property (strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
-@property (strong, nonatomic) IBOutlet UITableView *chatTable;
-@property (strong, nonatomic) IBOutlet UITextField *chatMsg;
-@property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
-@property (strong, nonatomic) IBOutlet UIView *sendView;
+// UI Elements
+@property(strong, nonatomic) IBOutlet UINavigationBar *navigationBar;
+@property(strong, nonatomic) IBOutlet UITableView *chatTable;
+@property(strong, nonatomic) IBOutlet UITextField *chatMsg;
+@property(strong, nonatomic) IBOutlet UIView *sendView;
+@property(strong, nonatomic) UIAlertController *alert;
 
-@property (strong, nonatomic) FIRStorageReference *storageRef;
-@property (strong, nonatomic) CLLocationManager *locationManager;
-@property (strong, nonatomic) UIAlertController *alert;
+// Chat
+@property(strong, nonatomic) NSString *currentUserID;
+@property(strong, nonatomic) NSMutableDictionary<NSString *, NSString *> *users;
+@property(strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
+@property BOOL isGroup;
 
+// Storage
+@property(strong, nonatomic) FIRStorageReference *storageRef;
+
+// Position Manager
+@property(strong, nonatomic) CLLocationManager *locationManager;
 
 @end
 
 @implementation ChatViewController
-- (void)viewDidLoad {
+
+#pragma mark Initialisation
+
+/**
+ Init UI Elements and get / display chat information.
+ */
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    self.ref         = [[FIRDatabase database] reference];
-    self.chatRef     = [_ref child:@"messages"];
-    self.messagesRef = [_chatRef child:_chatId];
-    
+    [self initDelegates];
+    [self initDatabase];
+    [self initStorage];
+    [self initTable];
+    [self initChat];
+}
+
+/**
+ Set controller as delegate
+ */
+- (void)initDelegates
+{
     self.chatMsg.delegate = self;
-    
-    _chatTable.delegate = self;
-    _chatTable.dataSource = self;
-    
-    [self setNeedsStatusBarAppearanceUpdate];
-    
-    _messages = [[NSMutableArray alloc] init];
-    _navigationBar.topItem.title = self.chatTitle;
-    
-    // init Storage
+    self.chatTable.delegate = self;
+    self.chatTable.dataSource = self;
+}
+
+/**
+ Get references to database tables
+ */
+- (void)initDatabase
+{
+    self.ref = [[FIRDatabase database] reference];
+    self.chatRef = [self.ref child:MessagesTable];
+    self.messagesRef = [self.chatRef child:self.chatId];
+}
+
+/**
+ Get Storage Reference
+ */
+- (void)initStorage
+{
     self.storageRef = [[FIRStorage storage] reference];
+}
+
+/**
+ Set cell height to auto and register cell styles
+ */
+- (void)initTable
+{
+    // automatic table view height
+    self.chatTable.rowHeight = UITableViewAutomaticDimension;
+    self.chatTable.estimatedRowHeight = 71.0;
     
-    [_chatTable registerClass:[UITableViewCell class]forCellReuseIdentifier:@"TableViewCell"];
-    [self loadMessages];
+    // register bubble cell types
+    [self.chatTable registerClass:[BubbleChatCell class] forCellReuseIdentifier:BubbleCellId];
+    [self.chatTable registerClass:[BubbleImageChatCell class] forCellReuseIdentifier:BubbleImageCellId];
+    [self.chatTable registerClass:[BubbleLocationChatCell class] forCellReuseIdentifier:BubbleLocationCellId];
 }
 
--(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
-    NSLog(@"Chat unwind");
+/**
+ Init local variables, get usernames and load messages
+ */
+- (void)initChat
+{
+    // init local vars
+    self.users = [[NSMutableDictionary alloc] init];
+    self.messages = [[NSMutableArray alloc] init];
+    self.currentUserID = [[FIRAuth auth] currentUser].uid;
+    
+    // group chat, if more than 2 other user are in this chat
+    self.isGroup = [self.chatUserlist count] > 1;
+    
+    [self getUsernames];
 }
 
-
-- (IBAction)backButtonPressed:(id)sender {
-    [self performSegueWithIdentifier:@"unwindToList" sender:self];
+/**
+ Get username for each userid in chat.
+ Load messages from database.
+ */
+- (void)getUsernames
+{
+    for(NSString *userID in self.chatUserlist) {
+        // get user entry from db
+        [[[self.ref child:UsersTable] child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            NSString *name = snapshot.value[Username];
+            [self.users setValue:name forKey:userID];
+            
+            // Check if we have all usernames
+            if([self.users count] == [self.chatUserlist count]) {
+                [self displayTitle];
+                [self loadMessages];
+            }
+        } withCancelBlock:^(NSError * _Nonnull error) {
+            NSLog(@"%@", error.localizedDescription);
+        }];
+    }
 }
 
-- (IBAction)addButtonPressed:(id)sender {
-    NSLog(@"AddButton pressed");
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
 }
 
+#pragma mark UI Functions
+
+/**
+ Display all usernames as title
+ */
+- (void)displayTitle
+{
+    NSMutableArray *usernames = [[NSMutableArray alloc] init];
+    NSString *myName = self.users[self.currentUserID];
+    
+    // dont show own name
+    for(NSString *name in [self.users allValues]) {
+        if(![name isEqualToString:myName]) {
+            [usernames addObject:name];
+        }
+    }
+    
+    // sort names alphabetically
+    NSArray *sortedNames = [usernames sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    // convert array to string
+    NSString* title = [sortedNames componentsJoinedByString:@", "];
+    
+    // show as navigation bar title
+    self.navigationBar.topItem.title = title;
+}
+
+/**
+ Prepare a segue unwind.
+ 
+ @param segue Unwind Segue
+ */
+- (IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
+    NSLog(@"Chat unwind.");
+}
+
+/**
+ Add keyboard event listener.
+ 
+ @param animated If YES, use animation
+ */
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -78,253 +196,445 @@
                                                  name:UIKeyboardWillHideNotification object:nil];
 }
 
+/**
+ If the keyboard is shown, resize content to show the TextField.
+ */
+- (void)keyboardWasShown:(NSNotification *)aNotification {
+    NSLog(@"Keyboard was shown.");
+    
+    // Get keyboard size
+    NSDictionary *info = [aNotification userInfo];
+    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    // show content hidden by keyboard
+    [self.chatTable setContentInset:UIEdgeInsetsMake(0, 0, kbSize.height, 0)];
+    
+    CGRect frame = self.sendView.frame;
+    frame.origin.y = 608 - kbSize.height;
+    self.sendView.frame = frame;
+    
+    [self scrollToBottom:YES];
+}
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+/**
+ Reset content position, when keyboard is hidden.
+ */
+- (void)keyboardWillBeHidden:(NSNotification *)aNotification {
+    NSLog(@"Keyboard will be hidden.");
+    
+    // reset inset
+    [self.chatTable setContentInset:UIEdgeInsetsZero];
+    CGRect frame = self.sendView.frame;
+    frame.origin.y = 608;
+    self.sendView.frame = frame;
+    
+    [self scrollToBottom:YES];
 }
 
 
+#pragma mark UI Actions
+
+
+/**
+ Go back to chat list, when back button in navigation bar is pressed.
+ */
+- (IBAction)backButtonPressed:(id)sender {
+    [self performSegueWithIdentifier:@"unwindToList" sender:self];
+}
+
+/**
+ Show menu, when add button in navigation bar is pressed.
+ */
+- (IBAction)addButtonPressed:(id)sender {
+    NSLog(@"AddButton pressed");
+}
+
+/**
+ Send text message, when send button is pressed.
+ */
 - (IBAction)sendAction:(UIButton *)sender {
     // stop editing
     [self.view endEditing:YES];
     
-    // current timestamp
+    // get current timestamp
     NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-    NSString *result = [formatter stringFromDate:[NSDate date]];
-    NSDictionary *newMessage = @{@"attUrl": @"",
-                                 @"gpsCoord": @"",
-                                 @"imgUrl": @"",
-                                 @"msgText": _chatMsg.text,
-                                 @"msgTs": result,
-                                 @"readList": @[[[FIRAuth auth] currentUser].uid],
-                                 @"userid": [[FIRAuth auth] currentUser].uid,
-                                 @"vid": @"",
-                                 @"voiceUrl": @"",
-                               };
+    NSString *timestamp = [formatter stringFromDate:[NSDate date]];
     
-    // add message to databse
-    [[_messagesRef childByAutoId] setValue:newMessage];
-    
-    //Write last message in chat
-    NSString *msgKey = @"lastMsg";
-    NSString *tsKey = @"lastMsgTs";
-    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", _chatId, msgKey]: _chatMsg.text,
-                                   [NSString stringWithFormat:@"/chats/%@/%@/", _chatId, tsKey]: result};
-    [_ref updateChildValues:childUpdates];
-    
-    // reset textfield    
-    _chatMsg.text = @"";
+    NSDictionary *newMessage = @{MessageAttachment: EmptyString,
+                                 MessageLocation: EmptyString,
+                                 MessageImage: EmptyString,
+                                 MessageText: self.chatMsg.text,
+                                 MessageTimestamp: timestamp,
+                                 MessageReadlist: @[self.currentUserID],
+                                 MessageUserID: self.currentUserID,
+                                 MessageVideo: EmptyString,
+                                 MessageVoice: EmptyString,
+                                 };
+    [self sendMessage:newMessage withTimestamp:timestamp];
 }
 
+/**
+ Send Message to Database
+ */
+- (void)sendMessage:(NSDictionary *)msg withTimestamp:(NSString *)timestamp
+{
+    // add message to databse
+    [[self.messagesRef childByAutoId] setValue:msg];
+    
+    //Write last message in chat
+    [self updateLastChatMessage:self.chatMsg.text withTimestamp:timestamp];
+    
+    // reset textfield
+    self.chatMsg.text = EmptyString;
+}
+
+/**
+ Only 1 section for chat
+ */
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
+/**
+ Number of rows is the number of chat messages
+ */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [_messages count];
+    return [self.messages count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UITableViewCell *cell = [_chatTable dequeueReusableCellWithIdentifier:@"TableViewCell"forIndexPath:indexPath];
-    FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
+/**
+ Check if a message with location is selected and open maps.
+ */
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.view endEditing:YES];
+    
+    // get message for row
+    FIRDataSnapshot *messageSnapshot = self.messages[indexPath.row];
     NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
     
-    if([message[@"msgText"] isEqual:@""]) {
-        if(![message[@"imgUrl"] isEqual:@""]) {
-            cell.textLabel.text = @"[Foto]";
+    // is location message ?
+    if ([message[MessageLocation] isEqual:EmptyString]) return;
+    
+    // get coordinates
+    NSArray *coord = (NSArray *) message[MessageLocation];
+    CGFloat latitude = [coord[0] floatValue];
+    CGFloat longitude = [coord[1] floatValue];
+    
+    // open maps with location and username
+    NSString *url = [NSString stringWithFormat:@"http://maps.apple.com/?t=m&q=%@&ll=%f,%f",  self.users[message[MessageUserID]], latitude, longitude];
+    NSURL *targetURL = [NSURL URLWithString:url];
+    [[UIApplication sharedApplication] openURL:targetURL];
+}
+
+/**
+ Generate Bubble Chat Cell for row
+ */
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    // get chat entry
+    FIRDataSnapshot *messageSnapshot = self.messages[indexPath.row];
+    NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
+    
+    NSString *msg = message[MessageText];
+    
+    // get content type
+    BOOL showImage = NO;
+    BOOL showLocation = NO;
+    if ([msg isEqual:EmptyString]) {
+        if (![message[MessageImage] isEqual:EmptyString]) {
+            showImage = YES;
+        } else if (![message[MessageLocation] isEqual:EmptyString]) {
+            showLocation = YES;
+        }
+    }
+    BubbleChatCell *cell;
+    
+    if (showImage) {
+        // create image cell
+        cell = [self.chatTable dequeueReusableCellWithIdentifier:BubbleImageCellId forIndexPath:indexPath];
+        
+        NSString *imageURL = message[MessageImage];
+        
+        // is from firebase storage?
+        if ([imageURL hasPrefix:@"gs://"]) {
+            BubbleImageChatCell* imgCell = (BubbleImageChatCell*) cell;
+            
+            // download from storage
+            [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
+                                                                  completion:^(NSData *data, NSError *error) {
+                                                                      if (error) {
+                                                                          NSLog(@"Error downloading: %@", error);
+                                                                          return;
+                                                                      }
+                                                                      NSLog(@"IMAGE LOADED.");
+                                                                      [imgCell showImage:[UIImage imageWithData: data]];
+                                                                      //[tableView reloadData];
+                                                                  }];
+        } else {
+            // get image from url
+            [(BubbleImageChatCell*)cell showImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]]];
         }
         
-        if(![message[@"gpsCoord"] isEqual:@""]) {
-            cell.textLabel.text = @"[Koordinaten]";
-        }
+    } else if (showLocation) {
+        // create location cell
+        cell = [self.chatTable dequeueReusableCellWithIdentifier:BubbleLocationCellId forIndexPath:indexPath];
+        NSArray *coord = (NSArray *) message[MessageLocation];
+        CGFloat latitude = [coord[0] floatValue];
+        CGFloat longitude = [coord[1] floatValue];
+        
+        [(BubbleLocationChatCell *) cell showLocation:latitude withLongitute:longitude];
     } else {
-        cell.textLabel.text = message[@"msgText"];
+        // use default cell
+        cell = [self.chatTable dequeueReusableCellWithIdentifier:BubbleCellId forIndexPath:indexPath];
     }
+    
+    // is my message?
+    if ([message[MessageUserID] isEqualToString:self.currentUserID]) {
+        [cell setStyle:MyBubble];
+    } else {
+        if (self.isGroup) {
+            // group chat style
+            [cell setStyle:GroupBubble];
+        } else {
+            // private chat style
+            [cell setStyle:PrivateBubble];
+        }
+    }
+    
+    // Format Date
+    NSISO8601DateFormatter *dateFormat = [[NSISO8601DateFormatter alloc] init];
+    NSDate *date = [dateFormat dateFromString:message[MessageTimestamp]];
+    NSString *dateStr = EmptyString;
+    NSString *timeStr = [NSDateFormatter localizedStringFromDate:date
+                                                       dateStyle:NSDateFormatterNoStyle
+                                                       timeStyle:NSDateFormatterShortStyle];
+    
+    // show date if its send before yesterday
+    if ([[NSCalendar currentCalendar] isDateInToday:date]) {
+        dateStr = Today;
+    } else if ([[NSCalendar currentCalendar] isDateInYesterday:date]) {
+        dateStr = Yesterday;
+    } else {
+        dateStr = [NSDateFormatter localizedStringFromDate:date
+                                                 dateStyle:NSDateFormatterShortStyle
+                                                 timeStyle:NSDateFormatterNoStyle];
+    }
+    
+    cell.user.text = self.users[message[MessageUserID]];
+    cell.date.text = dateStr;
+    cell.time.text = timeStr;
+    cell.message.text = msg;
+    
+    // only show date, if first entry for that day
+    [cell hideDate:[self hideDate:indexPath.row]];
+    
     return cell;
 }
 
-- (void) loadMessages{
-    _refAddHandle = [_messagesRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-        [_messages addObject:snapshot];
+/**
+ Check if a previous message was send on the same day.
+
+ @param row table row index
+ @return Returns YES, if a previous message was written on the same day
+ */
+- (BOOL)hideDate:(NSInteger)row {
+    // always show first date
+    if (row == 0) {
+        return NO;
+    } else {
+        FIRDataSnapshot *messageSnapshot = self.messages[row];
+        NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
         
-        [self checkIsRead:snapshot];
+        // current message date
+        NSISO8601DateFormatter *dateFormat = [[NSISO8601DateFormatter alloc] init];
+        NSDate *myDate = [dateFormat dateFromString:message[MessageTimestamp]];
         
-        [_chatTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_messages.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self scrollToBottom];
+        // previous message date
+        messageSnapshot = self.messages[row - 1];
+        message = messageSnapshot.value;
+        NSDate *prevDate = [dateFormat dateFromString:message[MessageTimestamp]];
+        
+        // compare dates
+        return [[NSCalendar currentCalendar] isDate:myDate inSameDayAsDate:prevDate];
+    }
+}
+
+/**
+ Start Message Handler. Show every new message in chat table
+ */
+- (void)loadMessages {
+    _refAddHandle = [self.messagesRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        [self.messages addObject:snapshot];
+        
+        // animate if unread
+        BOOL animate = [self checkIsRead:snapshot];
+        
+        [self.chatTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+        [self scrollToBottom:animate];
     }];
 }
 
--(void)checkIsRead:(FIRDataSnapshot*) msg {
+/**
+ Check if the message was read by the user.
+ Updates readlist in database.
+ */
+- (BOOL)checkIsRead:(FIRDataSnapshot *)msg {
     NSDictionary<NSString *, NSString *> *message = msg.value;
     
-    NSArray *readList = (NSArray *) message[@"readList"];
-    NSString *userId = [[FIRAuth auth] currentUser].uid;
+    NSArray *readList = (NSArray *) message[MessageReadlist];
     
-    if(![readList containsObject:userId]) {
+    // check if unread
+    if (![readList containsObject:self.currentUserID]) {
         
         // update readList in db
-        NSString *key = @"readList";
-        NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/messages/%@/%@/%@/", _chatId, msg.key, key]: [readList arrayByAddingObject:userId]};
-        [_ref updateChildValues:childUpdates];
+        NSString *key = MessageReadlist;
+        NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/messages/%@/%@/%@/", self.chatId, msg.key, key]: [readList arrayByAddingObject:self.currentUserID]};
+        [self.ref updateChildValues:childUpdates];
+        
+        return NO;
+    }
+    
+    return YES;
+}
+
+/**
+ Scroll to latest chat message
+ */
+- (void)scrollToBottom:(BOOL)animated {
+    if (self.messages.count > 0) {
+        [self.chatTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:animated];
     }
 }
 
--(void)scrollToBottom
-{
-    if(self.messages.count >0){
-        [_chatTable scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messages.count-1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-    }
-}
-
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    NSLog(@"Keyboard was shown.");
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    
-    [_chatTable setContentInset:UIEdgeInsetsMake(0, 0, kbSize.height, 0)];
-    
-    CGRect frame = _sendView.frame;
-    frame.origin.y = 608-kbSize.height;
-    _sendView.frame = frame;
-    
-    [self scrollToBottom];
-    
-    NSLog(@"Keyboard height is %f", kbSize.height);
-}
-
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    NSLog(@"Keyboard will be hidden.");
-    [_chatTable setContentInset:UIEdgeInsetsZero];
-    CGRect frame = _sendView.frame;
-    frame.origin.y = 608;
-    _sendView.frame = frame;
-    
-    [self scrollToBottom];
-}
-
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
+/**
+ Handles keyboard return action.
+ */
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
     NSLog(@"TextField should return.");
-    if(textField == _chatMsg) {
+    
+    // was send button on keyboard pressed?
+    if (textField == self.chatMsg) {
+        // send message
         [self sendAction:nil];
     }
     return NO;
 }
 
-
+/**
+ Handles send menu action. (plus icon button)
+ */
 - (IBAction)menuAction:(UIButton *)sender {
-    UIAlertController * view =   [UIAlertController
-                                 alertControllerWithTitle:nil
-                                 message:nil
-                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *view = [UIAlertController
+                               alertControllerWithTitle:nil
+                               message:nil
+                               preferredStyle:UIAlertControllerStyleActionSheet];
     
+    // choose photo from library
+    UIAlertAction *photo = [UIAlertAction
+                            actionWithTitle:ChoosePhotoString
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction *action) {
+                                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                                picker.delegate = self;
+                                
+                                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                                    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                                } else {
+                                    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                                }
+                                
+                                [self presentViewController:picker animated:YES completion:NULL];
+                                
+                                // close menu
+                                [view dismissViewControllerAnimated:YES completion:nil];
+                            }];
     
-    UIAlertAction* photo = [UIAlertAction
-                                 actionWithTitle:@"Foto auswählen"
-                                 style:UIAlertActionStyleDefault
-                                 handler:^(UIAlertAction * action)
-                                 {
-                                     UIImagePickerController * picker = [[UIImagePickerController alloc] init];
-                                     picker.delegate = self;
-                                     
-                                     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                                         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                                     } else {
-                                         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                                     }
-                                     
-                                     [self presentViewController:picker animated:YES completion:NULL];
-                                                                          
-                                     // close menu
-                                     [view dismissViewControllerAnimated:YES completion:nil];
-                                 }];
+    // send voice message
+    UIAlertAction *voice = [UIAlertAction
+                            actionWithTitle:SendVoiceString
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction *action) {
+                                // TODO: voice msg
+                                
+                                // close menu
+                                [view dismissViewControllerAnimated:YES completion:nil];
+                            }];
     
-    
-    UIAlertAction* voice = [UIAlertAction
-                               actionWithTitle:@"TODO: Sprachnachricht"
+    // send current location
+    UIAlertAction *location = [UIAlertAction
+                               actionWithTitle:SendLocationString
                                style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction * action)
-                               {
-                                   // TODO: voice msg
-                                   
+                               handler:^(UIAlertAction *action) {
                                    // close menu
                                    [view dismissViewControllerAnimated:YES completion:nil];
-                               }];
-    UIAlertAction* location = [UIAlertAction
-                               actionWithTitle:@"Standort"
-                               style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction * action)
-                               {
-                                   // close menu
-                                   [view dismissViewControllerAnimated:YES completion:nil];
                                    
-                                   _alert =   [UIAlertController
-                                                                 alertControllerWithTitle:@"Bitte warten"
-                                                                 message:@"Sendet den aktuellen Standort."
-                                                                 preferredStyle:UIAlertControllerStyleAlert];
+                                   // show alert while sending current location
+                                   self.alert = [UIAlertController
+                                             alertControllerWithTitle:PleaseWaitString
+                                             message:GetLocationString
+                                             preferredStyle:UIAlertControllerStyleAlert];
                                    
-                                   [self presentViewController:_alert animated:YES completion:nil];
+                                   [self presentViewController:self.alert animated:YES completion:nil];
                                    
                                    [self getCurrentLocation];
-                                   
                                }];
     
-    UIAlertAction* cancel = [UIAlertAction
-                             actionWithTitle:@"Abbrechen"
+    // close menu without action
+    UIAlertAction *cancel = [UIAlertAction
+                             actionWithTitle:CancelString
                              style:UIAlertActionStyleCancel
-                             handler:^(UIAlertAction * action)
-                             {
+                             handler:^(UIAlertAction *action) {
                                  // close menu
                                  [view dismissViewControllerAnimated:YES completion:nil];
                                  
                              }];
     
-    
+    // add menu entries
     [view addAction:photo];
     [view addAction:voice];
     [view addAction:location];
     [view addAction:cancel];
+    
+    // show menu
     [self presentViewController:view animated:YES completion:nil];
 }
 
-
+/**
+ Display image picker
+ */
 - (void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    [picker dismissViewControllerAnimated:YES completion:NULL];    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
     
-    _alert =   [UIAlertController
-                alertControllerWithTitle:@"Bitte warten"
-                message:@"Lädt das Bild hoch."
-                preferredStyle:UIAlertControllerStyleAlert];
+    self.alert = [UIAlertController
+              alertControllerWithTitle:PleaseWaitString
+              message:UploadImageString
+              preferredStyle:UIAlertControllerStyleAlert];
     
     NSURL *referenceURL = info[UIImagePickerControllerReferenceURL];
+    
     // if it's a photo from the library, not an image from the camera
     if (referenceURL) {
-        PHFetchResult* assets = [PHAsset fetchAssetsWithALAssetURLs:@[referenceURL] options:nil];
+        PHFetchResult *assets = [PHAsset fetchAssetsWithALAssetURLs:@[referenceURL] options:nil];
         PHAsset *asset = [assets firstObject];
         [asset requestContentEditingInputWithOptions:nil
                                    completionHandler:^(PHContentEditingInput *contentEditingInput, NSDictionary *info) {
                                        NSURL *imageFile = contentEditingInput.fullSizeImageURL;
                                        NSString *filePath = [NSString stringWithFormat:@"%@/%lld/%@",
                                                              [FIRAuth auth].currentUser.uid,
-                                                             (long long)([[NSDate date] timeIntervalSince1970] * 1000.0),
+                                                             (long long) ([[NSDate date] timeIntervalSince1970] * 1000.0),
                                                              [referenceURL lastPathComponent]];
-                                       [[_storageRef child:filePath]
+                                       [[self.storageRef child:filePath]
                                         putFile:imageFile metadata:nil
                                         completion:^(FIRStorageMetadata *metadata, NSError *error) {
                                             // close alert
-                                            [_alert dismissViewControllerAnimated:YES completion:nil];
+                                            [self.alert dismissViewControllerAnimated:YES completion:nil];
                                             
                                             if (error) {
                                                 NSLog(@"Error uploading: %@", error);
                                                 return;
                                             }
-                                            [self sendPicture:[_storageRef child:metadata.path].description];
+                                            // add message after image upload
+                                            [self sendPicture:[self.storageRef child:metadata.path].description];
                                         }
                                         ];
                                    }];
@@ -334,64 +644,70 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
         NSString *imagePath =
         [NSString stringWithFormat:@"%@/%lld.jpg",
          [FIRAuth auth].currentUser.uid,
-         (long long)([[NSDate date] timeIntervalSince1970] * 1000.0)];
+         (long long) ([[NSDate date] timeIntervalSince1970] * 1000.0)];
         FIRStorageMetadata *metadata = [FIRStorageMetadata new];
         metadata.contentType = @"image/jpeg";
-        [[_storageRef child:imagePath] putData:imageData metadata:metadata
-                                    completion:^(FIRStorageMetadata * _Nullable metadata, NSError * _Nullable error) {
+        [[self.storageRef child:imagePath] putData:imageData metadata:metadata
+                                    completion:^(FIRStorageMetadata *_Nullable metadata, NSError *_Nullable error) {
                                         // close alert
-                                        [_alert dismissViewControllerAnimated:YES completion:nil];
+                                        [self.alert dismissViewControllerAnimated:YES completion:nil];
                                         
                                         if (error) {
                                             NSLog(@"Error uploading: %@", error);
                                             return;
                                         }
-                                        [self sendPicture:[_storageRef child:metadata.path].description];
+                                        // add message after image upload
+                                        [self sendPicture:[self.storageRef child:metadata.path].description];
                                     }];
     }
 }
 
+/**
+ Close image picker
+ */
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
+/**
+ Send image message.
 
-- (void)sendPicture:(NSString *)url
-{
-    // stop editingT
+ @param url URL to image file
+ */
+- (void)sendPicture:(NSString *)url {
+    // stop editing
     [self.view endEditing:YES];
     
     // current timestamp
     NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
     NSString *result = [formatter stringFromDate:[NSDate date]];
-    NSDictionary *newMessage = @{@"attUrl": @"",
-                                 @"gpsCoord": @"",
-                                 @"imgUrl": url,
-                                 @"msgText": _chatMsg.text,
-                                 @"msgTs": result,
-                                 @"readList": @[[[FIRAuth auth] currentUser].uid],
-                                 @"userid": [[FIRAuth auth] currentUser].uid,
-                                 @"vid": @"",
-                                 @"voiceUrl": @"",
+    NSDictionary *newMessage = @{MessageAttachment: EmptyString,
+                                 MessageLocation: EmptyString,
+                                 MessageImage: url,
+                                 MessageText: self.chatMsg.text,
+                                 MessageTimestamp: result,
+                                 MessageReadlist: @[self.currentUserID],
+                                 MessageUserID: self.currentUserID,
+                                 MessageVideo: EmptyString,
+                                 MessageVoice: EmptyString,
                                  };
     
     // add message to databse
-    [[_messagesRef childByAutoId] setValue:newMessage];
+    [[self.messagesRef childByAutoId] setValue:newMessage];
     
+    // Write last message in chat
+    [self updateLastChatMessage:ImageString withTimestamp:result];
     
-    //Write last message in chat
-    NSString *msgKey = @"lastMsg";
-    NSString *tsKey = @"lastMsgTs";
-    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", _chatId, msgKey]: @"[Foto]",
-                                   [NSString stringWithFormat:@"/chats/%@/%@/", _chatId, tsKey]: result};
-    [_ref updateChildValues:childUpdates];
-    
-    _chatMsg.text = @"";
-
+    self.chatMsg.text = EmptyString;
 }
 
-- (void)sendLocation:(CLLocation*)location
-{
+
+/**
+ Send location message.
+
+ @param location Latitude and Longitude of current Location
+ */
+- (void)sendLocation:(CLLocation *)location {
     // stop editing
     [self.view endEditing:YES];
     
@@ -401,61 +717,68 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     // current timestamp
     NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
     NSString *result = [formatter stringFromDate:[NSDate date]];
-    NSDictionary *newMessage = @{@"attUrl": @"",
-                                 @"gpsCoord": coords,
-                                 @"imgUrl": @"",
-                                 @"msgText": @"",
-                                 @"msgTs": result,
-                                 @"readList": @[[[FIRAuth auth] currentUser].uid],
-                                 @"userid": [[FIRAuth auth] currentUser].uid,
-                                 @"vid": @"",
-                                 @"voiceUrl": @"",
+    NSDictionary *newMessage = @{MessageAttachment: EmptyString,
+                                 MessageLocation: coords,
+                                 MessageImage: EmptyString,
+                                 MessageText: EmptyString,
+                                 MessageTimestamp: result,
+                                 MessageReadlist: @[[[FIRAuth auth] currentUser].uid],
+                                 MessageUserID: [[FIRAuth auth] currentUser].uid,
+                                 MessageVideo: EmptyString,
+                                 MessageVoice: EmptyString,
                                  };
     
     // add message to databse
-    [[_messagesRef childByAutoId] setValue:newMessage];
+    [[self.messagesRef childByAutoId] setValue:newMessage];
     
     //Write last message in chat
-    NSString *msgKey = @"lastMsg";
-    NSString *tsKey = @"lastMsgTs";
-    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", _chatId, msgKey]: @"[Koordinaten]",
-                                   [NSString stringWithFormat:@"/chats/%@/%@/", _chatId, tsKey]: result};
-    [_ref updateChildValues:childUpdates];
+    [self updateLastChatMessage:LocationString withTimestamp:result];
     
     // close alert
-    [_alert dismissViewControllerAnimated:YES completion:nil];
+    [self.alert dismissViewControllerAnimated:YES completion:nil];
+}
+
+/**
+ Update last message of chat in database for chat list
+
+ @param msg text of the last message
+ @param timestamp timestamp of the last message
+ */
+- (void)updateLastChatMessage:(NSString *)msg withTimestamp:(NSString *)timestamp {
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", self.chatId, ChatLastMessage]: msg,
+                                   [NSString stringWithFormat:@"/chats/%@/%@/", self.chatId, ChatLastMessageTimestamp]: timestamp};
+    [self.ref updateChildValues:childUpdates];
 }
 
 
-
-- (void)getCurrentLocation
-{
-    if(_locationManager == nil) {
-        _locationManager = [[CLLocationManager alloc] init];
+/**
+ Start Location Manager to get current user location.
+ */
+- (void)getCurrentLocation {
+    if (self.locationManager == nil) {
+        self.locationManager = [[CLLocationManager alloc] init];
     }
     
-    _locationManager.delegate = self;
-    _locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    _locationManager.distanceFilter = kCLDistanceFilterNone;
+    self.locationManager.delegate = self;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+    self.locationManager.distanceFilter = kCLDistanceFilterNone;
     
+    // check permission
     [self.locationManager requestWhenInUseAuthorization];
     
-    [_locationManager startUpdatingLocation];
+    [self.locationManager startUpdatingLocation];
 }
 
+/**
+ Send current location and stop location manager.
+ */
 - (void)locationManager:(CLLocationManager *)manager
      didUpdateLocations:(NSArray *)locations {
     
     [self sendLocation:[locations lastObject]];
     
-    [_locationManager stopUpdatingLocation];
-    _locationManager = nil;
-}
-
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
+    [self.locationManager stopUpdatingLocation];
+    self.locationManager = nil;
 }
 
 @end

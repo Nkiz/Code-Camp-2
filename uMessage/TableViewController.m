@@ -26,6 +26,7 @@
 
 @property (weak, atomic) NSString *selectedChatId;
 @property (weak, atomic) NSString *selectedChatTitle;
+@property NSUInteger selectedRow;
 
 @end
 
@@ -172,7 +173,7 @@
     
     NSString *imageURL = message[@"img"];
     
-    if (imageURL) {
+    if (imageURL && ![imageURL isEqualToString:@""]) {
         if ([imageURL hasPrefix:@"gs://"]) {
             [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
                                                                   completion:^(NSData *data, NSError *error) {
@@ -181,6 +182,7 @@
                                                                           return;
                                                                       }
                                                                       cell.avatar.image = [UIImage imageWithData: data];
+                                                                      [tableView reloadData];
                                                                   }];
         } else {
             cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
@@ -198,6 +200,8 @@
     self.selectedChatId     = messageSnapshot.key;
     self.selectedChatTitle  = [name objectAtIndex:indexPath.row];
     
+    self.selectedRow = indexPath.row;
+    
     // open chat
     [self performSegueWithIdentifier:@"ListToChat" sender:self];
 }
@@ -210,6 +214,7 @@
         ChatViewController *controller = [segue destinationViewController];
         controller.chatId = _selectedChatId;
         controller.chatTitle = _selectedChatTitle;
+        controller.chatUserlist = _myMessages[_selectedRow].value[@"userlist"];
     }
     if([[segue identifier] isEqualToString:@"ListToContact"])
     {
