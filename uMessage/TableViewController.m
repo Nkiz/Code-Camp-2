@@ -85,7 +85,7 @@
                         NSString *tmpUser = [userData objectForKey:@"authId"];
                         for (NSString *key in _myUsers) {
                             if([tmpUser isEqualToString:([_myUsers objectForKey:key])]){
-                                [_myUserList setObject:[userData objectForKey:@"username"] forKey:key];
+                                [_myUserList setObject:[userData objectForKey:@"username"] forKey:userData[@"authId"]];
                                 //add cell in Table for Chat
                                 [self filtermyChat];
                             }
@@ -150,7 +150,6 @@
                                        dateStyle:NSDateFormatterShortStyle
                                        timeStyle:NSDateFormatterNoStyle];
     }
-    
     cell.title.text = [name objectAtIndex:indexPath.row];
     cell.message.text = message[@"lastMsg"];
     cell.date.text = dateStr;
