@@ -15,9 +15,6 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     
-    // Helpers
-    CGSize size = self.contentView.frame.size;
-    
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     // Title init
@@ -38,7 +35,7 @@
     [self.date setTextAlignment:NSTextAlignmentRight];
     [self.date setTextColor:[UIColor lightGrayColor]];
     
-    // Title init
+    // Avatar init
     self.avatar = [[UIImageView alloc] initWithFrame:CGRectMake(15.0, 10.0, 50.0, 50.0)];
     self.avatar.backgroundColor=[UIColor clearColor];
     [self.avatar.layer setCornerRadius:25.0f];

@@ -12,7 +12,7 @@
 #import "DataViewController.h"
 #import "ContactViewController.h"
 
-@interface TableViewController ()<UITableViewDataSource, UITableViewDelegate>{
+@interface TableViewController ()<UITableViewDataSource, UITabBarDelegate, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
 }
 @property (weak, nonatomic) IBOutlet UITableView *chatTableView;
@@ -22,9 +22,11 @@
 @property (strong, nonatomic) NSMutableDictionary *myUsers;
 @property (strong, nonatomic) NSMutableDictionary *myUserList;
 @property (strong, nonatomic) DataViewController *dv;
+@property (strong, nonatomic) IBOutlet UITabBar *uiBar;
 
 @property (weak, atomic) NSString *selectedChatId;
 @property (weak, atomic) NSString *selectedChatTitle;
+@property NSUInteger selectedRow;
 
 @end
 
@@ -39,9 +41,11 @@
     
     [self setNeedsStatusBarAppearanceUpdate];
     
-    
+    _uiBar.delegate = self;
     _chatTableView.delegate = self;
     _chatTableView.dataSource = self;
+    
+    self.uiBar.selectedItem = [self.uiBar.items objectAtIndex:0];
     
     //Load Database
     _messages = [[NSMutableArray alloc] init];
@@ -57,6 +61,10 @@
 {
     return UIStatusBarStyleLightContent;
 }
+/*
+-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    //NSLog(@"%@", tabBarController);
+}*/
 
 - (void) configureDatabase{
     _refHandle = [_chatRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
@@ -164,7 +172,7 @@
     
     NSString *imageURL = message[@"img"];
     
-    if (imageURL) {
+    if (imageURL && ![imageURL isEqualToString:@""]) {
         if ([imageURL hasPrefix:@"gs://"]) {
             [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
                                                                   completion:^(NSData *data, NSError *error) {
@@ -173,6 +181,7 @@
                                                                           return;
                                                                       }
                                                                       cell.avatar.image = [UIImage imageWithData: data];
+                                                                      [tableView reloadData];
                                                                   }];
         } else {
             cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
@@ -190,6 +199,8 @@
     self.selectedChatId     = messageSnapshot.key;
     self.selectedChatTitle  = [name objectAtIndex:indexPath.row];
     
+    self.selectedRow = indexPath.row;
+    
     // open chat
     [self performSegueWithIdentifier:@"ListToChat" sender:self];
 }
@@ -202,6 +213,7 @@
         ChatViewController *controller = [segue destinationViewController];
         controller.chatId = _selectedChatId;
         controller.chatTitle = _selectedChatTitle;
+        controller.chatUserlist = _myMessages[_selectedRow].value[@"userlist"];
     }
     if([[segue identifier] isEqualToString:@"ListToContact"])
     {

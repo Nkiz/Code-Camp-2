@@ -39,7 +39,17 @@
     // login listener
     self.handle = [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *_Nonnull auth, FIRUser *_Nullable user) {
         if (user) {
-            NSLog(@"LOGIN: User %@ logged in.", user.displayName);
+            NSLog(@"LOGIN: User %@ logged in.", user.email);
+            
+            // current timestamp
+            NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
+            NSString *result = [formatter stringFromDate:[NSDate date]];
+            
+            // update last login in db
+            NSString *key = @"lastLogin";
+            NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/users/%@/%@/", user.uid, key]: result};
+            [_ref updateChildValues:childUpdates];
+            
             // go to chats ui
             [self performSegueWithIdentifier: @"LoginToChat" sender: self];
         }
