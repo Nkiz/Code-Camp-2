@@ -14,6 +14,7 @@
 @interface TableViewController : UIViewController
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) FIRDatabaseReference *userRef;
+@property (strong, nonatomic) FIRDatabaseReference *userRelRef;
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
 @property (strong, nonatomic) NSDictionary *tmpUserData;
 - (IBAction)logoutAction:(id)sender;

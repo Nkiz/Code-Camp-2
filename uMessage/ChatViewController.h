@@ -27,6 +27,7 @@
 @property (strong, nonatomic) NSString *chatId;
 @property (strong, nonatomic) NSString *chatTitle;
 @property (strong, nonatomic) NSString *chatUserId;
+@property (strong, nonatomic) NSString *messageUser;
 @property (strong, nonatomic) NSMutableArray *chatUserlist;
 
 

@@ -167,7 +167,8 @@
     NSString* title = [sortedNames componentsJoinedByString:@", "];
     
     // show as navigation bar title
-    self.navigationBar.topItem.title = title;
+    //self.navigationBar.topItem.title = title;
+    self.navigationBar.topItem.title = _chatTitle;
 }
 
 /**
@@ -253,6 +254,7 @@
  Send text message, when send button is pressed.
  */
 - (IBAction)sendAction:(UIButton *)sender {
+    [self checkNewChat];
     // stop editing
     [self.view endEditing:YES];
     
@@ -276,6 +278,12 @@
 /**
  Send Message to Database
  */
+- (void)checkNewChat{
+   NSDictionary *userList =  @{@"0":_messageUser,
+                               @"1": [FIRAuth auth].currentUser.uid};
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/userlist/", self.chatId]: userList};
+    [self.ref updateChildValues:childUpdates];
+}
 - (void)sendMessage:(NSDictionary *)msg withTimestamp:(NSString *)timestamp
 {
     // add message to databse

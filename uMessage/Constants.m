@@ -20,6 +20,7 @@ NSString *const ChatsTable = @"chats";
 NSString *const ChatLastMessage = @"lastMsg";
 NSString *const ChatLastMessageTimestamp = @"lastMsgTs";
 
+
 NSString *const MessagesTable = @"messages";
 NSString *const MessageUserID = @"userid";
 NSString *const MessageText = @"msgText";

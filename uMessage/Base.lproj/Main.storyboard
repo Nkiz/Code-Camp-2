@@ -201,6 +201,16 @@
                                     <outlet property="delegate" destination="bAN-J9-YOw" id="X0n-c4-XNE"/>
                                 </connections>
                             </tableView>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idContactList" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="71" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="6MM-MG-Q9u" userLabel="Contact Table View">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="sectionIndexBackgroundColor" red="0.89026087519999997" green="0.9455057979" blue="0.96945375199999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="bAN-J9-YOw" id="RRF-g8-D5R"/>
+                                    <outlet property="delegate" destination="bAN-J9-YOw" id="wSL-MA-www"/>
+                                </connections>
+                            </tableView>
                             <tabBar contentMode="scaleToFill" fixedFrame="YES" translucent="NO" selectionIndicatorImage="MenuIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Qd3-YD-l4W">
                                 <rect key="frame" x="0.0" y="618" width="375" height="49"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -218,6 +228,7 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="chatTableView" destination="dak-f2-5Og" id="4GL-iB-Dhr"/>
+                        <outlet property="contactTableView" destination="6MM-MG-Q9u" id="xVp-Cy-0H1"/>
                         <outlet property="uiBar" destination="Qd3-YD-l4W" id="blF-5e-qZO"/>
                         <segue destination="lkQ-iI-wLp" kind="show" identifier="ListToChat" id="aGA-8o-TpW"/>
                         <segue destination="m1l-IT-ZWW" kind="unwind" identifier="unwindToLogin" unwindAction="prepareForUnwind:" id="op7-pB-88o"/>
