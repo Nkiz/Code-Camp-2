@@ -189,8 +189,8 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
@@ -200,19 +200,28 @@
 /**
  If the keyboard is shown, resize content to show the TextField.
  */
-- (void)keyboardWasShown:(NSNotification *)aNotification {
+- (void)keyboardWillShow:(NSNotification *)aNotification {
     NSLog(@"Keyboard was shown.");
     
     // Get keyboard size
     NSDictionary *info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    // show content hidden by keyboard
-    [self.chatTable setContentInset:UIEdgeInsetsMake(0, 0, kbSize.height, 0)];
+    CGRect tableFrame = self.chatTable.frame;
+    tableFrame.size.height -= kbSize.height;
     
     CGRect frame = self.sendView.frame;
     frame.origin.y = 608 - kbSize.height;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:0.3f];
+    
+    // show content hidden by keyboard
     self.sendView.frame = frame;
+    self.chatTable.frame = tableFrame;
+    
+    [UIView commitAnimations];
     
     [self scrollToBottom:YES];
 }
@@ -223,11 +232,20 @@
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification {
     NSLog(@"Keyboard will be hidden.");
     
-    // reset inset
-    [self.chatTable setContentInset:UIEdgeInsetsZero];
+    CGRect tableFrame = self.chatTable.frame;
+    tableFrame.size.height = 545;
+    
     CGRect frame = self.sendView.frame;
     frame.origin.y = 608;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:0.3f];
+    
     self.sendView.frame = frame;
+    self.chatTable.frame = tableFrame;
+    
+    [UIView commitAnimations];
     
     [self scrollToBottom:YES];
 }
@@ -396,8 +414,10 @@
     }
     
     // is my message?
+    BOOL myMsg = NO;
     if ([message[MessageUserID] isEqualToString:self.currentUserID]) {
         [cell setStyle:MyBubble];
+        myMsg = YES;
     } else {
         if (self.isGroup) {
             // group chat style
@@ -425,6 +445,10 @@
         dateStr = [NSDateFormatter localizedStringFromDate:date
                                                  dateStyle:NSDateFormatterShortStyle
                                                  timeStyle:NSDateFormatterNoStyle];
+    }
+    
+    if(myMsg && [self checkIsReadByAll:messageSnapshot]) {
+        timeStr = [@"✓ " stringByAppendingString:timeStr];
     }
     
     cell.user.text = self.users[message[MessageUserID]];
@@ -502,6 +526,21 @@
     }
     
     return YES;
+}
+/**
+ Check if the message was read by all users in chat.
+ */
+- (BOOL)checkIsReadByAll:(FIRDataSnapshot *)msg {
+    NSDictionary<NSString *, NSString *> *message = msg.value;
+    
+    NSArray *readList = (NSArray *) message[MessageReadlist];
+    
+    // are all users in readlist?
+    if([readList count] == [self.users count]) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 /**
@@ -788,5 +827,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self.locationManager stopUpdatingLocation];
     self.locationManager = nil;
 }
+
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 
 @end

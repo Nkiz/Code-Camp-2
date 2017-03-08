@@ -17,6 +17,10 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, atomic) UITextField *activeField;
 
+@property (strong, nonatomic) IBOutlet UILabel *registerLabel;
+@property (strong, nonatomic) IBOutlet UILabel *loginLabel;
+@property (strong, nonatomic) IBOutlet UIView *registerView;
+
 @end
 
 @implementation DataViewController
@@ -30,7 +34,6 @@
     self.registerPasswordTextField.delegate = self;
     self.loginEmailTextField.delegate       = self;
     self.loginPasswordTextField.delegate    = self;
-    self.scrollView.delegate = self;
     
     // reference to database
     self.ref     = [[FIRDatabase database] reference];
@@ -54,6 +57,29 @@
             [self performSegueWithIdentifier: @"LoginToChat" sender: self];
         }
     }];
+    
+    // login / register tabs
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loginTap:)];
+    tapGestureRecognizer.numberOfTapsRequired = 1;
+    [_loginLabel addGestureRecognizer:tapGestureRecognizer];
+    _loginLabel.userInteractionEnabled = YES;
+    
+    tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(registerTap:)];
+    tapGestureRecognizer.numberOfTapsRequired = 1;
+    [_registerLabel addGestureRecognizer:tapGestureRecognizer];
+    _registerLabel.userInteractionEnabled = YES;
+}
+
+- (void)loginTap:(UIGestureRecognizer *)gestureRecognizer
+{
+    _uiView.hidden = YES;
+    _registerView.hidden = NO;
+}
+- (void)registerTap:(UIGestureRecognizer *)gestureRecognizer
+{
+    _registerView.hidden = YES;
+    _uiView.hidden = NO;
+    
 }
 
 
@@ -255,4 +281,10 @@ static NSString *const kOK = @"OK";
     NSLog(@"Active Field reset");
     _activeField = nil;
 }
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 @end
