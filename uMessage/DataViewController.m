@@ -271,7 +271,11 @@ static NSString *const kOK = @"OK";
     } else if(textField == _registerPasswordTextField) {
         [self.view endEditing:YES];
         
-        //[self registerTouchUpInside:nil];
+        [self registerTouchUpInside:nil];
+    } else if(textField == _loginPasswordTextField) {
+        [self.view endEditing:YES];
+        
+        [self loginTouchUpInside:nil];
     }
     return NO;
 }

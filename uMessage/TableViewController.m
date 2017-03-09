@@ -279,14 +279,6 @@
         cell.message.text = message[@"lastMsg"];
         cell.date.text = dateStr;
         
-        // TODO: check if unread
-        if(indexPath.row % 2 == 0) {
-            [cell setRead:NO];
-        }
-        else {
-            [cell setRead:YES];
-        }
-        
         NSString *imageURL = message[@"img"];
         
         if (imageURL && ![imageURL isEqualToString:@""]) {
@@ -333,6 +325,31 @@
         return cell;
     }
     return nil;
+}
+
+-(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Löschen"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        // delete action
+        NSLog(@"Delete Chat with index %li", (long) indexPath.row);
+    }];
+    deleteAction.backgroundColor = [UIColor redColor];
+    
+    return @[deleteAction];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView == _chatTableView)
+    {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // do nothing
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
