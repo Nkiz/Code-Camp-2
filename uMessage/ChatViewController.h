@@ -21,6 +21,7 @@
 // Database References
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
+@property (strong, nonatomic) FIRDatabaseReference *allChatsRef;
 @property (strong, nonatomic) FIRDatabaseReference *messagesRef;
 
 // Chat Information

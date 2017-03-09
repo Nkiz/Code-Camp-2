@@ -74,6 +74,7 @@
 {
     self.ref = [[FIRDatabase database] reference];
     self.chatRef = [self.ref child:MessagesTable];
+    self.allChatsRef = [self.ref child:ChatsTable];
     self.messagesRef = [self.chatRef child:self.chatId];
 }
 
@@ -114,6 +115,7 @@
     self.isGroup = [self.chatUserlist count] > 1;
     
     [self getUsernames];
+    [self checkNewChat];
 }
 
 /**
@@ -254,7 +256,6 @@
  Send text message, when send button is pressed.
  */
 - (IBAction)sendAction:(UIButton *)sender {
-    [self checkNewChat];
     // stop editing
     [self.view endEditing:YES];
     
@@ -279,10 +280,18 @@
  Send Message to Database
  */
 - (void)checkNewChat{
-   NSDictionary *userList =  @{@"0":_messageUser,
-                               @"1": [FIRAuth auth].currentUser.uid};
-    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/userlist/", self.chatId]: userList};
-    [self.ref updateChildValues:childUpdates];
+    //[] self.chatId
+    [self.allChatsRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        NSDictionary<NSString *, NSString *> *chat = snapshot.value;
+        NSArray *userListArr = [ chat objectForKey:@"userlist"];
+        
+        if(userListArr == nil){
+            NSDictionary *userList =  @{@"0":_messageUser,
+                                        @"1": [FIRAuth auth].currentUser.uid};
+            NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/userlist/", self.chatId]: userList};
+            [self.ref updateChildValues:childUpdates];
+        }
+    }];
 }
 - (void)sendMessage:(NSDictionary *)msg withTimestamp:(NSString *)timestamp
 {

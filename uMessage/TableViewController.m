@@ -99,8 +99,16 @@
         NSDictionary<NSString *, NSString *> *message = snapshot.value;
         [_messages addObject:snapshot];
         [_contactTableView reloadData];
-        NSArray *userListArr = [ message objectForKey:@"userlist"];
+        NSMutableArray *userListArr = [ message objectForKey:@"userlist"];
         BOOL myChat = false;
+        //New chat without userlist -->add userlist
+        if(userListArr == nil){
+            myChat = true;
+            [_myMessages addObject:snapshot];
+            userListArr = [[NSMutableArray alloc] init];
+            [userListArr addObject:_selectedUserId];
+            [userListArr addObject:[FIRAuth auth].currentUser.uid];
+        }
         //check if logged user is in chat-userlist
         for (int x=0; x<userListArr.count; x++ ) {
             if([userListArr[x] isEqualToString:[FIRAuth auth].currentUser.uid]){
@@ -149,12 +157,9 @@
 
                 }
             }
-            //
-            //if([message[@"lastMsgTs"] isEqualToString:@""]){
-            //    [self performSegueWithIdentifier:@"ListToChat" sender:self];
-            //}
         }
     }];
+    //Handler for change in Chatlist
     [_chatRef observeEventType:FIRDataEventTypeChildChanged withBlock:^(FIRDataSnapshot *snapshot) {
         NSString *chatId = snapshot.key;
         NSDictionary<NSString *, NSString *> *chatData = snapshot.value;
@@ -167,13 +172,33 @@
             }
         }
         _myMessages[index] = snapshot;
-        //[_myMessages setValue:snapshot forKey:chat.key];
         [_chatTableView reloadData];
         NSLog(@"test");
+    }];
+    //Handler for removed Chat from Chatslist
+    [_chatRef observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
+        NSString *chatId = snapshot.key;
+        NSString *chatData = snapshot.value;
+        int index = 0;
+        for(int i=0; i < [_myMessages count]; i++){
+            FIRDataSnapshot *chat = [_myMessages objectAtIndex:i];
+            if([chat.key isEqualToString:chatId]){
+                index = i;
+                break;
+            }
+        }
+        [_myMessages removeObjectAtIndex:index];
+        [_userList removeObjectAtIndex:index];
+        [_chatTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }];
 }
 
 - (void) fillChatList{
+    NSInteger tmp_count = [_userList count];
+    for(int i=0; i < tmp_count; i++){
+        [_userList removeObjectAtIndex:0];
+        [_chatTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
     for (NSString *chatId in _myChatList) {
         NSMutableArray<NSString*> *chatUser = [_myChats objectForKey:chatId];
         //is String --> one Value, no GroupChat
@@ -249,6 +274,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    //Check if Chattable or Usertable
     if(tableView == _chatTableView){
         BOOL myChat = false;
         // Dequeue cell
@@ -351,6 +377,7 @@
          [self performSegueWithIdentifier:@"ListToChat" sender:self];
      }else if (tableView == _contactTableView){
          BOOL findChat = false;
+         //Get Contactdates for User in Chat
          for (int i=0; i<_myMessages.count; i++) {
              FIRDataSnapshot *messageSnapshot = _myMessages[i];
              NSMutableArray * userList = messageSnapshot.value[@"userlist"];
@@ -368,23 +395,13 @@
                  break;
              }
          }
+         //If new User than create new Chat
          if(!findChat){
              NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
              self.selectedChatId = key;
              self.selectedChatTitle = selectedUserName;
              self.selectedUserId = selectedUser;
              self.selectedRow = indexPath.row;
-             /*NSDictionary *userListForChat = @{@"0": selectedUserName,
-              @"1": [FIRAuth auth].currentUser.uid
-              };
-             NSDictionary *chatInfo = @{@"lastMsgTs": @"",
-                                        @"userlist": @{
-                                                @"0":selectedUser,
-                                                @"1": [FIRAuth auth].currentUser.uid}
-                                        };
-             NSDictionary *childUpdates = @{key: chatInfo};*/
-             // add user to databse
-             //[_chatRef updateChildValues:childUpdates];
          }
          [self performSegueWithIdentifier:@"ListToChat" sender:self];
          
