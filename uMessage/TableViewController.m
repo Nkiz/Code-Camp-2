@@ -305,27 +305,11 @@
         cell.message.text = message[@"lastMsg"];
         cell.date.text = dateStr;
         
-        // TODO: check if unread
-        if(indexPath.row % 2 == 0) {
-            [cell setRead:NO];
-        }
-        else {
-            [cell setRead:YES];
-        }
-        
         NSString *imageURL = message[@"img"];
         
         if (imageURL && ![imageURL isEqualToString:@""]) {
             if ([imageURL hasPrefix:@"gs://"]) {
-                [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
-                                                                      completion:^(NSData *data, NSError *error) {
-                                                                          if (error) {
-                                                                              NSLog(@"Error downloading: %@", error);
-                                                                              return;
-                                                                          }
-                                                                          cell.avatar.image = [UIImage imageWithData: data];
-                                                                          [tableView reloadData];
-                                                                      }];
+                [self getAvatar:imageURL withImageView:cell.avatar];
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
@@ -342,15 +326,7 @@
         
         if (imageURL && ![imageURL isEqualToString:@""]) {
             if ([imageURL hasPrefix:@"gs://"]) {
-                [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
-                                                                      completion:^(NSData *data, NSError *error) {
-                                                                          if (error) {
-                                                                              NSLog(@"Error downloading: %@", error);
-                                                                              return;
-                                                                          }
-                                                                          cell.avatar.image = [UIImage imageWithData: data];
-                                                                          [tableView reloadData];
-                                                                      }];
+                [self getAvatar:imageURL withImageView:cell.avatar];
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
@@ -359,6 +335,61 @@
         return cell;
     }
     return nil;
+}
+
+-(void)getAvatar:(NSString *)url withImageView:(UIImageView *)imageView
+{
+    //   0   1 2                         3       4
+    // @"gs://umessage-80185.appspot.com/avatars/THb9zYI7DPbtOieCFXLn0TmPLfh1.png";
+    NSArray *urlComponents = [url componentsSeparatedByString:@"/"];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = paths[0];
+    NSString *filePath = [NSString stringWithFormat:@"file:%@/%@/%@", documentsDirectory, urlComponents[3], urlComponents[4]];
+    NSURL *fileURL = [NSURL URLWithString:filePath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
+        imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+    } else {
+        // Start Download
+        [[[FIRStorage storage] referenceForURL:url]
+         writeToFile:fileURL
+         completion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+             if (error) {
+                 NSLog(@"Error downloading: %@", error);
+                 return;
+             } else if (URL) {
+                 imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+             }
+         }];
+    }
+    
+    
+}
+
+-(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Löschen"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+        // delete action
+        NSLog(@"Delete Chat with index %li", (long) indexPath.row);
+    }];
+    deleteAction.backgroundColor = [UIColor redColor];
+    
+    return @[deleteAction];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(tableView == _chatTableView)
+    {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // do nothing
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -191,8 +191,8 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
@@ -202,19 +202,28 @@
 /**
  If the keyboard is shown, resize content to show the TextField.
  */
-- (void)keyboardWasShown:(NSNotification *)aNotification {
+- (void)keyboardWillShow:(NSNotification *)aNotification {
     NSLog(@"Keyboard was shown.");
     
     // Get keyboard size
     NSDictionary *info = [aNotification userInfo];
     CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    // show content hidden by keyboard
-    [self.chatTable setContentInset:UIEdgeInsetsMake(0, 0, kbSize.height, 0)];
+    CGRect tableFrame = self.chatTable.frame;
+    tableFrame.size.height -= kbSize.height;
     
     CGRect frame = self.sendView.frame;
     frame.origin.y = 608 - kbSize.height;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:0.3f];
+    
+    // show content hidden by keyboard
     self.sendView.frame = frame;
+    self.chatTable.frame = tableFrame;
+    
+    [UIView commitAnimations];
     
     [self scrollToBottom:YES];
 }
@@ -225,11 +234,20 @@
 - (void)keyboardWillBeHidden:(NSNotification *)aNotification {
     NSLog(@"Keyboard will be hidden.");
     
-    // reset inset
-    [self.chatTable setContentInset:UIEdgeInsetsZero];
+    CGRect tableFrame = self.chatTable.frame;
+    tableFrame.size.height = 545;
+    
     CGRect frame = self.sendView.frame;
     frame.origin.y = 608;
+    
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:0.3f];
+    
     self.sendView.frame = frame;
+    self.chatTable.frame = tableFrame;
+    
+    [UIView commitAnimations];
     
     [self scrollToBottom:YES];
 }
@@ -375,17 +393,7 @@
         if ([imageURL hasPrefix:@"gs://"]) {
             BubbleImageChatCell* imgCell = (BubbleImageChatCell*) cell;
             
-            // download from storage
-            [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
-                                                                  completion:^(NSData *data, NSError *error) {
-                                                                      if (error) {
-                                                                          NSLog(@"Error downloading: %@", error);
-                                                                          return;
-                                                                      }
-                                                                      NSLog(@"IMAGE LOADED.");
-                                                                      [imgCell showImage:[UIImage imageWithData: data]];
-                                                                      //[tableView reloadData];
-                                                                  }];
+            [self getImage:imageURL withImageView:imgCell.image];
         } else {
             // get image from url
             [(BubbleImageChatCell*)cell showImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]]];
@@ -405,8 +413,10 @@
     }
     
     // is my message?
+    BOOL myMsg = NO;
     if ([message[MessageUserID] isEqualToString:self.currentUserID]) {
         [cell setStyle:MyBubble];
+        myMsg = YES;
     } else {
         if (self.isGroup) {
             // group chat style
@@ -436,6 +446,10 @@
                                                  timeStyle:NSDateFormatterNoStyle];
     }
     
+    if(myMsg && [self checkIsReadByAll:messageSnapshot]) {
+        timeStr = [@"✓ " stringByAppendingString:timeStr];
+    }
+    
     cell.user.text = self.users[message[MessageUserID]];
     cell.date.text = dateStr;
     cell.time.text = timeStr;
@@ -446,6 +460,38 @@
     
     return cell;
 }
+
+// Download image to documents
+-(void)getImage:(NSString *)url withImageView:(UIImageView *)imageView
+{
+    //   0   1 2                          3                            4             5
+    // @""gs://umessage-80185.appspot.com/DNZPu76tgmb5bvPJAvDMiq6RhYb2/1487939843972/asset.JPG"";
+    NSArray *urlComponents = [url componentsSeparatedByString:@"/"];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = paths[0];
+    NSString *filePath = [NSString stringWithFormat:@"file:%@/%@/%@/%@", documentsDirectory, urlComponents[3], urlComponents[4], urlComponents[5]];
+    NSURL *fileURL = [NSURL URLWithString:filePath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
+        NSLog(@"Load image from documents");
+        imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+    } else {
+        // Start Download
+        [[[FIRStorage storage] referenceForURL:url]
+         writeToFile:fileURL
+         completion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+             if (error) {
+                 NSLog(@"Error downloading: %@", error);
+                 return;
+             } else if (URL) {
+                 NSLog(@"Load image from storage");
+                 imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+             }
+         }];
+    }    
+}
+
 
 /**
  Check if a previous message was send on the same day.
@@ -511,6 +557,21 @@
     }
     
     return YES;
+}
+/**
+ Check if the message was read by all users in chat.
+ */
+- (BOOL)checkIsReadByAll:(FIRDataSnapshot *)msg {
+    NSDictionary<NSString *, NSString *> *message = msg.value;
+    
+    NSArray *readList = (NSArray *) message[MessageReadlist];
+    
+    // are all users in readlist?
+    if([readList count] == [self.users count]) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 /**
@@ -797,5 +858,12 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self.locationManager stopUpdatingLocation];
     self.locationManager = nil;
 }
+
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 
 @end
