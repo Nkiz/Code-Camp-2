@@ -43,10 +43,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.ref        = [[FIRDatabase database] reference];
-    self.userRef    = [_ref child:@"users"];
-    self.userRelRef = [_ref child:@"userRel"];
-    self.chatRef    = [_ref child:@"chats"];
+    self.ref         = [[FIRDatabase database] reference];
+    self.messagesRef = [_ref child:@"messages"];
+    self.userRef     = [_ref child:@"users"];
+    self.userRelRef  = [_ref child:@"userRel"];
+    self.chatRef     = [_ref child:@"chats"];
     
     
     [self setNeedsStatusBarAppearanceUpdate];
@@ -101,14 +102,6 @@
         [_contactTableView reloadData];
         NSMutableArray *userListArr = [ message objectForKey:@"userlist"];
         BOOL myChat = false;
-        //New chat without userlist -->add userlist
-        if(userListArr == nil){
-            myChat = true;
-            [_myMessages addObject:snapshot];
-            userListArr = [[NSMutableArray alloc] init];
-            [userListArr addObject:_selectedUserId];
-            [userListArr addObject:[FIRAuth auth].currentUser.uid];
-        }
         //check if logged user is in chat-userlist
         for (int x=0; x<userListArr.count; x++ ) {
             if([userListArr[x] isEqualToString:[FIRAuth auth].currentUser.uid]){
@@ -116,6 +109,14 @@
                 myChat = true;
                 break;
             }
+        }
+        //New chat without userlist -->add userlist
+        if(userListArr == nil){
+            myChat = true;
+            [_myMessages addObject:snapshot];
+            userListArr = [[NSMutableArray alloc] init];
+            [userListArr addObject:_selectedUserId];
+            [userListArr addObject:[FIRAuth auth].currentUser.uid];
         }
         //add chat if logged user included in chat
         if(myChat){
@@ -189,7 +190,9 @@
         }
         [_myMessages removeObjectAtIndex:index];
         [_userList removeObjectAtIndex:index];
+        [_myChatList removeObjectAtIndex:index];
         [_chatTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self fillChatList];
     }];
 }
 
@@ -371,6 +374,9 @@
 {
     UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Löschen"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
         // delete action
+        FIRDataSnapshot *chat = [_myMessages objectAtIndex:indexPath.row];
+        [[_chatRef child:chat.key ] removeValue];
+        [[_messagesRef child:chat.key ] removeValue];
         NSLog(@"Delete Chat with index %li", (long) indexPath.row);
     }];
     deleteAction.backgroundColor = [UIColor redColor];

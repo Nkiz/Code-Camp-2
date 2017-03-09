@@ -16,6 +16,7 @@
 @interface ChatViewController () <UITextFieldDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate> {
     FIRDatabaseHandle _refAddHandle;
     FIRDatabaseHandle _refRemoveHandle;
+    FIRDatabaseHandle _refAddChatHandle;
 }
 
 // UI Elements
@@ -117,6 +118,7 @@
     [self getUsernames];
     [self checkNewChat];
 }
+
 
 /**
  Get username for each userid in chat.
@@ -261,6 +263,7 @@
  */
 - (IBAction)backButtonPressed:(id)sender {
     [self performSegueWithIdentifier:@"unwindToList" sender:self];
+    [self.allChatsRef removeObserverWithHandle:_refAddChatHandle];
 }
 
 /**
@@ -299,9 +302,10 @@
  */
 - (void)checkNewChat{
     //[] self.chatId
-    [self.allChatsRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+    _refAddChatHandle = [self.allChatsRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         NSDictionary<NSString *, NSString *> *chat = snapshot.value;
         NSArray *userListArr = [ chat objectForKey:@"userlist"];
+        NSString *lstMsg     = [ chat objectForKey:@"lastMsg"];
         
         if(userListArr == nil){
             NSDictionary *userList =  @{@"0":_messageUser,

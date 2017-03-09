@@ -13,6 +13,7 @@
 
 @interface TableViewController : UIViewController
 @property (strong, nonatomic) FIRDatabaseReference *ref;
+@property (strong, nonatomic) FIRDatabaseReference *messagesRef;
 @property (strong, nonatomic) FIRDatabaseReference *userRef;
 @property (strong, nonatomic) FIRDatabaseReference *userRelRef;
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
