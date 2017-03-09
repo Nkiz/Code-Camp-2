@@ -384,17 +384,7 @@
         if ([imageURL hasPrefix:@"gs://"]) {
             BubbleImageChatCell* imgCell = (BubbleImageChatCell*) cell;
             
-            // download from storage
-            [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
-                                                                  completion:^(NSData *data, NSError *error) {
-                                                                      if (error) {
-                                                                          NSLog(@"Error downloading: %@", error);
-                                                                          return;
-                                                                      }
-                                                                      NSLog(@"IMAGE LOADED.");
-                                                                      [imgCell showImage:[UIImage imageWithData: data]];
-                                                                      //[tableView reloadData];
-                                                                  }];
+            [self getImage:imageURL withImageView:imgCell.image];
         } else {
             // get image from url
             [(BubbleImageChatCell*)cell showImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]]];
@@ -461,6 +451,38 @@
     
     return cell;
 }
+
+// Download image to documents
+-(void)getImage:(NSString *)url withImageView:(UIImageView *)imageView
+{
+    //   0   1 2                          3                            4             5
+    // @""gs://umessage-80185.appspot.com/DNZPu76tgmb5bvPJAvDMiq6RhYb2/1487939843972/asset.JPG"";
+    NSArray *urlComponents = [url componentsSeparatedByString:@"/"];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = paths[0];
+    NSString *filePath = [NSString stringWithFormat:@"file:%@/%@/%@/%@", documentsDirectory, urlComponents[3], urlComponents[4], urlComponents[5]];
+    NSURL *fileURL = [NSURL URLWithString:filePath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
+        NSLog(@"Load image from documents");
+        imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+    } else {
+        // Start Download
+        [[[FIRStorage storage] referenceForURL:url]
+         writeToFile:fileURL
+         completion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+             if (error) {
+                 NSLog(@"Error downloading: %@", error);
+                 return;
+             } else if (URL) {
+                 NSLog(@"Load image from storage");
+                 imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+             }
+         }];
+    }    
+}
+
 
 /**
  Check if a previous message was send on the same day.

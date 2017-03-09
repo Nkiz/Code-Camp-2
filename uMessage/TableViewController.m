@@ -283,15 +283,7 @@
         
         if (imageURL && ![imageURL isEqualToString:@""]) {
             if ([imageURL hasPrefix:@"gs://"]) {
-                [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
-                                                                      completion:^(NSData *data, NSError *error) {
-                                                                          if (error) {
-                                                                              NSLog(@"Error downloading: %@", error);
-                                                                              return;
-                                                                          }
-                                                                          cell.avatar.image = [UIImage imageWithData: data];
-                                                                          [tableView reloadData];
-                                                                      }];
+                [self getAvatar:imageURL withImageView:cell.avatar];
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
@@ -308,15 +300,7 @@
         
         if (imageURL && ![imageURL isEqualToString:@""]) {
             if ([imageURL hasPrefix:@"gs://"]) {
-                [[[FIRStorage storage] referenceForURL:imageURL] dataWithMaxSize:INT64_MAX
-                                                                      completion:^(NSData *data, NSError *error) {
-                                                                          if (error) {
-                                                                              NSLog(@"Error downloading: %@", error);
-                                                                              return;
-                                                                          }
-                                                                          cell.avatar.image = [UIImage imageWithData: data];
-                                                                          [tableView reloadData];
-                                                                      }];
+                [self getAvatar:imageURL withImageView:cell.avatar];
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
@@ -325,6 +309,36 @@
         return cell;
     }
     return nil;
+}
+
+-(void)getAvatar:(NSString *)url withImageView:(UIImageView *)imageView
+{
+    //   0   1 2                         3       4
+    // @"gs://umessage-80185.appspot.com/avatars/THb9zYI7DPbtOieCFXLn0TmPLfh1.png";
+    NSArray *urlComponents = [url componentsSeparatedByString:@"/"];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = paths[0];
+    NSString *filePath = [NSString stringWithFormat:@"file:%@/%@/%@", documentsDirectory, urlComponents[3], urlComponents[4]];
+    NSURL *fileURL = [NSURL URLWithString:filePath];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
+        imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+    } else {
+        // Start Download
+        [[[FIRStorage storage] referenceForURL:url]
+         writeToFile:fileURL
+         completion:^(NSURL * _Nullable URL, NSError * _Nullable error) {
+             if (error) {
+                 NSLog(@"Error downloading: %@", error);
+                 return;
+             } else if (URL) {
+                 imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
+             }
+         }];
+    }
+    
+    
 }
 
 -(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
