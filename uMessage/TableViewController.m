@@ -132,15 +132,18 @@
                     //For GroupChat, if more than one User in Chat
                     if(userListArr.count > 2){
                         if([_myChats objectForKey:(snapshot.key)]){
-                            [_userArray addObject:[_myChats objectForKey:(snapshot.key)]];
+                            //[_userArray addObject:[_myChats objectForKey:(snapshot.key)]];
                             [_userArray addObject:userListArr[i]];
                             [_myChats setValue:_userArray forKey:(snapshot.key)];
+                            //break;
                         }else{
                             [_myChats setObject: userListArr[i] forKey:(snapshot.key)];
+                            [_userArray addObject:userListArr[i]];
                         }
                     // For PrivateChat
                     }else{
                         [_myChats setObject: userListArr[i] forKey:(snapshot.key)];
+                        [_userArray addObject:userListArr[i]];
                     }
                     [[_userRef child:userListArr[i] ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
                         // Get user value
@@ -400,19 +403,25 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *selectedUser = [_myUserRels objectAtIndex:indexPath.row].value[@"authId"];
-    NSString *selectedUserName = [_myUserRels objectAtIndex:indexPath.row].value[@"username"];
      if(tableView == _chatTableView){
+         NSString *selectedUser;
          // save selected chat id
          FIRDataSnapshot *messageSnapshot = _myMessages[indexPath.row];
+         NSMutableArray *userList = messageSnapshot.value[@"userlist"];
+         /*if([userList count] == 2){
+             selectedUser = [_myUserRels objectAtIndex:indexPath.row].value[@"authId"];
+         }*/
+         //NSString *selectedUser = messageSnapshot.value[@"userlist"];
          self.selectedChatId     = messageSnapshot.key;
          self.selectedChatTitle  = [_userList objectAtIndex:indexPath.row];
-         self.selectedUserId = selectedUser;
+         //self.selectedUserId = selectedUser;
          self.selectedRow = indexPath.row;
     
          // open chat
          [self performSegueWithIdentifier:@"ListToChat" sender:self];
      }else if (tableView == _contactTableView){
+         NSString *selectedUser = [_myUserRels objectAtIndex:indexPath.row].value[@"authId"];
+         NSString *selectedUserName = [_myUserRels objectAtIndex:indexPath.row].value[@"username"];
          BOOL findChat = false;
          //Get Contactdates for User in Chat
          for (int i=0; i<_myMessages.count; i++) {
@@ -470,6 +479,10 @@
         contactController.myUsers    = self.myChats;
         
     }
+    if([[segue identifier] isEqualToString:@"ListToGroup"])
+    {
+        
+    }
 }
 - (IBAction)settingsAction:(UIBarButtonItem *)sender {
     UIAlertController * view=   [UIAlertController
@@ -497,6 +510,7 @@
                                  handler:^(UIAlertAction * action)
                                  {
                                      // TODO: New Group
+                                     [self performSegueWithIdentifier: @"ListToGroup" sender: self];
                                      // close menu
                                      [view dismissViewControllerAnimated:YES completion:nil];
                                  }];
