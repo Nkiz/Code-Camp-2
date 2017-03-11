@@ -334,6 +334,7 @@
                         <outlet property="navigationBar" destination="AgN-bq-kb4" id="L5z-IZ-bKJ"/>
                         <outlet property="sendView" destination="MnS-IP-fCO" id="EWg-Z5-Cxe"/>
                         <segue destination="ZyE-YZ-1Ev" kind="unwind" identifier="unwindToList" unwindAction="prepareForUnwind:" id="Awr-c0-5X1"/>
+                        <segue destination="H9d-0x-VgL" kind="show" identifier="ChatToGroup" id="ulA-yB-1Ca"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIM-u7-S49" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -621,5 +622,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="336-4C-Gfr"/>
+        <segue reference="ulA-yB-1Ca"/>
     </inferredMetricsTieBreakers>
 </document>

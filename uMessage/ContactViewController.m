@@ -114,6 +114,9 @@
         for (int i=0; i<_myMessages.count; i++) {
             FIRDataSnapshot *messageSnapshot = _myMessages[i];
             NSMutableArray * userList = messageSnapshot.value[@"userlist"];
+            if([userList count] > 2){
+                continue;
+            }
             for(NSString *key in userList){
                 if([_selectedUserId isEqualToString:key]){
                     findChat = true;

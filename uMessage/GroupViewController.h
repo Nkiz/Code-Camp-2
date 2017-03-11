@@ -17,4 +17,7 @@
 @property (strong, nonatomic) FIRDatabaseReference *userRef;
 @property (strong, nonatomic) FIRDatabaseReference *userRelRef;
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
+
+@property (strong, nonatomic) NSString *openedBy;
+@property (strong, nonatomic) NSString *openedByChatId;
 @end

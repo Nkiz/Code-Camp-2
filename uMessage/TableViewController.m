@@ -9,6 +9,7 @@
 #import "TableViewController.h"
 #import "ChatTableViewCell.h"
 #import "ChatViewController.h"
+#import "GroupViewController.h"
 #import "DataViewController.h"
 #import "ContactViewController.h"
 
@@ -175,6 +176,22 @@
                 break;
             }
         }
+        //NSString *chatTitle;
+        /*if(_myMessages[index].value[@"userlist"] != snapshot.value[@"userlist"]){
+            for(NSString *userId in snapshot.value[@"userlist"]){
+                if(![userId isEqualToString:[FIRAuth auth].currentUser.uid]){
+                    _myChats setValue:<#(nullable id)#> forKey:<#(nonnull NSString *)#>
+                    _myUserList[userId] = ;
+                }
+                _myUserList;
+                //_userList[index] =
+                //[self fillChatList];
+            }
+        }*/
+        if(_myMessages[index].value[@"userlist"] != snapshot.value[@"userlist"] && _myMessages[index].value[@"userlist"] != nil){
+            [_myChats setValue:snapshot.value[@"userlist"] forKey:chatId];
+            [self fillChatList];
+        }
         _myMessages[index] = snapshot;
         [_chatTableView reloadData];
         NSLog(@"test");
@@ -214,6 +231,9 @@
             NSString *tmp;
             
             for(NSString *chatUsers in chatUser){
+                if([chatUsers isEqualToString: [FIRAuth auth].currentUser.uid]){
+                    continue;
+                }
                 if([chatUser indexOfObject:chatUsers] == 0){
                     tmp = [_myUserList objectForKey:chatUsers];
                 }else{
@@ -375,21 +395,46 @@
 
 -(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Löschen"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
-        // delete action
-        FIRDataSnapshot *chat = [_myMessages objectAtIndex:indexPath.row];
-        [[_chatRef child:chat.key ] removeValue];
-        [[_messagesRef child:chat.key ] removeValue];
-        NSLog(@"Delete Chat with index %li", (long) indexPath.row);
-    }];
-    deleteAction.backgroundColor = [UIColor redColor];
-    
-    return @[deleteAction];
+    if(tableView == _chatTableView){
+        UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Löschen"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+            // delete action
+            FIRDataSnapshot *chat = [_myMessages objectAtIndex:indexPath.row];
+            [[_chatRef child:chat.key ] removeValue];
+            [[_messagesRef child:chat.key ] removeValue];
+            NSLog(@"Delete Chat with index %li", (long) indexPath.row);
+        }];
+        deleteAction.backgroundColor = [UIColor redColor];
+        
+        return @[deleteAction];
+    }else if(tableView == _contactTableView){
+        UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Löschen"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
+            // delete action
+            FIRDataSnapshot *userRel = [_myUserRels objectAtIndex:indexPath.row];
+            [[_userRelRef child:[FIRAuth auth].currentUser.uid ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                // Get user value
+                //NSMutableDictionary<NSString *, NSString *> *userData = snapshot.value;
+                NSMutableArray *userList = snapshot.value;
+                //NSArray *userDataList = snapshot.value[@"2"];
+                [userList removeObject:userRel.key];
+                //int index =  [userList indexOfObject:userRel.key];
+                NSDictionary *childUpdates = @{[FIRAuth auth].currentUser.uid: userList};
+                [_userRelRef updateChildValues:childUpdates];
+            }];
+        }];
+        deleteAction.backgroundColor = [UIColor redColor];
+        
+        return @[deleteAction];
+    }
+    return nil;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(tableView == _chatTableView)
+    {
+        return YES;
+    }
+    if(tableView == _contactTableView)
     {
         return YES;
     }
@@ -427,6 +472,9 @@
          for (int i=0; i<_myMessages.count; i++) {
              FIRDataSnapshot *messageSnapshot = _myMessages[i];
              NSMutableArray * userList = messageSnapshot.value[@"userlist"];
+             if([userList count] > 2){
+                 continue;
+             }
              for(NSString *key in userList){
                  if([selectedUser isEqualToString:key]){
                      findChat = true;
@@ -481,7 +529,8 @@
     }
     if([[segue identifier] isEqualToString:@"ListToGroup"])
     {
-        
+        GroupViewController *controller = [segue destinationViewController];
+        controller.openedBy = @"List";
     }
 }
 - (IBAction)settingsAction:(UIBarButtonItem *)sender {

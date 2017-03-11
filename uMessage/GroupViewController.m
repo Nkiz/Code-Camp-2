@@ -69,23 +69,62 @@
         }
     }
     tmpUserRelList = _myUserRelList;
-    [tmpUserRelList addObject:[FIRAuth auth].currentUser.uid];
-    NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
-    NSDictionary *chatInfo = @{@"img": @"",
-                               @"lastMsg": @"",
-                               @"lastMsgTs": @"",
-                               @"userlist": tmpUserRelList
-                               };
-    NSDictionary *childUpdates = @{key: chatInfo};
-    // add user to databse
-    [_chatRef updateChildValues:childUpdates];
-
-    self.selectedChatId     = key;
-    self.selectedChatTitle  = tmp;
-    self.selectedUserId = [FIRAuth auth].currentUser.uid;
-    self.selectedRow = 1;
-
-    [self performSegueWithIdentifier:@"GroupToChat" sender:self];
+    
+    //For add User in existing Chat
+    if([self.openedBy isEqualToString:@"Chat"]){
+        [[_chatRef child:_openedByChatId] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            NSDictionary<NSString *, NSString *> *userData = snapshot.value;
+            NSMutableArray<NSString*> *userDataList = [userData allValues];
+            NSMutableArray *userList = snapshot.value[@"userlist"];
+            [tmpUserRelList addObjectsFromArray:userList];
+            [userData setValue:tmpUserRelList forKeyPath:@"userlist"];
+            NSDictionary *childUpdates = @{_openedByChatId: userData};
+            // add user to databse
+            [_chatRef updateChildValues:childUpdates];
+            NSMutableString * chatTitle;
+            int counter = 0;
+            for(NSString* userName in tmpUserRelList){
+                for(FIRDataSnapshot *userRels in _myUserRels){
+                    NSDictionary<NSString *, NSString *> *userRel = userRels.value;
+                    if([userName isEqualToString:[userRel objectForKey:@"authId"]]){
+                        if(counter == 0){
+                            chatTitle = [userRel objectForKey:@"username"];
+                        }else{
+                            chatTitle = [chatTitle stringByAppendingString:@", "];
+                            chatTitle = [chatTitle stringByAppendingString:[userRel objectForKey:@"username"]];
+                        }
+                    };
+                }
+                counter++;
+            }
+            self.selectedChatId     = _openedByChatId;
+            self.selectedChatTitle  = chatTitle;
+            self.selectedUserId = [FIRAuth auth].currentUser.uid;
+            self.selectedRow = 1;
+            
+            [self performSegueWithIdentifier:@"GroupToChat" sender:self];
+        }];
+        
+    //For create new Chat
+    }else if([self.openedBy isEqualToString:@"List"]){
+        [tmpUserRelList addObject:[FIRAuth auth].currentUser.uid];
+        NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
+        NSDictionary *chatInfo = @{@"img": @"",
+                                   @"lastMsg": @"",
+                                   @"lastMsgTs": @"",
+                                   @"userlist": tmpUserRelList
+                                   };
+        NSDictionary *childUpdates = @{key: chatInfo};
+        // add user to databse
+        [_chatRef updateChildValues:childUpdates];
+        
+        self.selectedChatId     = key;
+        self.selectedChatTitle  = tmp;
+        self.selectedUserId = [FIRAuth auth].currentUser.uid;
+        self.selectedRow = 1;
+        
+        [self performSegueWithIdentifier:@"GroupToChat" sender:self];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

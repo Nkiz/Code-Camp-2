@@ -9,6 +9,7 @@
 @import Photos;
 @import CoreLocation;
 #import "ChatViewController.h"
+#import "GroupViewController.h"
 #import "BubbleChatCell.h"
 #import "BubbleImageChatCell.h"
 #import "BubbleLocationChatCell.h"
@@ -270,6 +271,8 @@
  Show menu, when add button in navigation bar is pressed.
  */
 - (IBAction)addButtonPressed:(id)sender {
+    //opened Bye
+    [self performSegueWithIdentifier:@"ChatToGroup" sender:self];
     NSLog(@"AddButton pressed");
 }
 
@@ -867,6 +870,16 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"ChatToGroup"])
+    {
+        GroupViewController *controller = [segue destinationViewController];
+        controller.openedBy = @"Chat";
+        controller.openedByChatId = self.chatId;
+    }
 }
 
 
