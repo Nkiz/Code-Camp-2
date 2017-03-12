@@ -17,6 +17,7 @@
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) FIRDatabaseReference *usersRef;
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
+@property (strong, nonatomic) FIRDatabaseReference *userRelRef;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *myMessages;
 @property (strong, nonatomic) NSMutableDictionary *myUsers;
 - (IBAction)searchContactPressed:(id)sender;

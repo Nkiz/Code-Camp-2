@@ -275,6 +275,21 @@
     [self performSegueWithIdentifier:@"ChatToGroup" sender:self];
     NSLog(@"AddButton pressed");
 }
+- (IBAction)leaveGroup:(id)sender {
+    [[_allChatsRef child:_chatId] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSDictionary<NSString *, NSString *> *userData = snapshot.value;
+        //NSMutableArray<NSString*> *userDataList = [userData allValues];
+        NSMutableArray *userList = snapshot.value[@"userlist"];
+        //[tmpUserRelList addObjectsFromArray:userList];
+        [userList removeObject:[FIRAuth auth].currentUser.uid];
+        [userData setValue:userList forKeyPath:@"userlist"];
+        NSDictionary *childUpdates = @{_chatId: userData};
+        // add user to databse
+        [_allChatsRef updateChildValues:childUpdates];
+        [self performSegueWithIdentifier:@"unwindToList" sender:self];
+        [self.allChatsRef removeObserverWithHandle:_refAddChatHandle];
+    }];
+}
 
 /**
  Send text message, when send button is pressed.

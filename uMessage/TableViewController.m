@@ -167,7 +167,7 @@
     //Handler for change in Chatlist
     [_chatRef observeEventType:FIRDataEventTypeChildChanged withBlock:^(FIRDataSnapshot *snapshot) {
         NSString *chatId = snapshot.key;
-        NSDictionary<NSString *, NSString *> *chatData = snapshot.value;
+        NSMutableArray *tmpUserList = snapshot.value[@"userlist"];
         int index = 0;
         for(int i=0; i < [_myMessages count]; i++){
             FIRDataSnapshot *chat = [_myMessages objectAtIndex:i];
@@ -176,20 +176,14 @@
                 break;
             }
         }
-        //NSString *chatTitle;
-        /*if(_myMessages[index].value[@"userlist"] != snapshot.value[@"userlist"]){
-            for(NSString *userId in snapshot.value[@"userlist"]){
-                if(![userId isEqualToString:[FIRAuth auth].currentUser.uid]){
-                    _myChats setValue:<#(nullable id)#> forKey:<#(nonnull NSString *)#>
-                    _myUserList[userId] = ;
-                }
-                _myUserList;
-                //_userList[index] =
-                //[self fillChatList];
+        if([_myMessages[index].value[@"userlist"] count] != [snapshot.value[@"userlist"] count] && _myMessages[index].value[@"userlist"] != nil){
+            if([tmpUserList indexOfObject:[FIRAuth auth].currentUser.uid] < 1000){
+                [_myChats setValue:snapshot.value[@"userlist"] forKey:chatId];
+                [_myChatList addObject:chatId];
+                _myMessages[index] = snapshot;
+            }else{
+                [_myChatList removeObject:chatId];
             }
-        }*/
-        if(_myMessages[index].value[@"userlist"] != snapshot.value[@"userlist"] && _myMessages[index].value[@"userlist"] != nil){
-            [_myChats setValue:snapshot.value[@"userlist"] forKey:chatId];
             [self fillChatList];
         }
         _myMessages[index] = snapshot;
@@ -411,12 +405,8 @@
             // delete action
             FIRDataSnapshot *userRel = [_myUserRels objectAtIndex:indexPath.row];
             [[_userRelRef child:[FIRAuth auth].currentUser.uid ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                // Get user value
-                //NSMutableDictionary<NSString *, NSString *> *userData = snapshot.value;
                 NSMutableArray *userList = snapshot.value;
-                //NSArray *userDataList = snapshot.value[@"2"];
                 [userList removeObject:userRel.key];
-                //int index =  [userList indexOfObject:userRel.key];
                 NSDictionary *childUpdates = @{[FIRAuth auth].currentUser.uid: userList};
                 [_userRelRef updateChildValues:childUpdates];
             }];

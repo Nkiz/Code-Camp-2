@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -275,12 +276,20 @@
                                                 <action selector="backButtonPressed:" destination="lkQ-iI-wLp" id="ZFv-qm-Lar"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="smi-cy-P46">
-                                            <color key="tintColor" red="0.87498339859999996" green="0.94497746439999997" blue="0.96656602619999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <connections>
-                                                <action selector="addButtonPressed:" destination="lkQ-iI-wLp" id="S5H-3K-yEN"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <rightBarButtonItems>
+                                            <barButtonItem systemItem="add" id="smi-cy-P46">
+                                                <color key="tintColor" red="0.87498339859999996" green="0.94497746439999997" blue="0.96656602619999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="addButtonPressed:" destination="lkQ-iI-wLp" id="S5H-3K-yEN"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem systemItem="trash" id="tOb-uH-tcl">
+                                                <color key="tintColor" red="0.87498339859999996" green="0.94497746439999997" blue="0.96656602619999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="leaveGroup:" destination="lkQ-iI-wLp" id="QF5-bY-ZFE"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -621,7 +630,7 @@
         <image name="chatIcon" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="336-4C-Gfr"/>
+        <segue reference="aGA-8o-TpW"/>
         <segue reference="ulA-yB-1Ca"/>
     </inferredMetricsTieBreakers>
 </document>

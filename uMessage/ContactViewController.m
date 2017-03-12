@@ -36,6 +36,7 @@
     self.ref         = [[FIRDatabase database] reference];
     self.usersRef    = [_ref child:@"users"];
     self.chatRef     = [_ref child:@"chats"];
+    self.userRelRef  = [_ref child:@"userRel"];
     
     _users = [[NSMutableArray alloc] init];
     _myUserList = [NSMutableDictionary dictionary];
@@ -125,15 +126,23 @@
                     break;
                 }
             }
+            if(findChat){
+                break;
+            }
         }
         if(!findChat){
             //Todo neuer Chat
             NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
             controller.chatId = key;
-            controller.chatTitle = @"test";
+            //controller.chatTitle = @"test";
             /*NSDictionary *userListForChat = @{@"0": _selectedUserId,
                                               @"1": [FIRAuth auth].currentUser.uid
                                               };*/
+            NSMutableArray *tmpUserList = [[NSMutableArray alloc] init];
+            [tmpUserList addObject:_selectedUserId];
+            [tmpUserList addObject:[FIRAuth auth].currentUser.uid];
+            controller.chatTitle = _selectedChatTitle;
+            controller.chatUserlist = tmpUserList;
             NSDictionary *chatInfo = @{@"img": @"",
                                        @"lastMsg": @"",
                                        @"lastMsgTs": @"",
@@ -144,6 +153,14 @@
             NSDictionary *childUpdates = @{key: chatInfo};
             // add user to databse
             [_chatRef updateChildValues:childUpdates];
+            //add user as RelUser
+            [[_userRelRef child:[FIRAuth auth].currentUser.uid ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                NSMutableArray *userList = snapshot.value;
+                [userList addObject:_selectedUserId];
+                NSDictionary *childUpdates = @{[FIRAuth auth].currentUser.uid: userList};
+                [_userRelRef updateChildValues:childUpdates];
+            }];
+
             
 
         }
