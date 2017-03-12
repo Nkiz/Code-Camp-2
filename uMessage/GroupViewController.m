@@ -45,6 +45,11 @@
     [self loadUsers];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -152,6 +157,10 @@
     [[_userRelRef child:[FIRAuth auth].currentUser.uid] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         
         NSString *userRel = snapshot.value;
+        
+        // only non group members
+        if([_chatUserlist containsObject:userRel]) return;
+        
         [[_userRef child:userRel ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             // Get user value
             [_myUserRels addObject: snapshot];

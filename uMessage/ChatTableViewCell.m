@@ -18,19 +18,19 @@
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     // Title init
-    self.title = [[UILabel alloc] initWithFrame:CGRectMake(80.0, 17.0, 140.0, 21.0)];
+    self.title = [[UILabel alloc] initWithFrame:CGRectMake(80.0, 17.0, 190.0, 21.0)];
     [self.title setFont:[UIFont systemFontOfSize:17.0]];
     [self.title setTextAlignment:NSTextAlignmentLeft];
     [self.title setTextColor:[UIColor blackColor]];
     
     // Message init
-    self.message = [[UILabel alloc] initWithFrame:CGRectMake(80.0, 38.0, 232.0, 15.0)];
+    self.message = [[UILabel alloc] initWithFrame:CGRectMake(80.0, 38.0, 252.0, 15.0)];
     [self.message setFont:[UIFont systemFontOfSize:12.0]];
     [self.message setTextAlignment:NSTextAlignmentLeft];
     [self.message setTextColor:[UIColor blackColor]];
     
     // Date init
-    self.date = [[UILabel alloc] initWithFrame:CGRectMake(254.0, 22.0, 78.0, 15.0)];
+    self.date = [[UILabel alloc] initWithFrame:CGRectMake(274.0, 22.0, 58.0, 15.0)];
     [self.date setFont:[UIFont systemFontOfSize:12.0]];
     [self.date setTextAlignment:NSTextAlignmentRight];
     [self.date setTextColor:[UIColor lightGrayColor]];

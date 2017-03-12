@@ -628,19 +628,13 @@
                                message:nil
                                preferredStyle:UIAlertControllerStyleActionSheet];
     
-    // choose photo from library
-    UIAlertAction *photo = [UIAlertAction
-                            actionWithTitle:ChoosePhotoString
+    // take a new photo
+    UIAlertAction *takePhoto = [UIAlertAction
+                            actionWithTitle:TakePhotoString
                             style:UIAlertActionStyleDefault
                             handler:^(UIAlertAction *action) {
                                 UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-                                picker.delegate = self;
-                                
-                                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-                                    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-                                } else {
-                                    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-                                }
+                                picker.delegate = self;picker.sourceType = UIImagePickerControllerSourceTypeCamera;
                                 
                                 [self presentViewController:picker animated:YES completion:NULL];
                                 
@@ -648,6 +642,21 @@
                                 [view dismissViewControllerAnimated:YES completion:nil];
                             }];
     
+    // choose photo from library
+    UIAlertAction *photo = [UIAlertAction
+                            actionWithTitle:ChoosePhotoString
+                            style:UIAlertActionStyleDefault
+                            handler:^(UIAlertAction *action) {
+                                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                                picker.delegate = self;
+                                picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                                
+                                [self presentViewController:picker animated:YES completion:NULL];
+                                
+                                // close menu
+                                [view dismissViewControllerAnimated:YES completion:nil];
+                            }];
+    /*
     // send voice message
     UIAlertAction *voice = [UIAlertAction
                             actionWithTitle:SendVoiceString
@@ -658,7 +667,8 @@
                                 // close menu
                                 [view dismissViewControllerAnimated:YES completion:nil];
                             }];
-    
+    */
+     
     // send current location
     UIAlertAction *location = [UIAlertAction
                                actionWithTitle:SendLocationString
@@ -689,8 +699,12 @@
                              }];
     
     // add menu entries
+    
+    // Check if camera is available (simulator)
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [view addAction:takePhoto];
+    }
     [view addAction:photo];
-    [view addAction:voice];
     [view addAction:location];
     [view addAction:cancel];
     
@@ -894,6 +908,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
         GroupViewController *controller = [segue destinationViewController];
         controller.openedBy = @"Chat";
         controller.openedByChatId = self.chatId;
+        controller.chatUserlist = self.chatUserlist;
     }
 }
 

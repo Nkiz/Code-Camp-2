@@ -329,7 +329,7 @@
         
         if (imageURL && ![imageURL isEqualToString:@""]) {
             if ([imageURL hasPrefix:@"gs://"]) {
-                [self getAvatar:imageURL withImageView:cell.avatar];
+                [TableViewController getAvatar:imageURL withImageView:cell.avatar];
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
@@ -346,7 +346,7 @@
         
         if (imageURL && ![imageURL isEqualToString:@""]) {
             if ([imageURL hasPrefix:@"gs://"]) {
-                [self getAvatar:imageURL withImageView:cell.avatar];
+                [TableViewController getAvatar:imageURL withImageView:cell.avatar];
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
@@ -357,7 +357,7 @@
     return nil;
 }
 
--(void)getAvatar:(NSString *)url withImageView:(UIImageView *)imageView
++(void)getAvatar:(NSString *)url withImageView:(UIImageView *)imageView
 {
     //   0   1 2                         3       4
     // @"gs://umessage-80185.appspot.com/avatars/THb9zYI7DPbtOieCFXLn0TmPLfh1.png";

@@ -363,19 +363,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9IU-ga-Jzf">
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="9IU-ga-Jzf">
                                 <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <items>
                                     <navigationItem title="Kontakt" id="UM3-rI-W5N">
                                         <barButtonItem key="leftBarButtonItem" title="Zurück" id="1WY-4X-L4e">
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <connections>
                                                 <action selector="backButtonPressed:" destination="LRt-Z6-vTS" id="hac-Ym-laM"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="KjQ-Wl-SRw">
-                                            <connections>
-                                                <action selector="addButtonPressed:" destination="lkQ-iI-wLp" id="vbm-Qk-9mG"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -390,16 +388,16 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                        <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idContactMail" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="E-Mail" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="d1N-dw-zHu">
                                         <rect key="frame" x="29" y="79" width="319" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="_____________________________________________________" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="61M-Wc-ICZ">
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="_____________________________________________________" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="61M-Wc-ICZ">
                                         <rect key="frame" x="0.0" y="193" width="383" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -409,18 +407,21 @@
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idSeachtContactBtn" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NsF-R9-jh4">
                                         <rect key="frame" x="29" y="132" width="319" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.078431372550000003" green="0.59607843140000005" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="backgroundColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <size key="titleShadowOffset" width="1" height="1"/>
                                         <state key="normal" title="Kontakt suchen">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="15"/>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="loginTouchUpInside:" destination="S4R-Ja-viH" eventType="touchUpInside" id="MWD-cI-fUF"/>
                                             <action selector="searchContactPressed:" destination="LRt-Z6-vTS" eventType="touchUpInside" id="5vO-tj-RLb"/>
                                         </connections>
                                     </button>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" restorationIdentifier="idContactTable" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="71" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KyY-9O-bQR">
-                                        <rect key="frame" x="8" y="220" width="360" height="376"/>
+                                        <rect key="frame" x="0.0" y="193" width="376" height="411"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
@@ -429,13 +430,15 @@
                                         </connections>
                                     </tableView>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="10"/>
-                                </userDefinedRuntimeAttributes>
+                                <color key="backgroundColor" red="0.97638529539108276" green="0.97652524709701538" blue="0.97635465860366821" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXn-cs-Cbx">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <connections>
                         <outlet property="idContactMail" destination="d1N-dw-zHu" id="Apd-oM-1M7"/>
@@ -448,7 +451,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O46-23-su7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="KEc-PS-PO0" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1332" y="532"/>
+            <point key="canvasLocation" x="1332" y="530.28485757121439"/>
         </scene>
         <!--Benutzerbild-->
         <scene sceneID="7br-cX-zyr">
@@ -590,7 +593,7 @@
                                                 <action selector="backButtonPressed:" destination="H9d-0x-VgL" id="g5q-fT-1Uh"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="y9G-AJ-g0R">
+                                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="y9G-AJ-g0R">
                                             <color key="tintColor" red="0.87498339859999996" green="0.94497746439999997" blue="0.96656602619999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <connections>
                                                 <action selector="addGroup:" destination="H9d-0x-VgL" id="NXb-Y6-lK2"/>
@@ -630,7 +633,7 @@
         <image name="chatIcon" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="aGA-8o-TpW"/>
+        <segue reference="k0F-H1-ZWC"/>
         <segue reference="ulA-yB-1Ca"/>
     </inferredMetricsTieBreakers>
 </document>

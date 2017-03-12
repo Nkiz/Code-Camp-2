@@ -45,6 +45,11 @@
     
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -53,8 +58,11 @@
     _refAddHandle = [_usersRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         NSDictionary<NSString *, NSString *> *user = snapshot.value;
         //Entered Username or Mail is matched
-        if([_idContactMail.text isEqualToString:[user objectForKey:@"email"]] ||
-           [_idContactNick.text isEqualToString:[user objectForKey:@"username"]]){
+        if([[user objectForKey:@"email"] hasPrefix:_idContactMail.text] ||
+           [[user objectForKey:@"username"] hasPrefix:_idContactNick.text]){
+            // dont show me
+            if([[user objectForKey:@"authId"] isEqualToString:[FIRAuth auth].currentUser.uid]) return;
+            
             [_users addObject:snapshot];
             [_myUserList setObject:[snapshot.value objectForKey:@"username"] forKey:snapshot.key];
             [_usersTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_users.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -67,6 +75,17 @@
     FIRDataSnapshot *usersSnapshot = _users[indexPath.row];
     NSDictionary<NSString *, NSString *> *user = usersSnapshot.value;
     cell.title.text = user[@"username"];
+    cell.message.text = user[@"status"];
+    
+    NSString *imageURL = user[@"profileImg"];
+    
+    if (imageURL && ![imageURL isEqualToString:@""]) {
+        if ([imageURL hasPrefix:@"gs://"]) {
+            [TableViewController getAvatar:imageURL withImageView:cell.avatar];
+        } else {
+            cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
+        }
+    }
     return cell;
 }
 

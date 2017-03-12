@@ -19,5 +19,6 @@
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
 @property (strong, nonatomic) NSDictionary *tmpUserData;
 - (IBAction)logoutAction:(id)sender;
++ (void)getAvatar:(NSString *)url withImageView:(UIImageView *)imageView;
 
 @end

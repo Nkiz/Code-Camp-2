@@ -20,4 +20,5 @@
 
 @property (strong, nonatomic) NSString *openedBy;
 @property (strong, nonatomic) NSString *openedByChatId;
+@property (strong, nonatomic) NSMutableArray *chatUserlist;
 @end
