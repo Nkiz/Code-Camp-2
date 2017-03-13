@@ -179,7 +179,12 @@
         if([_myMessages[index].value[@"userlist"] count] != [snapshot.value[@"userlist"] count] && _myMessages[index].value[@"userlist"] != nil){
             if([tmpUserList indexOfObject:[FIRAuth auth].currentUser.uid] < 1000){
                 [_myChats setValue:snapshot.value[@"userlist"] forKey:chatId];
-                [_myChatList addObject:chatId];
+                if([_myChatList containsObject:chatId])
+                {
+                    NSLog(@"Already in list, didnt add.");
+                } else {
+                    [_myChatList addObject:chatId];
+                }
                 _myMessages[index] = snapshot;
             }else{
                 [_myChatList removeObject:chatId];
@@ -237,7 +242,7 @@
             }
             [_userList addObject:tmp];
         }
-        [_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_userList.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_userList.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
