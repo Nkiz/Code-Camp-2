@@ -123,7 +123,7 @@
         if(myChat){
             _userArray = [[NSMutableArray alloc] init];
             for(int i=0; i<userListArr.count; i++){
-                if(![userListArr[i] isEqualToString:[FIRAuth auth].currentUser.uid]){
+                if(![[FIRAuth auth].currentUser.uid isEqualToString:userListArr[i]]){
                     if(![_myChatList containsObject:(snapshot.key)]){
                         [_myChatList addObject:(snapshot.key)];
                     }
@@ -305,21 +305,24 @@
         NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
         
         // Format Date
-        NSISO8601DateFormatter *dateFormat = [[NSISO8601DateFormatter alloc] init];
-        NSDate *date = [dateFormat dateFromString:message[@"lastMsgTs"]];
         NSString *dateStr = @"";
         
-        if([[NSCalendar currentCalendar] isDateInToday:date])
-        {
-            dateStr =  [NSDateFormatter localizedStringFromDate:date
-                                                      dateStyle:NSDateFormatterNoStyle
-                                                      timeStyle:NSDateFormatterShortStyle];
-        } else if([[NSCalendar currentCalendar] isDateInYesterday:date]) {
-            dateStr = @"Gestern";
-        } else {
-            dateStr = [NSDateFormatter localizedStringFromDate:date
-                                                     dateStyle:NSDateFormatterShortStyle
-                                                     timeStyle:NSDateFormatterNoStyle];
+        if(message[@"lastMsgTs"] && [message[@"lastMsgTs"] length] > 0) {
+            NSISO8601DateFormatter *dateFormat = [[NSISO8601DateFormatter alloc] init];
+            NSDate *date = [dateFormat dateFromString:message[@"lastMsgTs"]];
+            
+            if([[NSCalendar currentCalendar] isDateInToday:date])
+            {
+                dateStr =  [NSDateFormatter localizedStringFromDate:date
+                                                          dateStyle:NSDateFormatterNoStyle
+                                                          timeStyle:NSDateFormatterShortStyle];
+            } else if([[NSCalendar currentCalendar] isDateInYesterday:date]) {
+                dateStr = @"Gestern";
+            } else {
+                dateStr = [NSDateFormatter localizedStringFromDate:date
+                                                         dateStyle:NSDateFormatterShortStyle
+                                                         timeStyle:NSDateFormatterNoStyle];
+            }
         }
         cell.title.text = [_userList objectAtIndex:indexPath.row];
         cell.message.text = message[@"lastMsg"];
@@ -333,7 +336,7 @@
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
-        }
+        } 
         return cell;
     }else if (tableView == _contactTableView){
         FIRDataSnapshot *userSnapshot = _myUserRels[indexPath.row];
@@ -471,7 +474,7 @@
                      self.selectedChatId = [_myMessages objectAtIndex: i].key;
                      self.selectedChatTitle = selectedUserName;
                      self.selectedUserId = selectedUser;
-                     self.selectedRow = indexPath.row;
+                     self.selectedRow = i; //indexPath.row;
                      break;
                  }
              }
@@ -485,7 +488,7 @@
              self.selectedChatId = key;
              self.selectedChatTitle = selectedUserName;
              self.selectedUserId = selectedUser;
-             self.selectedRow = indexPath.row;
+             self.selectedRow = 9999; // fix? //indexPath.row;
          }
          [self performSegueWithIdentifier:@"ListToChat" sender:self];
          

@@ -26,6 +26,7 @@
 @property(strong, nonatomic) IBOutlet UITextField *chatMsg;
 @property(strong, nonatomic) IBOutlet UIView *sendView;
 @property(strong, nonatomic) UIAlertController *alert;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *removeButton;
 
 // Chat
 @property(strong, nonatomic) NSString *currentUserID;
@@ -114,12 +115,18 @@
     self.currentUserID = [[FIRAuth auth] currentUser].uid;
     
     // group chat, if more than 2 other user are in this chat
-    self.isGroup = [self.chatUserlist count] > 1;
+    self.isGroup = [self.chatUserlist count] > 2;
+    
+    // hide remove from group in private chat
+    if(!self.isGroup)
+    {
+        [self.removeButton setEnabled:NO];
+        [self.removeButton setTintColor: [UIColor clearColor]];
+    }
     
     [self getUsernames];
     [self checkNewChat];
 }
-
 
 /**
  Get username for each userid in chat.

@@ -31,6 +31,8 @@
     
     _usersTable.delegate = self;
     _usersTable.dataSource = self;
+    _idContactNick.delegate = self;
+    _idContactMail.delegate = self;
     
     //Ref Data
     self.ref         = [[FIRDatabase database] reference];
@@ -105,6 +107,8 @@
     [self performSegueWithIdentifier:@"ContactToList" sender:self];
 }
 - (IBAction)searchContactPressed:(id)sender {
+    [self.view endEditing:YES];
+    
     [_users removeAllObjects];
     [_usersTable reloadData];
     [self loadUsers];
@@ -122,6 +126,16 @@
     
     // open chat
     [self performSegueWithIdentifier:@"ContactToChat" sender:self];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    NSLog(@"TextField should return.");
+    if(textField == _idContactMail || textField == _idContactNick) {
+        [self searchContactPressed:nil];
+    }
+    
+    return NO;
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
@@ -142,6 +156,7 @@
                     findChat = true;
                     controller.chatId = [_myMessages objectAtIndex: i].key;
                     controller.chatTitle = _selectedChatTitle;
+                    controller.chatUserlist = userList;
                     break;
                 }
             }

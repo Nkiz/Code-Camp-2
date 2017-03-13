@@ -225,6 +225,11 @@
                                 </items>
                                 <color key="tintColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="barTintColor" red="0.97636479139999999" green="0.97653168440000004" blue="0.9763541818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                        <color key="value" red="0.098797403275966644" green="0.74644488096237183" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </tabBar>
                         </subviews>
                         <color key="backgroundColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -341,6 +346,7 @@
                         <outlet property="chatMsg" destination="Fki-Pc-GMa" id="PCG-vJ-vnl"/>
                         <outlet property="chatTable" destination="q2V-GI-mNf" id="fPR-Mo-raW"/>
                         <outlet property="navigationBar" destination="AgN-bq-kb4" id="L5z-IZ-bKJ"/>
+                        <outlet property="removeButton" destination="tOb-uH-tcl" id="Sac-uA-3hg"/>
                         <outlet property="sendView" destination="MnS-IP-fCO" id="EWg-Z5-Cxe"/>
                         <segue destination="ZyE-YZ-1Ev" kind="unwind" identifier="unwindToList" unwindAction="prepareForUnwind:" id="Awr-c0-5X1"/>
                         <segue destination="H9d-0x-VgL" kind="show" identifier="ChatToGroup" id="ulA-yB-1Ca"/>
@@ -633,7 +639,7 @@
         <image name="chatIcon" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="k0F-H1-ZWC"/>
+        <segue reference="aGA-8o-TpW"/>
         <segue reference="ulA-yB-1Ca"/>
     </inferredMetricsTieBreakers>
 </document>
