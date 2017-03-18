@@ -12,6 +12,7 @@
 #import "GroupViewController.h"
 #import "DataViewController.h"
 #import "ContactViewController.h"
+#import "SettingsViewController.h"
 
 @interface TableViewController ()<UITableViewDataSource, UITabBarDelegate, UITableViewDelegate>{
     FIRDatabaseHandle _refHandle;
@@ -530,6 +531,13 @@
         GroupViewController *controller = [segue destinationViewController];
         controller.openedBy = @"List";
     }
+    //GLEB! NEW SEGUE!
+    if([[segue identifier] isEqualToString:@"ListToSettings"])
+    {
+        //SettingsViewController *controller = [segue destinationViewController];
+        //controller.openedBy = @"Settings";
+    }
+    
 }
 - (IBAction)settingsAction:(UIBarButtonItem *)sender {
     UIAlertController * view=   [UIAlertController
@@ -567,7 +575,7 @@
                                handler:^(UIAlertAction * action)
                                {
                                    // TODO: Settings
-                                   [self performSegueWithIdentifier: @"chatsToSettings" sender: self];
+                                   [self performSegueWithIdentifier: @"ListToSettings" sender: self];
                                    
                                    // close menu
                                    [view dismissViewControllerAnimated:YES completion:nil];
