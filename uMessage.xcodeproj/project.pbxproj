@@ -10,6 +10,7 @@
 		58BF81F5E95C9EC600386E7F /* libPods-uMessage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E5496BC4B6AF7E2FB4CB2B59 /* libPods-uMessage.a */; };
 		96052C7D1E71C97200BB7E74 /* GroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96052C7C1E71C97200BB7E74 /* GroupViewController.m */; };
 		96075A8E1E7B6B2400B0DBAD /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96075A8D1E7B6B2400B0DBAD /* SettingsViewController.m */; };
+		960D23D31E7DF7D500DFACDA /* GroupSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 960D23D21E7DF7D500DFACDA /* GroupSettingsViewController.m */; };
 		969864651E5C4FE20052D3D8 /* model.json in Resources */ = {isa = PBXBuildFile; fileRef = 969864641E5C4FE20052D3D8 /* model.json */; };
 		969864671E5C503F0052D3D8 /* chatModelBlank.json in Resources */ = {isa = PBXBuildFile; fileRef = 969864661E5C503F0052D3D8 /* chatModelBlank.json */; };
 		969864731E5DB1020052D3D8 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 969864721E5DB1020052D3D8 /* TableViewController.m */; };
@@ -62,6 +63,8 @@
 		96052C7C1E71C97200BB7E74 /* GroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupViewController.m; sourceTree = "<group>"; };
 		96075A8C1E7B6B2400B0DBAD /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		96075A8D1E7B6B2400B0DBAD /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		960D23D11E7DF7D500DFACDA /* GroupSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupSettingsViewController.h; sourceTree = "<group>"; };
+		960D23D21E7DF7D500DFACDA /* GroupSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupSettingsViewController.m; sourceTree = "<group>"; };
 		969864641E5C4FE20052D3D8 /* model.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = model.json; sourceTree = "<group>"; };
 		969864661E5C503F0052D3D8 /* chatModelBlank.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chatModelBlank.json; sourceTree = "<group>"; };
 		969864711E5DB1020052D3D8 /* TableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewController.h; sourceTree = "<group>"; };
@@ -202,6 +205,8 @@
 				96052C7C1E71C97200BB7E74 /* GroupViewController.m */,
 				96075A8C1E7B6B2400B0DBAD /* SettingsViewController.h */,
 				96075A8D1E7B6B2400B0DBAD /* SettingsViewController.m */,
+				960D23D11E7DF7D500DFACDA /* GroupSettingsViewController.h */,
+				960D23D21E7DF7D500DFACDA /* GroupSettingsViewController.m */,
 			);
 			path = uMessage;
 			sourceTree = "<group>";
@@ -557,6 +562,7 @@
 				969864731E5DB1020052D3D8 /* TableViewController.m in Sources */,
 				96FBAF2B1E5AE7C5007361C4 /* AppDelegate.m in Sources */,
 				B444170D1E65B1770060CB1E /* BubbleChatCell.m in Sources */,
+				960D23D31E7DF7D500DFACDA /* GroupSettingsViewController.m in Sources */,
 				B4068F691E68342F00A48D3E /* BubbleLocationChatCell.m in Sources */,
 				B4D19EEC1E5DE83700648DC3 /* ChatTableViewCell.m in Sources */,
 				969864761E603A3A0052D3D8 /* ContactViewController.m in Sources */,

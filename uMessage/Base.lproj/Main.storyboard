@@ -6,7 +6,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
-        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -281,20 +280,12 @@
                                                 <action selector="backButtonPressed:" destination="lkQ-iI-wLp" id="ZFv-qm-Lar"/>
                                             </connections>
                                         </barButtonItem>
-                                        <rightBarButtonItems>
-                                            <barButtonItem systemItem="add" id="smi-cy-P46">
-                                                <color key="tintColor" red="0.87498339859999996" green="0.94497746439999997" blue="0.96656602619999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <connections>
-                                                    <action selector="addButtonPressed:" destination="lkQ-iI-wLp" id="S5H-3K-yEN"/>
-                                                </connections>
-                                            </barButtonItem>
-                                            <barButtonItem systemItem="trash" id="tOb-uH-tcl">
-                                                <color key="tintColor" red="0.87498339859999996" green="0.94497746439999997" blue="0.96656602619999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <connections>
-                                                    <action selector="leaveGroup:" destination="lkQ-iI-wLp" id="QF5-bY-ZFE"/>
-                                                </connections>
-                                            </barButtonItem>
-                                        </rightBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" image="MenuIcon" id="ntF-1F-vgC">
+                                            <color key="tintColor" red="0.87450980392156863" green="0.94509803921568625" blue="0.96470588235294119" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <connections>
+                                                <action selector="showSettings:" destination="lkQ-iI-wLp" id="sai-aW-PcC"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -346,10 +337,10 @@
                         <outlet property="chatMsg" destination="Fki-Pc-GMa" id="PCG-vJ-vnl"/>
                         <outlet property="chatTable" destination="q2V-GI-mNf" id="fPR-Mo-raW"/>
                         <outlet property="navigationBar" destination="AgN-bq-kb4" id="L5z-IZ-bKJ"/>
-                        <outlet property="removeButton" destination="tOb-uH-tcl" id="Sac-uA-3hg"/>
                         <outlet property="sendView" destination="MnS-IP-fCO" id="EWg-Z5-Cxe"/>
                         <segue destination="ZyE-YZ-1Ev" kind="unwind" identifier="unwindToList" unwindAction="prepareForUnwind:" id="Awr-c0-5X1"/>
                         <segue destination="H9d-0x-VgL" kind="show" identifier="ChatToGroup" id="ulA-yB-1Ca"/>
+                        <segue destination="R4i-sB-h9Z" kind="show" identifier="GroupToSettings" id="XOS-dv-o9N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cIM-u7-S49" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -462,7 +453,7 @@
         <!--Benutzereinstellungen-->
         <scene sceneID="ceL-2m-6D8">
             <objects>
-                <viewController title="Benutzereinstellungen" modalTransitionStyle="crossDissolve" id="FII-Zd-AIk" customClass="SettingsViewController" sceneMemberID="viewController">
+                <viewController title="Benutzereinstellungen" modalTransitionStyle="crossDissolve" id="FII-Zd-AIk" userLabel="Benutzereinstellungen" customClass="SettingsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jkd-43-nOV"/>
                         <viewControllerLayoutGuide type="bottom" id="f2q-vi-jGz"/>
@@ -533,6 +524,9 @@
                                         <state key="normal" title="Bild auswählen">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="selectUserPicture:" destination="FII-Zd-AIk" eventType="touchUpInside" id="jxW-yA-9kV"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Aktuelles Benutzerbild:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvQ-l5-hPB">
                                         <rect key="frame" x="8" y="149" width="359" height="21"/>
@@ -542,7 +536,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VLm-hv-icj">
-                                        <rect key="frame" x="192" y="545" width="175" height="50"/>
+                                        <rect key="frame" x="191" y="545" width="175" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <color key="backgroundColor" red="0.078431372550000003" green="0.59607843140000005" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -550,6 +544,9 @@
                                         <state key="normal" title="Bild löschen">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="deleteUserPicture:" destination="FII-Zd-AIk" eventType="touchUpInside" id="gD5-Pq-pD4"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -557,6 +554,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.098039215690000001" green="0.74509803919999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
                         <outlet property="userPicture" destination="83h-zu-ila" id="wIT-JJ-VUh"/>
                         <outlet property="userStatus" destination="bPp-7m-aEV" id="qGy-aw-bOb"/>
@@ -566,40 +564,6 @@
                 <exit id="S5T-7X-tBV" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2109.5999999999999" y="-909.89505247376314"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="w8e-aO-jCc">
-            <objects>
-                <viewController id="KgI-Da-Ihz" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="0wc-yy-l27"/>
-                        <viewControllerLayoutGuide type="bottom" id="H0R-uo-IsS"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="48f-5r-fKN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="aB5-VN-DS2" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="a8t-lY-tge">
-            <objects>
-                <viewController id="LAD-Ii-gKd" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="RUb-oe-pBu"/>
-                        <viewControllerLayoutGuide type="bottom" id="Snh-gL-w90"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="bbg-h3-KGQ">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="q59-Jo-Ul2" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
         <!--GruppenChat-->
         <scene sceneID="5h5-Ut-5yF">
@@ -661,13 +625,91 @@
             </objects>
             <point key="canvasLocation" x="2110" y="530"/>
         </scene>
+        <!--Gruppeneinstellungen-->
+        <scene sceneID="4FZ-E1-Fxq">
+            <objects>
+                <viewController title="Benutzereinstellungen" modalTransitionStyle="crossDissolve" id="R4i-sB-h9Z" userLabel="Gruppeneinstellungen" customClass="GroupSettingsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Mj5-gc-VeN"/>
+                        <viewControllerLayoutGuide type="bottom" id="g5E-hz-fvW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="OJC-CS-OGn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" barStyle="black" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="btj-DY-SgK">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.096742905680000005" green="0.74492818120000004" blue="0.99897259469999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <items>
+                                    <navigationItem title="Gruppeneinstellungen" id="HyD-j6-GtB" userLabel="Gruppen Chat">
+                                        <barButtonItem key="leftBarButtonItem" title="Zurück" id="a12-dZ-EVS">
+                                            <color key="tintColor" red="0.87498339859999996" green="0.94497746439999997" blue="0.96656602619999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <connections>
+                                                <action selector="backButtonPressed:" destination="H9d-0x-VgL" id="rLo-71-x6d"/>
+                                                <segue destination="b5U-Ny-E4b" kind="unwind" unwindAction="prepareForUnwind:" id="aSF-8c-hU9"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4e3-Jy-CY6">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fJW-GH-17k">
+                                        <rect key="frame" x="8" y="37" width="359" height="359"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ee5-7H-Zik">
+                                        <rect key="frame" x="8" y="404" width="175" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <color key="backgroundColor" red="0.078431372550000003" green="0.59607843140000005" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <size key="titleShadowOffset" width="1" height="1"/>
+                                        <state key="normal" title="Bild auswählen">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Aktuelles Gruppenbild:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ty4-vg-xk0">
+                                        <rect key="frame" x="8" y="8" width="359" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bTA-bu-9px">
+                                        <rect key="frame" x="191" y="404" width="175" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <color key="backgroundColor" red="0.078431372550000003" green="0.59607843140000005" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <size key="titleShadowOffset" width="1" height="1"/>
+                                        <state key="normal" title="Bild löschen">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.098039215690000001" green="0.74509803919999995" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4cx-cb-vcI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="b5U-Ny-E4b" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2841" y="-243"/>
+        </scene>
     </scenes>
     <resources>
         <image name="MenuIcon" width="44" height="44"/>
         <image name="chatIcon" width="44" height="44"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="k0F-H1-ZWC"/>
         <segue reference="ulA-yB-1Ca"/>
-        <segue reference="336-4C-Gfr"/>
     </inferredMetricsTieBreakers>
 </document>

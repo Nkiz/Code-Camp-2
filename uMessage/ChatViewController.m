@@ -268,20 +268,24 @@
 
 /**
  Go back to chat list, when back button in navigation bar is pressed.
- */
+*/
 - (IBAction)backButtonPressed:(id)sender {
     [self performSegueWithIdentifier:@"unwindToList" sender:self];
     [self.allChatsRef removeObserverWithHandle:_refAddChatHandle];
 }
 
 /**
- Show menu, when add button in navigation bar is pressed.
- */
+// Show menu, when add new contact button in alert dialog is pressed.
+*/
 - (IBAction)addButtonPressed:(id)sender {
     //opened Bye
     [self performSegueWithIdentifier:@"ChatToGroup" sender:self];
     NSLog(@"AddButton pressed");
 }
+
+
+// Leave this group, when leave group button in alert dialog is pressed.
+ 
 - (IBAction)leaveGroup:(id)sender {
     [[_allChatsRef child:_chatId] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSDictionary<NSString *, NSString *> *userData = snapshot.value;
@@ -297,6 +301,7 @@
         [self.allChatsRef removeObserverWithHandle:_refAddChatHandle];
     }];
 }
+
 
 /**
  Send text message, when send button is pressed.
@@ -919,5 +924,77 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     }
 }
 
+
+/**
+ Show allert dialog, when settings button in navigation bar is pressed.
+ */
+- (IBAction)showSettings:(UIBarButtonItem *)sender {
+    
+    UIAlertController * view=   [UIAlertController
+                                 alertControllerWithTitle:nil
+                                 message:nil
+                                 preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    
+    UIAlertAction* addNewContact = [UIAlertAction
+                                    actionWithTitle:@"Neuen Kontakt hinzufügen"
+                                    style:UIAlertActionStyleDefault
+                                    handler:^(UIAlertAction * action)
+                                    {
+                                        //Show menu, when add new contact button in alert dialog is pressed.
+                                        [self performSegueWithIdentifier:@"ChatToGroup" sender:self];
+                                        NSLog(@"AddButton pressed");
+                                        
+                                        // close menu
+                                        [view dismissViewControllerAnimated:YES completion:nil];
+                                        
+                                    }];
+    
+    UIAlertAction* showGroupSettings = [UIAlertAction
+                                        actionWithTitle:@"Gruppeneinstellungen"
+                                        style:UIAlertActionStyleDefault
+                                        handler:^(UIAlertAction * action)
+                                        {
+                                            // TODO: group settings
+                                            [self performSegueWithIdentifier: @"GroupToSettings" sender: self];
+                                            
+                                            // close menu
+                                            [view dismissViewControllerAnimated:YES completion:nil];
+                                        }];
+    
+    UIAlertAction* leaveGroup = [UIAlertAction
+                                 actionWithTitle:@"Gruppe verlassen"
+                                 style:UIAlertActionStyleDefault
+                                 handler:^(UIAlertAction * action)
+                                 {
+                                     //Leave this group, when leave group button in alert dialog is pressed.
+                                     [self leaveGroup:self];
+                                     
+                                     // close menu
+                                     [view dismissViewControllerAnimated:YES completion:nil];
+                                 }];
+    
+    UIAlertAction* cancel = [UIAlertAction
+                             actionWithTitle:@"Abbrechen"
+                             style:UIAlertActionStyleCancel
+                             handler:^(UIAlertAction * action)
+                             {
+                                 // close menu when user taps outside
+                                 [view dismissViewControllerAnimated:YES completion:nil];
+                                 
+                             }];
+    
+    //desable transparency of UIActionSheetss
+    UIView * firstView = view.view.subviews.firstObject;
+    UIView * nextView = firstView.subviews.firstObject;
+    nextView.backgroundColor = [UIColor whiteColor];
+    nextView.layer.cornerRadius = 15;
+    
+    [view addAction:addNewContact];
+    [view addAction:showGroupSettings];
+    [view addAction:leaveGroup];
+    [view addAction:cancel];
+    [self presentViewController:view animated:YES completion:nil];
+}
 
 @end

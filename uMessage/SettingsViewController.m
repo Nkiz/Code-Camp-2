@@ -48,7 +48,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    //read old status
+    //get actual status and user pic
     NSString *userID = [FIRAuth auth].currentUser.uid;
     [[[self.ref child:UsersTable] child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         //NSString *status = snapshot.value[@"status"];
@@ -101,7 +101,15 @@
     [_ref updateChildValues:childUpdates];
     
     [_userStatus resignFirstResponder];
+}
+
+- (IBAction)selectUserPicture:(id)sender {
     
+    FIRStorage *storage = [FIRStorage storage];
+    
+}
+
+- (IBAction)deleteUserPicture:(id)sender {
 }
 
 @end

@@ -531,7 +531,6 @@
         GroupViewController *controller = [segue destinationViewController];
         controller.openedBy = @"List";
     }
-    //GLEB! NEW SEGUE!
     if([[segue identifier] isEqualToString:@"ListToSettings"])
     {
         //SettingsViewController *controller = [segue destinationViewController];
