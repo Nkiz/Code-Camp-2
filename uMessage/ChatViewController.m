@@ -13,6 +13,7 @@
 #import "BubbleChatCell.h"
 #import "BubbleImageChatCell.h"
 #import "BubbleLocationChatCell.h"
+#import "GroupSettingsViewController.h"
 
 @interface ChatViewController () <UITextFieldDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate> {
     FIRDatabaseHandle _refAddHandle;
@@ -918,6 +919,13 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if ([[segue identifier] isEqualToString:@"ChatToGroup"])
     {
         GroupViewController *controller = [segue destinationViewController];
+        controller.openedBy = @"Chat";
+        controller.openedByChatId = self.chatId;
+        controller.chatUserlist = self.chatUserlist;
+    }
+    if ([[segue identifier] isEqualToString:@"GroupToSettings"])
+    {
+        GroupSettingsViewController *controller = [segue destinationViewController];
         controller.openedBy = @"Chat";
         controller.openedByChatId = self.chatId;
         controller.chatUserlist = self.chatUserlist;

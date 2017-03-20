@@ -17,6 +17,7 @@
 
 @property (strong, nonatomic) IBOutlet UITextField *userStatus;
 @property (strong, nonatomic) IBOutlet UIImageView *userPicture;
+@property (strong, nonatomic) IBOutlet UITextField *pictureURL;
 
 - (IBAction)saveUserStatus:(id)sender;
 - (IBAction)selectUserPicture:(id)sender;

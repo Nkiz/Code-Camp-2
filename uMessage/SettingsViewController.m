@@ -23,12 +23,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.ref         = [[FIRDatabase database] reference];
-    //self.userRef     = [_ref child:@"users"];
     _myUserRels = [[NSMutableArray alloc] init];
     NSLog(@"self.ref: %@", self.ref);
-    //NSLog(@"self.userRef: %@", self.userRef);
-    //NSLog(@"self.userRelRef: %@", self.userRelRef);
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,11 +44,52 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    //get actual status and user pic
+    //get actual user status
     NSString *userID = [FIRAuth auth].currentUser.uid;
     [[[self.ref child:UsersTable] child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        //NSString *status = snapshot.value[@"status"];
+
         _userStatus.text = snapshot.value[@"status"];
+        
+    } withCancelBlock:^(NSError * _Nonnull error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
+    
+    //get actual user pic
+    [self showActualUserPicture];
+}
+
+- (IBAction)saveUserStatus:(id)sender {
+    
+    //write new status
+    [self setUserNewValue:_userStatus.text forKey:@"status"];
+    
+    //delete cursor
+    [_userStatus resignFirstResponder];
+}
+
+- (IBAction)selectUserPicture:(id)sender {
+    
+    //set URL for new user pic
+    [self setUserNewValue:_pictureURL.text forKey:@"profileImg"];
+    
+    //get actual user pic
+    [self showActualUserPicture];
+}
+
+- (IBAction)deleteUserPicture:(id)sender {
+    
+    //delete actual user pic in the model
+    [self setUserNewValue:@"" forKey:@"profileImg"];
+    
+    //delete shown picture
+    _userPicture.image = nil;
+}
+
+- (void) showActualUserPicture {
+    
+    //get actual user pic
+    NSString *userID = [FIRAuth auth].currentUser.uid;
+    [[[self.ref child:UsersTable] child:userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         
         NSString *imageURL = snapshot.value[@"profileImg"];
         
@@ -66,50 +103,14 @@
     } withCancelBlock:^(NSError * _Nonnull error) {
         NSLog(@"%@", error.localizedDescription);
     }];
-
-    
-    //FIRDataSnapshot *userSnapshot = _myUserRels;
-    //NSDictionary<NSString *, NSString *> *user = userSnapshot.value;
-    
-    //NSLog(@"_myUserRels: %@", _myUserRels);
-    //NSLog(@"user: %@", user);
-    
-/*
-    ChatTableViewCell *cell = [_groupTable dequeueReusableCellWithIdentifier:@"TableViewCell"forIndexPath:indexPath];
-    cell.title.text = user[@"username"];
-    cell.message.text = user[@"status"];
-    
-    NSString *imageURL = user[@"profileImg"];
-    
-    if (imageURL && ![imageURL isEqualToString:@""]) {
-        if ([imageURL hasPrefix:@"gs://"]) {
-            [self getAvatar:imageURL withImageView:cell.avatar];
-        } else {
-            cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
-        }
-    }
-*/
 }
 
-- (IBAction)saveUserStatus:(id)sender {
+//set new value in the model for current user
+- (void) setUserNewValue:(NSString*)value forKey:(NSString*)key {
     
-    //write new status
     NSString *userID = [FIRAuth auth].currentUser.uid;
-    NSString *newStatus = _userStatus.text;
-    NSString *key = @"status";
-    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/users/%@/%@/", userID, key]: newStatus};
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/users/%@/%@/", userID, key]: value};
     [_ref updateChildValues:childUpdates];
-    
-    [_userStatus resignFirstResponder];
-}
-
-- (IBAction)selectUserPicture:(id)sender {
-    
-    FIRStorage *storage = [FIRStorage storage];
-    
-}
-
-- (IBAction)deleteUserPicture:(id)sender {
 }
 
 @end
