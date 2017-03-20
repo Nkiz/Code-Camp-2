@@ -243,7 +243,7 @@
             }
             [_userList addObject:tmp];
         }
-        //[_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_userList.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [_chatTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_userList.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
 
@@ -342,7 +342,9 @@
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
-        } 
+        } else {
+            cell.avatar.image = [UIImage imageNamed:@"NoAvatar"];
+        }
         return cell;
     }else if (tableView == _contactTableView){
         FIRDataSnapshot *userSnapshot = _myUserRels[indexPath.row];
@@ -359,6 +361,8 @@
             } else {
                 cell.avatar.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]]];
             }
+        } else {
+            cell.avatar.image = [UIImage imageNamed:@"NoAvatar"];
         }
 
         return cell;
