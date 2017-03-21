@@ -15,6 +15,7 @@
 
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
+@property (strong, nonatomic) FIRStorageReference *storageRef;
 
 @property (strong, nonatomic) IBOutlet UIImageView *groupPicture;
 @property (strong, nonatomic) IBOutlet UITextField *pictureURL;
@@ -24,6 +25,6 @@
 @property (strong, nonatomic) NSMutableArray *chatUserlist;
 
 - (IBAction)selectGroupPicture:(id)sender;
-- (IBAction)deleteGroupPicture:(id)sender;
+- (IBAction)deleteActualyGroupPicture:(id)sender;
 
 @end

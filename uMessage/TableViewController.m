@@ -607,6 +607,11 @@
                                  
                              }];
     
+    //desable transparency of UIActionSheets
+    UIView * firstView = view.view.subviews.firstObject;
+    UIView * nextView = firstView.subviews.firstObject;
+    nextView.backgroundColor = [UIColor whiteColor];
+    nextView.layer.cornerRadius = 15;
     
     [view addAction:newContact];
     [view addAction:newGroup];

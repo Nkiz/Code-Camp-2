@@ -534,7 +534,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="deleteUserPicture:" destination="FII-Zd-AIk" eventType="touchUpInside" id="gD5-Pq-pD4"/>
+                                            <action selector="deleteActualUserPicture:" destination="FII-Zd-AIk" eventType="touchUpInside" id="7tF-Sq-cFS"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wFY-kr-fsq">
@@ -545,7 +545,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="83h-zu-ila">
-                                        <rect key="frame" x="7" y="155" width="359" height="359"/>
+                                        <rect key="frame" x="6.3333333333330302" y="155" width="360" height="360.00000000000011"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Aktuelles Benutzerbild:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CvQ-l5-hPB">
@@ -675,7 +675,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fJW-GH-17k">
-                                        <rect key="frame" x="8" y="37" width="359" height="359"/>
+                                        <rect key="frame" x="8" y="37" width="360" height="360"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Aktuelles Gruppenbild:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ty4-vg-xk0">
@@ -722,7 +722,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
-                                            <action selector="deleteGroupPicture:" destination="R4i-sB-h9Z" eventType="touchUpInside" id="17G-Fc-k51"/>
+                                            <action selector="deleteActualyGroupPicture:" destination="R4i-sB-h9Z" eventType="touchUpInside" id="NGz-fJ-bKP"/>
                                         </connections>
                                     </button>
                                 </subviews>

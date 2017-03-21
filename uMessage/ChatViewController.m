@@ -717,6 +717,13 @@
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         [view addAction:takePhoto];
     }
+    
+    //desable transparency of UIActionSheets
+    UIView * firstView = view.view.subviews.firstObject;
+    UIView * nextView = firstView.subviews.firstObject;
+    nextView.backgroundColor = [UIColor whiteColor];
+    nextView.layer.cornerRadius = 15;
+    
     [view addAction:photo];
     [view addAction:location];
     [view addAction:cancel];
@@ -970,17 +977,22 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                             [view dismissViewControllerAnimated:YES completion:nil];
                                         }];
     
-    UIAlertAction* leaveGroup = [UIAlertAction
-                                 actionWithTitle:@"Gruppe verlassen"
-                                 style:UIAlertActionStyleDefault
-                                 handler:^(UIAlertAction * action)
-                                 {
-                                     //Leave this group, when leave group button in alert dialog is pressed.
-                                     [self leaveGroup:self];
+    UIAlertAction* leaveGroup;
+    
+    if(_isGroup){
+        
+        leaveGroup = [UIAlertAction
+                      actionWithTitle:@"Gruppe verlassen"
+                      style:UIAlertActionStyleDefault
+                      handler:^(UIAlertAction * action)
+                      {
+                          //Leave this group, when leave group button in alert dialog is pressed.
+                          [self leaveGroup:self];
                                      
-                                     // close menu
-                                     [view dismissViewControllerAnimated:YES completion:nil];
-                                 }];
+                          // close menu
+                          [view dismissViewControllerAnimated:YES completion:nil];
+                      }];
+    }
     
     UIAlertAction* cancel = [UIAlertAction
                              actionWithTitle:@"Abbrechen"
@@ -992,7 +1004,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                  
                              }];
     
-    //desable transparency of UIActionSheetss
+    //desable transparency of UIActionSheets
     UIView * firstView = view.view.subviews.firstObject;
     UIView * nextView = firstView.subviews.firstObject;
     nextView.backgroundColor = [UIColor whiteColor];
@@ -1000,7 +1012,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
     [view addAction:addNewContact];
     [view addAction:showGroupSettings];
-    [view addAction:leaveGroup];
+    if(_isGroup){
+        [view addAction:leaveGroup];
+    }
     [view addAction:cancel];
     [self presentViewController:view animated:YES completion:nil];
 }
