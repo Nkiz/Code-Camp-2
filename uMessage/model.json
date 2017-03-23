@@ -21,7 +21,6 @@
         "q9ptazyibpTs1n7oUkacL5IyM3n1": {
             "email": "us1@test.de",
             "username": "User1",
-            "authId": "AUTHID1",
             "profileImg": "",
             "createdTs": "1487674335",
             "lastLogin": "1487675335",
@@ -30,7 +29,6 @@
         "USID2": {
             "email": "us2@test.de",
             "username": "User2",
-            "authId": "AUTHID2",
             "profileImg": "",
             "createdTs": "1487674335",
             "lastLogin": "1487675335",

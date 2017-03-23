@@ -24,13 +24,10 @@ extern NSString *const ChatLastMessageTimestamp;
 extern NSString *const MessagesTable;
 extern NSString *const MessageTimestamp;
 extern NSString *const MessageImage;
-extern NSString *const MessageAttachment;
 extern NSString *const MessageLocation;
 extern NSString *const MessageText;
 extern NSString *const MessageReadlist;
 extern NSString *const MessageUserID;
-extern NSString *const MessageVideo;
-extern NSString *const MessageVoice;
 
 extern NSString *const UsersTable;
 extern NSString *const Username;

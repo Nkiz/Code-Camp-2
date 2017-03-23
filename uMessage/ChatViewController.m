@@ -311,20 +311,23 @@
     // stop editing
     [self.view endEditing:YES];
     
-    // get current timestamp
-    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-    NSString *timestamp = [formatter stringFromDate:[NSDate date]];
+    // dont send empty message
+    NSString *text = self.chatMsg.text;
+    if([text length] == 0) {
+        return;
+    }
     
-    NSDictionary *newMessage = @{MessageAttachment: EmptyString,
-                                 MessageLocation: EmptyString,
+    // get current timestamp
+    NSString *timestamp = [Utils getTimestamp];
+    
+    NSDictionary *newMessage = @{MessageLocation: EmptyString,
                                  MessageImage: EmptyString,
-                                 MessageText: self.chatMsg.text,
+                                 MessageText: text,
                                  MessageTimestamp: timestamp,
                                  MessageReadlist: @[self.currentUserID],
-                                 MessageUserID: self.currentUserID,
-                                 MessageVideo: EmptyString,
-                                 MessageVoice: EmptyString,
+                                 MessageUserID: self.currentUserID
                                  };
+    
     [self sendMessage:newMessage withTimestamp:timestamp];
 }
 
@@ -813,24 +816,21 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     [self.view endEditing:YES];
     
     // current timestamp
-    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-    NSString *result = [formatter stringFromDate:[NSDate date]];
-    NSDictionary *newMessage = @{MessageAttachment: EmptyString,
-                                 MessageLocation: EmptyString,
+    NSString *timestamp = [Utils getTimestamp];
+    
+    NSDictionary *newMessage = @{MessageLocation: EmptyString,
                                  MessageImage: url,
-                                 MessageText: self.chatMsg.text,
-                                 MessageTimestamp: result,
+                                 MessageText: EmptyString,
+                                 MessageTimestamp: timestamp,
                                  MessageReadlist: @[self.currentUserID],
-                                 MessageUserID: self.currentUserID,
-                                 MessageVideo: EmptyString,
-                                 MessageVoice: EmptyString,
+                                 MessageUserID: self.currentUserID
                                  };
     
     // add message to databse
     [[self.messagesRef childByAutoId] setValue:newMessage];
     
     // Write last message in chat
-    [self updateLastChatMessage:ImageString withTimestamp:result];
+    [self updateLastChatMessage:ImageString withTimestamp:timestamp];
     
     self.chatMsg.text = EmptyString;
 }
@@ -849,24 +849,21 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     NSArray<NSString *> *coords = @[[NSString stringWithFormat:@"%f", location.coordinate.latitude], [NSString stringWithFormat:@"%f", location.coordinate.longitude]];
     
     // current timestamp
-    NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-    NSString *result = [formatter stringFromDate:[NSDate date]];
-    NSDictionary *newMessage = @{MessageAttachment: EmptyString,
-                                 MessageLocation: coords,
+    NSString *timestamp = [Utils getTimestamp];
+    
+    NSDictionary *newMessage = @{MessageLocation: coords,
                                  MessageImage: EmptyString,
                                  MessageText: EmptyString,
-                                 MessageTimestamp: result,
+                                 MessageTimestamp: timestamp,
                                  MessageReadlist: @[[[FIRAuth auth] currentUser].uid],
-                                 MessageUserID: [[FIRAuth auth] currentUser].uid,
-                                 MessageVideo: EmptyString,
-                                 MessageVoice: EmptyString,
+                                 MessageUserID: [[FIRAuth auth] currentUser].uid
                                  };
     
     // add message to databse
     [[self.messagesRef childByAutoId] setValue:newMessage];
     
     //Write last message in chat
-    [self updateLastChatMessage:LocationString withTimestamp:result];
+    [self updateLastChatMessage:LocationString withTimestamp:timestamp];
     
     // close alert
     [self.alert dismissViewControllerAnimated:YES completion:nil];

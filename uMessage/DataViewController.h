@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @import FirebaseDatabase;
 @import Firebase;
+#import "Utils.h"
 
 @interface DataViewController : UIViewController
 

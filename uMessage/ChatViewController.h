@@ -12,6 +12,7 @@
 @import FirebaseDatabase;
 @import FirebaseStorage;
 #import "Constants.h"
+#import "Utils.h"
 
 /**
  Chat Window Controller

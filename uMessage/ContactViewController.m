@@ -58,12 +58,13 @@
 
 - (void) loadUsers{
     _refAddHandle = [_usersRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        NSString *userId = snapshot.key;
         NSDictionary<NSString *, NSString *> *user = snapshot.value;
         //Entered Username or Mail is matched
         if([[user objectForKey:@"email"] hasPrefix:_idContactMail.text] ||
            [[user objectForKey:@"username"] hasPrefix:_idContactNick.text]){
             // dont show me
-            if([[user objectForKey:@"authId"] isEqualToString:[FIRAuth auth].currentUser.uid]) return;
+            if([userId isEqualToString:[FIRAuth auth].currentUser.uid]) return;
             
             [_users addObject:snapshot];
             [_myUserList setObject:[snapshot.value objectForKey:@"username"] forKey:snapshot.key];
@@ -123,6 +124,9 @@
     self.selectedChatTitle    = [myUsers objectAtIndex:indexPath.row];
     self.selectedUserId       = [myUserIds objectAtIndex:indexPath.row];
     
+    // save rel in database
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/userRel/%@/%@/", [FIRAuth auth].currentUser.uid, self.selectedUserId]: @YES};
+    [_ref updateChildValues:childUpdates];
     
     // open chat
     [self performSegueWithIdentifier:@"ContactToChat" sender:self];
@@ -187,15 +191,6 @@
             NSDictionary *childUpdates = @{key: chatInfo};
             // add user to databse
             [_chatRef updateChildValues:childUpdates];
-            //add user as RelUser
-            [[_userRelRef child:[FIRAuth auth].currentUser.uid ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                NSMutableArray *userList = snapshot.value;
-                [userList addObject:_selectedUserId];
-                NSDictionary *childUpdates = @{[FIRAuth auth].currentUser.uid: userList};
-                [_userRelRef updateChildValues:childUpdates];
-            }];
-
-            
 
         }
     }

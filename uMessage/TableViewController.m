@@ -151,8 +151,8 @@
                         // Get user value
                         
                         NSDictionary<NSString *, NSString *> *userData = snapshot.value;
-                        //NSString *tmpUser = [userData objectForKey:@"authId"];
-                        [_myUserList setObject:[userData objectForKey:@"username"] forKey:userData[@"authId"]];
+                        //NSString *tmpUser = snapshot.key;
+                        [_myUserList setObject:[userData objectForKey:@"username"] forKey:snapshot.key];
                         if([_myUserList count] == [_myUserIdList count]){
                             [self fillChatList];
                             [_chatTableView reloadData];
@@ -250,27 +250,34 @@
 - (void) fillContactList{
     //Fill Table with Contacts
     [[_userRelRef child:[FIRAuth auth].currentUser.uid] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-
-        NSString *userRel = snapshot.value;
-            [[_userRef child:userRel ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        NSString *userId = snapshot.key;
+        
+            [[_userRef child:userId] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
                 // Get user value
-                [_myUserRels addObject: snapshot];
+                [_myUserRels addObject:snapshot];
                 [_contactTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[_myUserRels count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
             }];
     }];
     [[_userRelRef child:[FIRAuth auth].currentUser.uid] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
-        NSString *userRel = snapshot.value;
+        NSString *userId = snapshot.key;
+        
         int index = 0;
+        BOOL found = NO;
+        
         for(int i=0; i < [_myUserRels count]; i++){
             FIRDataSnapshot *user = [_myUserRels objectAtIndex:i];
-            NSDictionary<NSString *, NSString *> *userData = user.value;
-            if([userData[@"authId"] isEqualToString:userRel]){
+            
+            if([user.key isEqualToString:userId]){
                 index = i;
+                found = YES;
                 break;
             }
         }
-        [_myUserRels removeObjectAtIndex:index];
-        [_contactTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
+        if(found) {
+            [_myUserRels removeObjectAtIndex:index];
+            [_contactTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
      }];
 }
 
@@ -408,7 +415,6 @@
             FIRDataSnapshot *chat = [_myMessages objectAtIndex:indexPath.row];
             [[_chatRef child:chat.key ] removeValue];
             [[_messagesRef child:chat.key ] removeValue];
-            NSLog(@"Delete Chat with index %li", (long) indexPath.row);
         }];
         deleteAction.backgroundColor = [UIColor redColor];
         
@@ -417,12 +423,8 @@
         UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Löschen"  handler:^(UITableViewRowAction *action, NSIndexPath *indexPath){
             // delete action
             FIRDataSnapshot *userRel = [_myUserRels objectAtIndex:indexPath.row];
-            [[_userRelRef child:[FIRAuth auth].currentUser.uid ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                NSMutableArray *userList = snapshot.value;
-                [userList removeObject:userRel.key];
-                NSDictionary *childUpdates = @{[FIRAuth auth].currentUser.uid: userList};
-                [_userRelRef updateChildValues:childUpdates];
-            }];
+            
+            [[[_userRelRef child:[FIRAuth auth].currentUser.uid] child:userRel.key] removeValue];
         }];
         deleteAction.backgroundColor = [UIColor redColor];
         
@@ -457,7 +459,7 @@
          FIRDataSnapshot *messageSnapshot = _myMessages[indexPath.row];
          NSMutableArray *userList = messageSnapshot.value[@"userlist"];
          /*if([userList count] == 2){
-             selectedUser = [_myUserRels objectAtIndex:indexPath.row].value[@"authId"];
+             selectedUser = [_myUserRels objectAtIndex:indexPath.row].key;
          }*/
          //NSString *selectedUser = messageSnapshot.value[@"userlist"];
          self.selectedChatId     = messageSnapshot.key;
@@ -468,7 +470,7 @@
          // open chat
          [self performSegueWithIdentifier:@"ListToChat" sender:self];
      }else if (tableView == _contactTableView){
-         NSString *selectedUser = [_myUserRels objectAtIndex:indexPath.row].value[@"authId"];
+         NSString *selectedUser = [_myUserRels objectAtIndex:indexPath.row].key;
          NSString *selectedUserName = [_myUserRels objectAtIndex:indexPath.row].value[@"username"];
          BOOL findChat = false;
          //Get Contactdates for User in Chat

@@ -28,6 +28,7 @@
 		B4068F661E6759A000A48D3E /* BubbleImageChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4068F651E6759A000A48D3E /* BubbleImageChatCell.m */; };
 		B4068F691E68342F00A48D3E /* BubbleLocationChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B4068F681E68342F00A48D3E /* BubbleLocationChatCell.m */; };
 		B444170D1E65B1770060CB1E /* BubbleChatCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B444170B1E65B1770060CB1E /* BubbleChatCell.m */; };
+		B46447971E84129200F5140D /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = B46447961E84129200F5140D /* Utils.m */; };
 		B4962FAF1E5F04970028580C /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4962FAE1E5F04970028580C /* ChatViewController.m */; };
 		B4D1290E1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
 		B4D1290F1E5B337B0079972E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */; };
@@ -99,6 +100,8 @@
 		B4068F681E68342F00A48D3E /* BubbleLocationChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleLocationChatCell.m; sourceTree = "<group>"; };
 		B444170A1E65B1770060CB1E /* BubbleChatCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BubbleChatCell.h; sourceTree = "<group>"; };
 		B444170B1E65B1770060CB1E /* BubbleChatCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BubbleChatCell.m; sourceTree = "<group>"; };
+		B46447951E84129200F5140D /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		B46447961E84129200F5140D /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		B4962FAD1E5F03C80028580C /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		B4962FAE1E5F04970028580C /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		B4D1290D1E5B337B0079972E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -197,8 +200,6 @@
 				B4D19EEB1E5DE83700648DC3 /* ChatTableViewCell.m */,
 				969864741E603A3A0052D3D8 /* ContactViewController.h */,
 				969864751E603A3A0052D3D8 /* ContactViewController.m */,
-				B4DA14A41E69C68000047C65 /* Constants.h */,
-				B4DA14A51E69C68000047C65 /* Constants.m */,
 				B4DA14A21E69715C00047C65 /* BubbleChat */,
 				B4DA14A31E69C63500047C65 /* Database */,
 				96052C7B1E71C97200BB7E74 /* GroupViewController.h */,
@@ -214,7 +215,11 @@
 		96FBAF261E5AE7C5007361C4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B46447951E84129200F5140D /* Utils.h */,
+				B46447961E84129200F5140D /* Utils.m */,
 				96FBAF271E5AE7C5007361C4 /* main.m */,
+				B4DA14A41E69C68000047C65 /* Constants.h */,
+				B4DA14A51E69C68000047C65 /* Constants.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -573,6 +578,7 @@
 				96075A8E1E7B6B2400B0DBAD /* SettingsViewController.m in Sources */,
 				B4962FAF1E5F04970028580C /* ChatViewController.m in Sources */,
 				96FBAF2E1E5AE7C5007361C4 /* RootViewController.m in Sources */,
+				B46447971E84129200F5140D /* Utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
