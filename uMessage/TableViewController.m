@@ -151,8 +151,8 @@
                         // Get user value
                         
                         NSDictionary<NSString *, NSString *> *userData = snapshot.value;
-                        //NSString *tmpUser = [userData objectForKey:@"authId"];
-                        [_myUserList setObject:[userData objectForKey:@"username"] forKey:userData[@"authId"]];
+                        //NSString *tmpUser = snapshot.key;
+                        [_myUserList setObject:[userData objectForKey:@"username"] forKey:snapshot.key];
                         if([_myUserList count] == [_myUserIdList count]){
                             [self fillChatList];
                             [_chatTableView reloadData];
@@ -264,7 +264,7 @@
         for(int i=0; i < [_myUserRels count]; i++){
             FIRDataSnapshot *user = [_myUserRels objectAtIndex:i];
             NSDictionary<NSString *, NSString *> *userData = user.value;
-            if([userData[@"authId"] isEqualToString:userRel]){
+            if([user.key isEqualToString:userRel]){
                 index = i;
                 break;
             }
@@ -457,7 +457,7 @@
          FIRDataSnapshot *messageSnapshot = _myMessages[indexPath.row];
          NSMutableArray *userList = messageSnapshot.value[@"userlist"];
          /*if([userList count] == 2){
-             selectedUser = [_myUserRels objectAtIndex:indexPath.row].value[@"authId"];
+             selectedUser = [_myUserRels objectAtIndex:indexPath.row].key;
          }*/
          //NSString *selectedUser = messageSnapshot.value[@"userlist"];
          self.selectedChatId     = messageSnapshot.key;
@@ -468,7 +468,7 @@
          // open chat
          [self performSegueWithIdentifier:@"ListToChat" sender:self];
      }else if (tableView == _contactTableView){
-         NSString *selectedUser = [_myUserRels objectAtIndex:indexPath.row].value[@"authId"];
+         NSString *selectedUser = [_myUserRels objectAtIndex:indexPath.row].key;
          NSString *selectedUserName = [_myUserRels objectAtIndex:indexPath.row].value[@"username"];
          BOOL findChat = false;
          //Get Contactdates for User in Chat

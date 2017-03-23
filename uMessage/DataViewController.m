@@ -45,12 +45,11 @@
             NSLog(@"LOGIN: User %@ logged in.", user.email);
             
             // current timestamp
-            NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-            NSString *result = [formatter stringFromDate:[NSDate date]];
+            NSString *timestamp = [Utils getTimestamp];
             
             // update last login in db
             NSString *key = @"lastLogin";
-            NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/users/%@/%@/", user.uid, key]: result};
+            NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/users/%@/%@/", user.uid, key]: timestamp};
             [_ref updateChildValues:childUpdates];
             
             // go to chats ui
@@ -186,14 +185,12 @@ static NSString *const kOK = @"OK";
                                          NSLog(@"REGISTER: User created.");
                                          
                                          // current timestamp
-                                         NSISO8601DateFormatter *formatter = [[NSISO8601DateFormatter alloc] init];
-                                         NSString *result = [formatter stringFromDate:[NSDate date]];
+                                         NSString *timestamp = [Utils getTimestamp];
                                          
                                          // userinfo
-                                         NSDictionary *userInfo = @{@"authId": user.uid,
-                                                                    @"createdTs": result,
+                                         NSDictionary *userInfo = @{@"createdTs": timestamp,
                                                                     @"email": user.email,
-                                                                    @"lastLogin": result,
+                                                                    @"lastLogin": timestamp,
                                                                     @"profileImg": @"",
                                                                     @"status": @"verfügbar",
                                                                     @"username": _registerNicknameTextField.text

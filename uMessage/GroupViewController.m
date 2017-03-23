@@ -64,8 +64,10 @@
         NSIndexPath *loopPath = [NSIndexPath indexPathForRow:i inSection:0];
         ChatTableViewCell *cell = [_groupTable cellForRowAtIndexPath:loopPath];
         FIRDataSnapshot *snap = [_selectedGroupUsers objectAtIndex:i];
+        
+        NSString *userId = snap.key;
         NSDictionary<NSString *, NSString *> *userRel = snap.value;
-        [_myUserRelList addObject:[userRel valueForKey:@"authId"]];
+        [_myUserRelList addObject:userId];
         if(i == 0){
             tmp = [userRel valueForKey:@"username"];
         }else{
@@ -90,8 +92,9 @@
             int counter = 0;
             for(NSString* userName in tmpUserRelList){
                 for(FIRDataSnapshot *userRels in _myUserRels){
+                    NSString *userId = userRels.key;
                     NSDictionary<NSString *, NSString *> *userRel = userRels.value;
-                    if([userName isEqualToString:[userRel objectForKey:@"authId"]]){
+                    if([userName isEqualToString:userId]){
                         if(counter == 0){
                             chatTitle = [userRel objectForKey:@"username"];
                         }else{
@@ -172,8 +175,9 @@
         int index = 0;
         for(int i=0; i < [_myUserRels count]; i++){
             FIRDataSnapshot *user = [_myUserRels objectAtIndex:i];
+            NSString *userId = user.key;
             NSDictionary<NSString *, NSString *> *userData = user.value;
-            if([userData[@"authId"] isEqualToString:userRel]){
+            if([userId isEqualToString:userRel]){
                 index = i;
                 break;
             }

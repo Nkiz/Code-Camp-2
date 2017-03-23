@@ -28,9 +28,6 @@ NSString *const MessageLocation = @"gpsCoord";
 NSString *const MessageTimestamp = @"msgTs";
 NSString *const MessageImage = @"imgUrl";
 NSString *const MessageReadlist = @"readList";
-NSString *const MessageAttachment = @"attUrl";
-NSString *const MessageVideo = @"vid";
-NSString *const MessageVoice = @"voiceUrl";
 
 NSString *const UsersTable = @"users";
 NSString *const Username = @"username";

@@ -58,12 +58,13 @@
 
 - (void) loadUsers{
     _refAddHandle = [_usersRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
+        NSString *userId = snapshot.key;
         NSDictionary<NSString *, NSString *> *user = snapshot.value;
         //Entered Username or Mail is matched
         if([[user objectForKey:@"email"] hasPrefix:_idContactMail.text] ||
            [[user objectForKey:@"username"] hasPrefix:_idContactNick.text]){
             // dont show me
-            if([[user objectForKey:@"authId"] isEqualToString:[FIRAuth auth].currentUser.uid]) return;
+            if([userId isEqualToString:[FIRAuth auth].currentUser.uid]) return;
             
             [_users addObject:snapshot];
             [_myUserList setObject:[snapshot.value objectForKey:@"username"] forKey:snapshot.key];
