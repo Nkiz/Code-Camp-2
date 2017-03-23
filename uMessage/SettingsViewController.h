@@ -13,16 +13,16 @@
 
 @interface SettingsViewController : UIViewController
 
-//Firebase
+// Firebase
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 
-//UI lements
+// UI elements
 @property (strong, nonatomic) IBOutlet UITextField *userStatus;
 @property (strong, nonatomic) IBOutlet UIImageView *userPicture;
 @property (strong, nonatomic) IBOutlet UITextField *pictureURL;
 
-//picture and status methods
+// Picture and status methods
 - (IBAction)saveUserStatus:(id)sender;
 - (IBAction)selectUserPicture:(id)sender;
 - (IBAction)deleteActualUserPicture:(id)sender;

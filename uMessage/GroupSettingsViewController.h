@@ -13,17 +13,19 @@
 
 @interface GroupSettingsViewController : UIViewController
 
+//Firebase
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) FIRDatabaseReference *chatRef;
 @property (strong, nonatomic) FIRStorageReference *storageRef;
 
+//UI elements
 @property (strong, nonatomic) IBOutlet UIImageView *groupPicture;
 @property (strong, nonatomic) IBOutlet UITextField *pictureURL;
 
-@property (strong, nonatomic) NSString *openedBy;
+// Group ID
 @property (strong, nonatomic) NSString *openedByChatId;
-@property (strong, nonatomic) NSMutableArray *chatUserlist;
 
+// Picture methods
 - (IBAction)selectGroupPicture:(id)sender;
 - (IBAction)deleteActualyGroupPicture:(id)sender;
 
