@@ -124,6 +124,9 @@
     self.selectedChatTitle    = [myUsers objectAtIndex:indexPath.row];
     self.selectedUserId       = [myUserIds objectAtIndex:indexPath.row];
     
+    // save rel in database
+    NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/userRel/%@/%@/", [FIRAuth auth].currentUser.uid, self.selectedUserId]: @YES};
+    [_ref updateChildValues:childUpdates];
     
     // open chat
     [self performSegueWithIdentifier:@"ContactToChat" sender:self];
@@ -188,15 +191,6 @@
             NSDictionary *childUpdates = @{key: chatInfo};
             // add user to databse
             [_chatRef updateChildValues:childUpdates];
-            //add user as RelUser
-            [[_userRelRef child:[FIRAuth auth].currentUser.uid ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                NSMutableArray *userList = snapshot.value;
-                [userList addObject:_selectedUserId];
-                NSDictionary *childUpdates = @{[FIRAuth auth].currentUser.uid: userList};
-                [_userRelRef updateChildValues:childUpdates];
-            }];
-
-            
 
         }
     }
