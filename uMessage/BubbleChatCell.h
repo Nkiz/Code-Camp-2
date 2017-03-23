@@ -14,7 +14,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *message;
 @property (strong, nonatomic) IBOutlet UILabel *date;
 @property (strong, nonatomic) IBOutlet UILabel *time;
-@property (strong, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) IBOutlet UIView *bubble;
 
 @property (strong, nonatomic) NSLayoutConstraint *leftConstraint;
@@ -23,6 +22,8 @@
 @property (strong, nonatomic) NSLayoutConstraint *timeConstraint;
 @property (strong, nonatomic) NSLayoutConstraint *dateConstraint;
 
+@property BOOL isMe;
+
 typedef enum BubbleStyle : NSUInteger
 {
     PrivateBubble,
@@ -30,7 +31,6 @@ typedef enum BubbleStyle : NSUInteger
     MyBubble
 } BubbleStyle;
 
-@property BOOL isMe;
 
 - (void)setStyle:(BubbleStyle)style;
 - (void)hideDate:(BOOL)hide;
