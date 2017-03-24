@@ -721,7 +721,7 @@
         [view addAction:takePhoto];
     }
     
-    //desable transparency of UIActionSheets
+    // disable transparency of UIActionSheets
     UIView * firstView = view.view.subviews.firstObject;
     UIView * nextView = firstView.subviews.firstObject;
     nextView.backgroundColor = [UIColor whiteColor];
@@ -930,9 +930,9 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if ([[segue identifier] isEqualToString:@"GroupToSettings"])
     {
         GroupSettingsViewController *controller = [segue destinationViewController];
-        controller.openedBy = @"Chat";
+        //controller.openedBy = @"Chat";
         controller.openedByChatId = self.chatId;
-        controller.chatUserlist = self.chatUserlist;
+        //controller.chatUserlist = self.chatUserlist;
     }
 }
 
@@ -1001,7 +1001,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
                                  
                              }];
     
-    //desable transparency of UIActionSheets
+    // disable transparency of UIActionSheets
     UIView * firstView = view.view.subviews.firstObject;
     UIView * nextView = firstView.subviews.firstObject;
     nextView.backgroundColor = [UIColor whiteColor];
