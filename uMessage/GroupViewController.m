@@ -75,7 +75,7 @@
             tmp = [tmp stringByAppendingString:[userRel valueForKey:@"username"]];
         }
     }
-    tmpUserRelList = _myUserRelList;
+    //tmpUserRelList = _myUserRelList;
     
     //For add User in existing Chat
     if([self.openedBy isEqualToString:@"Chat"]){
@@ -83,8 +83,8 @@
             NSDictionary<NSString *, NSString *> *userData = snapshot.value;
             NSMutableArray<NSString*> *userDataList = [userData allValues];
             NSMutableArray *userList = snapshot.value[@"userlist"];
-            [tmpUserRelList addObjectsFromArray:userList];
-            [userData setValue:tmpUserRelList forKeyPath:@"userlist"];
+            [_myUserRelList addObjectsFromArray:userList];
+            [userData setValue:_myUserRelList forKeyPath:@"userlist"];
             NSDictionary *childUpdates = @{_openedByChatId: userData};
             // add user to databse
             [_chatRef updateChildValues:childUpdates];

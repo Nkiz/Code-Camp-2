@@ -147,7 +147,7 @@
                         [_myChats setObject: userListArr[i] forKey:(snapshot.key)];
                         [_userArray addObject:userListArr[i]];
                     }
-                    [[_userRef child:userListArr[i] ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                    [[_userRef child:userListArr[i]] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
                         // Get user value
                         
                         NSDictionary<NSString *, NSString *> *userData = snapshot.value;

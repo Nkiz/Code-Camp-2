@@ -180,8 +180,8 @@
     NSString* title = [sortedNames componentsJoinedByString:@", "];
     
     // show as navigation bar title
-    //self.navigationBar.topItem.title = title;
-    self.navigationBar.topItem.title = _chatTitle;
+    self.navigationBar.topItem.title = title;
+    //self.navigationBar.topItem.title = _chatTitle;
 }
 
 /**
@@ -190,7 +190,7 @@
  @param segue Unwind Segue
  */
 - (IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
-    NSLog(@"Chat unwind.");
+    NSLog(@"Chat unwind: %@", [segue identifier]);
 }
 
 /**
