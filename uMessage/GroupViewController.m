@@ -159,19 +159,19 @@
 - (void) loadUsers{
     [[_userRelRef child:[FIRAuth auth].currentUser.uid] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         
-        NSString *userRel = snapshot.value;
+        NSString *userRel = snapshot.key;
         
         // only non group members
         if([_chatUserlist containsObject:userRel]) return;
         
-        [[_userRef child:userRel ] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [[_userRef child:userRel] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             // Get user value
             [_myUserRels addObject: snapshot];
             [_groupTable insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[_myUserRels count]-1 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
         }];
     }];
     [[_userRelRef child:[FIRAuth auth].currentUser.uid] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
-        NSString *userRel = snapshot.value;
+        NSString *userRel = snapshot.key;
         int index = 0;
         for(int i=0; i < [_myUserRels count]; i++){
             FIRDataSnapshot *user = [_myUserRels objectAtIndex:i];

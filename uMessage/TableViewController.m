@@ -102,11 +102,11 @@
         NSDictionary<NSString *, NSString *> *message = snapshot.value;
         [_messages addObject:snapshot];
         [_contactTableView reloadData];
-        NSMutableArray *userListArr = [ message objectForKey:@"userlist"];
+        NSMutableArray *userListArr = [message objectForKey:@"userlist"];
         BOOL myChat = false;
         //check if logged user is in chat-userlist
         for (int x=0; x<userListArr.count; x++ ) {
-            if([userListArr[x] isEqualToString:[FIRAuth auth].currentUser.uid]){
+            if([[FIRAuth auth].currentUser.uid isEqualToString:userListArr[x]]){
                 [_myMessages addObject:snapshot];
                 myChat = true;
                 break;
@@ -237,8 +237,14 @@
                 if([chatUser indexOfObject:chatUsers] == 0){
                     tmp = [_myUserList objectForKey:chatUsers];
                 }else{
+                    NSString *username = [_myUserList objectForKey:chatUsers];
+                    if(username == nil) {
+                        NSLog(@"NIL USERNAME");
+                        username = @"NIL";
+                    }
+                    
                     tmp = [tmp stringByAppendingString:@", "];
-                    tmp = [tmp stringByAppendingString:[_myUserList objectForKey:chatUsers]];
+                    tmp = [tmp stringByAppendingString:username];
                 }
             }
             [_userList addObject:tmp];
