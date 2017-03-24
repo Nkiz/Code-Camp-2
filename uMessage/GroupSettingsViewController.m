@@ -9,7 +9,7 @@
 #import "GroupSettingsViewController.h"
 #import "TableViewController.h"
 #import "Constants.h"
-#import "SettingsViewController.h"
+  
 
 @interface GroupSettingsViewController ()
 
@@ -48,10 +48,14 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    //get actual group pic
+    // Get actual group pic
     [self showActualGroupPicture];
 }
 
+/**
+ Upload a pic from internet to the storage and delete old pic.
+ Only png, jpg, jpeg allowed for saving traffic
+ */
 - (IBAction)selectGroupPicture:(id)sender {
     
     NSURL *candidateURL = [NSURL URLWithString:self.pictureURL.text];
@@ -63,7 +67,7 @@
             ||[[self.pictureURL.text lowercaseString] hasSuffix:@".jpg"]
             ||[[self.pictureURL.text lowercaseString] hasSuffix:@".jpeg"]
             )){
-            // candidate is a well-formed url
+            // Candidate is a well-formed url
             
             // Get actual group picture name
             [[self.chatRef child:self.openedByChatId] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
@@ -111,7 +115,7 @@
                                          message:@"Please wait"
                                          preferredStyle:UIAlertControllerStyleAlert];
             
-            //desable transparency of UIActionSheets
+            // Disable transparency of UIActionSheets
             UIView * firstView = view.view.subviews.firstObject;
             UIView * nextView = firstView.subviews.firstObject;
             nextView.backgroundColor = [UIColor whiteColor];
@@ -119,9 +123,9 @@
             
             [self presentViewController:view animated:YES completion:nil];
             
+            // Upload completed successfully
             [uploadTask observeStatus:FIRStorageTaskStatusSuccess handler:^(FIRStorageTaskSnapshot *snapshot) {
                 
-                // Upload completed successfully
                 // Set URL for new user pic
                 [self setGroupNewValue:[NSString stringWithFormat:@"gs://umessage-80185.appspot.com/groupAvatars/%@", fileName] forKey:@"img"];
                 
@@ -177,12 +181,12 @@
                                  style:UIAlertActionStyleDefault
                                  handler:^(UIAlertAction * action)
                                  {
-                                     //Do some thing here
+                                     // Hide the message
                                      [view dismissViewControllerAnimated:YES completion:nil];
                                      
                                  }];
             
-            //desable transparency of UIActionSheets
+            // Disable transparency of UIActionSheets
             UIView * firstView = view.view.subviews.firstObject;
             UIView * nextView = firstView.subviews.firstObject;
             nextView.backgroundColor = [UIColor whiteColor];
@@ -190,20 +194,8 @@
             
             [view addAction:ok];
             [self presentViewController:view animated:YES completion:nil];
-            
         }
-    
-    //set URL for new group pic
-    //[self setGroupNewValue:_pictureURL.text forKey:@"img"];
-    
-    //get actual group pic
-    //[self showActualGroupPicture];
-    
-    //delete actual group pic in the model
-    //[self setGroupNewValue:@"" forKey:@"img"];
-    
-    //delete shown picture
-    //_groupPicture.image = nil;
+
 }
 
 - (IBAction)deleteActualyGroupPicture:(id)sender {
@@ -229,6 +221,7 @@
     
 }
 
+// Delete needed file in the group model
 - (void)deleteGroupFile:(NSString *)fileName inFolder:(NSString *)folder {
     
     NSLog(@"deleteGroupFile - fileName: %@", fileName);
@@ -264,6 +257,7 @@
         
         NSString *imageURL = snapshot.value[@"img"];
         
+        // Url from internet can be used too
         if (imageURL && ![imageURL isEqualToString:@""]) {
             if ([imageURL hasPrefix:@"gs://"]) {
                 [TableViewController getAvatar:imageURL withImageView:self.groupPicture];
@@ -276,19 +270,12 @@
     }];
 }
 
-//set new value in the model for current group
+// Set new value in Ddb for current group
 - (void) setGroupNewValue:(NSString*)value forKey:(NSString*)key {
     
     NSString *chatID = self.openedByChatId;
     NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/%@/", chatID, key]: value};
     [self.ref updateChildValues:childUpdates];
-}
-
-- (BOOL) validateUrl: (NSString *) candidate {
-    NSString *urlRegEx =
-    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
-    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
-    return [urlTest evaluateWithObject:candidate];
 }
 
 @end

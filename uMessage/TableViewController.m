@@ -615,7 +615,7 @@
                                  
                              }];
     
-    //desable transparency of UIActionSheets
+    // disable transparency of UIActionSheets
     UIView * firstView = view.view.subviews.firstObject;
     UIView * nextView = firstView.subviews.firstObject;
     nextView.backgroundColor = [UIColor whiteColor];

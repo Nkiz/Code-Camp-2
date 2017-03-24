@@ -24,7 +24,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.ref = [[FIRDatabase database] reference];
-    //NSLog(@"self.ref: %@", self.ref);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,7 +48,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    //get actual user status
+    // Get actual user status
     self.userID = [FIRAuth auth].currentUser.uid;
     [[[self.ref child:UsersTable] child:self.userID] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
 
@@ -59,19 +58,23 @@
         NSLog(@"%@", error.localizedDescription);
     }];
     
-    //get actual user pic
+    // Get actual user pic
     [self showActualUserPicture];
 }
 
 - (IBAction)saveUserStatus:(id)sender {
     
-    //write new status
+    // Write new status
     [self setUserNewValue:self.userStatus.text forKey:@"status"];
     
-    //delete cursor
+    // Delete cursor
     [self.userStatus resignFirstResponder];
 }
 
+/**
+ Upload a pic from internet to the storage and delete old pic.
+ Only png, jpg, jpeg allowed for saving traffic
+ */
 - (IBAction)selectUserPicture:(id)sender {
     
     NSURL *candidateURL = [NSURL URLWithString:self.pictureURL.text];
@@ -131,7 +134,7 @@
                                       message:@"Please wait"
                                       preferredStyle:UIAlertControllerStyleAlert];
         
-        //desable transparency of UIActionSheets
+        // disable transparency of UIActionSheets
         UIView * firstView = view.view.subviews.firstObject;
         UIView * nextView = firstView.subviews.firstObject;
         nextView.backgroundColor = [UIColor whiteColor];
@@ -197,12 +200,12 @@
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
-                                 //Do some thing here
+                                 // Hide the message
                                  [view dismissViewControllerAnimated:YES completion:nil];
                                  
                              }];
         
-        //desable transparency of UIActionSheets
+        // Disable transparency of UIActionSheets
         UIView * firstView = view.view.subviews.firstObject;
         UIView * nextView = firstView.subviews.firstObject;
         nextView.backgroundColor = [UIColor whiteColor];
@@ -210,7 +213,6 @@
         
         [view addAction:ok];
         [self presentViewController:view animated:YES completion:nil];
-        
     }
     
 }
@@ -238,6 +240,7 @@
 
 }
 
+// Delete needed file in the user model
 - (void)deleteUserFile:(NSString *)fileName inFolder:(NSString *)folder {
     
     NSLog(@"deleteUserFile - fileName: %@", fileName);
@@ -285,19 +288,12 @@
     }];
 }
 
-//set new value in the model for current user
+// Set new value in the model for current user
 - (void) setUserNewValue:(NSString*)value forKey:(NSString*)key {
     
     NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/users/%@/%@/", self.userID, key]: value};
     NSLog(@"value: %@", value);
     [self.ref updateChildValues:childUpdates];
-}
-
-- (BOOL) validateUrl: (NSString *) candidate {
-    NSString *urlRegEx =
-    @"(http|https)://((\\w)*|([0-9]*)|([-|_])*)+([\\.|/]((\\w)*|([0-9]*)|([-|_])*))+";
-    NSPredicate *urlTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", urlRegEx];
-    return [urlTest evaluateWithObject:candidate];
 }
 
 @end
