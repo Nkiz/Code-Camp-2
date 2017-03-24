@@ -110,7 +110,8 @@
             self.selectedUserId = [FIRAuth auth].currentUser.uid;
             self.selectedRow = 1;
             
-            [self performSegueWithIdentifier:@"GroupToChat" sender:self];
+            //[self performSegueWithIdentifier:@"GroupToChat" sender:self];
+            [self performSegueWithIdentifier:@"GroupToList" sender:self]; // TEST: back to chat
         }];
         
     //For create new Chat

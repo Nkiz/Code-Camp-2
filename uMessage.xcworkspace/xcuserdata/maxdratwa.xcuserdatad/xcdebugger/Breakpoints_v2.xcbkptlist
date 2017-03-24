@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045937.653134"
+            timestampString = "512055421.067282"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "733"
-            endingLineNumber = "733"
+            startingLineNumber = "796"
+            endingLineNumber = "796"
             landmarkName = "-menuAction:"
             landmarkType = "7">
          </BreakpointContent>
@@ -138,13 +138,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045937.653134"
+            timestampString = "512054602.410171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
-            landmarkName = "-tableView:numberOfRowsInSection:"
-            landmarkType = "7">
+            startingLineNumber = "431"
+            endingLineNumber = "431"
+            landmarkName = "@implementation ChatViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045937.653134"
+            timestampString = "512054602.410171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
             landmarkName = "@implementation ChatViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045937.653134"
+            timestampString = "512054602.410171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
             landmarkName = "-keyboardWillShow:"
             landmarkType = "7">
          </BreakpointContent>
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045937.653134"
+            timestampString = "512054602.410171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "339"
-            endingLineNumber = "339"
+            startingLineNumber = "393"
+            endingLineNumber = "393"
             landmarkName = "-checkNewChat"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,7 +314,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "511100361.854559"
+            timestampString = "512049738.309218"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "140"
@@ -330,7 +330,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "511100361.854559"
+            timestampString = "512049738.309218"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "137"
@@ -394,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/GroupViewController.m"
-            timestampString = "511973913.556121"
+            timestampString = "512051623.665159"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "-prepareForSegue:sender:"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045937.653134"
+            timestampString = "512054602.410171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "402"
-            endingLineNumber = "402"
+            startingLineNumber = "456"
+            endingLineNumber = "456"
             landmarkName = "@implementation ChatViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -586,11 +586,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045937.653134"
+            timestampString = "512054602.410171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "275"
-            endingLineNumber = "275"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
             landmarkName = "-backButtonPressed:"
             landmarkType = "7">
          </BreakpointContent>
@@ -634,13 +634,77 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "uMessage/ChatViewController.m"
-            timestampString = "512045995.152671"
+            timestampString = "512054602.410171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
             landmarkName = "-prepareForUnwind:"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "uMessage/ChatViewController.m"
+            timestampString = "512054602.410171"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "352"
+            endingLineNumber = "352"
+            landmarkName = "-leaveGroup:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "uMessage/ChatViewController.m"
+            timestampString = "512054704.411055"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "-displayTitle"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ChatViewController displayTitle]"
+                  moduleName = "uMessage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxdratwa/XCode%20Projekte/Code-Camp-2/uMessage/ChatViewController.m"
+                  timestampString = "512054704.628149"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "168"
+                  endingLineNumber = "168"
+                  offsetFromSymbolStart = "99">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[ChatViewController displayTitle]"
+                  moduleName = "uMessage"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/maxdratwa/XCode%20Projekte/Code-Camp-2/uMessage/ChatViewController.m"
+                  timestampString = "512054704.631362"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "168"
+                  endingLineNumber = "168"
+                  offsetFromSymbolStart = "104">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -164,12 +164,15 @@
 - (void)displayTitle
 {
     NSMutableArray *usernames = [[NSMutableArray alloc] init];
-    NSString *myName = self.users[self.currentUserID];
     
-    // dont show own name
-    for(NSString *name in [self.users allValues]) {
-        if(![name isEqualToString:myName]) {
-            [usernames addObject:name];
+    for(NSString *userId in self.chatUserlist) {
+        // dont show own name
+        if(![userId isEqualToString:self.currentUserID]) {
+            NSString *name = self.users[userId];
+            
+            if(name != nil) {
+                [usernames addObject:name];
+            }
         }
     }
     
@@ -182,6 +185,57 @@
     // show as navigation bar title
     self.navigationBar.topItem.title = title;
     //self.navigationBar.topItem.title = _chatTitle;
+}
+
+- (void)checkNewUsers
+{
+    [[[_allChatsRef child:_chatId] child:@"userlist"] observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        // Bug: Firebase sends wrong userID
+        // Reload complete userList and find new users
+        [self reloadUserList];
+    }];
+    
+    [[[_allChatsRef child:_chatId] child:@"userlist"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        // Bug: Firebase sends wrong userID
+        // Reload complete userList and find new users
+        [self reloadUserList];
+    }];
+}
+
+- (void)reloadUserList {
+    [[[_allChatsRef child:_chatId] child:@"userlist"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        // update userlist
+        _chatUserlist = [NSMutableArray arrayWithArray:[[NSSet setWithArray:snapshot.value] allObjects]];
+        BOOL oldIsGroup = _isGroup;
+        _isGroup = [_chatUserlist count] > 2;
+        
+        if(oldIsGroup != _isGroup) {
+            // reload data to display correct chat bubbles
+            [_chatTable reloadData];
+            [self scrollToBottom:YES];
+        }
+        
+        // update title
+        [self displayTitle];
+        
+        for(NSString *userId in _chatUserlist) {
+            // get username
+            NSString *userName = [self.users objectForKey:userId];
+                
+            // new user name
+            if(userName == nil) {
+                [[[[self.ref child:UsersTable] child:userId] child:@"username"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                        NSLog(@"Username from DB");
+                        
+                        [_chatUserlist addObject:userId];
+                        [self.users setValue:snapshot.value forKey:userId];
+                        
+                        // update title with new username
+                        [self displayTitle];
+                }];
+            }
+        }
+    }];
 }
 
 /**
@@ -488,7 +542,13 @@
         timeStr = [@"✓ " stringByAppendingString:timeStr];
     }
     
-    cell.user.text = self.users[message[MessageUserID]];
+    NSString *username = self.users[message[MessageUserID]];
+    
+    if(username == nil) {
+        username = @"[Username]";
+    }
+    
+    cell.user.text = username;
     cell.date.text = dateStr;
     cell.time.text = timeStr;
     cell.message.text = msg;
@@ -563,6 +623,9 @@
  Start Message Handler. Show every new message in chat table
  */
 - (void)loadMessages {
+    // check if new users are added
+    [self checkNewUsers];
+    
     _refAddHandle = [self.messagesRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         [self.messages addObject:snapshot];
         
