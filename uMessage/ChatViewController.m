@@ -383,6 +383,9 @@
                                  };
     
     [self sendMessage:newMessage withTimestamp:timestamp];
+    
+    // set cursor on text field again
+    [self.chatMsg becomeFirstResponder];
 }
 
 /**
