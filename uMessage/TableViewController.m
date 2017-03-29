@@ -100,9 +100,13 @@
 - (void) configureDatabase{
     _refHandle = [_chatRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
         NSDictionary<NSString *, NSString *> *message = snapshot.value;
-        [_messages addObject:snapshot];
         [_contactTableView reloadData];
-        NSMutableArray *userListArr = [message objectForKey:@"userlist"];
+        
+        NSMutableArray *userListArr = [message objectForKey:@"userlist"];        
+        if(userListArr == nil) return;
+        
+        [_messages addObject:snapshot];
+        
         BOOL myChat = false;
         //check if logged user is in chat-userlist
         for (int x=0; x<userListArr.count; x++ ) {
@@ -226,26 +230,26 @@
         NSMutableArray<NSString*> *chatUser = [_myChats objectForKey:chatId];
         //is String --> one Value, no GroupChat
         if([chatUser isKindOfClass:[NSString class]]){
-            [_userList addObject:[_myUserList objectForKey:chatUser]];
+            NSString *tmp = [_myUserList objectForKey:chatUser];
+            if(tmp == nil) tmp = @"[Username]";
+            [_userList addObject:tmp];
         }else{
-            NSString *tmp;
+            NSString *tmp = @"";
             
             for(NSString *chatUsers in chatUser){
                 if([chatUsers isEqualToString: [FIRAuth auth].currentUser.uid]){
                     continue;
                 }
-                if([chatUser indexOfObject:chatUsers] == 0){
-                    tmp = [_myUserList objectForKey:chatUsers];
-                }else{
-                    NSString *username = [_myUserList objectForKey:chatUsers];
-                    if(username == nil) {
-                        NSLog(@"NIL USERNAME");
-                        username = @"NIL";
-                    }
-                    
-                    tmp = [tmp stringByAppendingString:@", "];
-                    tmp = [tmp stringByAppendingString:username];
+                NSString *username = [_myUserList objectForKey:chatUsers];
+                if(username == nil) {
+                    NSLog(@"NIL USERNAME");
+                    username = @"[Username]";
                 }
+                    
+                if(![tmp isEqualToString:@""]) {
+                    tmp = [tmp stringByAppendingString:@", "];
+                }
+                tmp = [tmp stringByAppendingString:username];                
             }
             [_userList addObject:tmp];
         }
@@ -503,6 +507,18 @@
          //If new User than create new Chat
          if(!findChat){
              NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
+            ;
+             
+             NSDictionary *chatInfo = @{@"img": @"",
+                                        @"lastMsg": @"",
+                                        @"lastMsgTs": @"",
+                                        @"userlist":  @{@"0": selectedUser,
+                                                        @"1": [FIRAuth auth].currentUser.uid}
+                                        };
+             
+             // add user to databse
+             [[[_ref child:@"chats"] child:key] setValue:chatInfo];
+             
              self.selectedChatId = key;
              self.selectedChatTitle = selectedUserName;
              self.selectedUserId = selectedUser;

@@ -126,7 +126,7 @@
     }
     
     [self getUsernames];
-    [self checkNewChat];
+    //[self checkNewChat];
 }
 
 /**
@@ -205,8 +205,14 @@
 - (void)reloadUserList {
     [[[_allChatsRef child:_chatId] child:@"userlist"] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         // update userlist
-        _chatUserlist = [NSMutableArray arrayWithArray:[[NSSet setWithArray:snapshot.value] allObjects]];
+        NSArray *newList = snapshot.value;
+        
+        if((id)newList == [NSNull null]) return; // Chat deleted?
+        
+        _chatUserlist = [NSMutableArray arrayWithArray:[[NSSet setWithArray:newList] allObjects]];
         BOOL oldIsGroup = _isGroup;
+        
+        
         _isGroup = [_chatUserlist count] > 2;
         
         if(oldIsGroup != _isGroup) {
@@ -391,6 +397,7 @@
 /**
  Send Message to Database
  */
+/*
 - (void)checkNewChat{
     //[] self.chatId
     _refAddChatHandle = [self.allChatsRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
@@ -406,6 +413,7 @@
         }
     }];
 }
+ */
 - (void)sendMessage:(NSDictionary *)msg withTimestamp:(NSString *)timestamp
 {
     // add message to databse
@@ -845,9 +853,10 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
         UIImage *image = info[UIImagePickerControllerOriginalImage];
         NSData *imageData = UIImageJPEGRepresentation(image, 0.8);
         NSString *imagePath =
-        [NSString stringWithFormat:@"%@/%lld.jpg",
+        [NSString stringWithFormat:@"%@/%lld/%@",
          [FIRAuth auth].currentUser.uid,
-         (long long) ([[NSDate date] timeIntervalSince1970] * 1000.0)];
+         (long long) ([[NSDate date] timeIntervalSince1970] * 1000.0),
+         [referenceURL lastPathComponent]];
         FIRStorageMetadata *metadata = [FIRStorageMetadata new];
         metadata.contentType = @"image/jpeg";
         [[self.storageRef child:imagePath] putData:imageData metadata:metadata

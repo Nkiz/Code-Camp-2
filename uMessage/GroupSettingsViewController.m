@@ -36,6 +36,12 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    NSLog(@"TouchEvent: end editing.");
+    [self.view endEditing:YES];
+    [super touchesBegan:touches withEvent:event];
+}
+
 /*
 #pragma mark - Navigation
 

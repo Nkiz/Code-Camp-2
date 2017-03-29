@@ -59,7 +59,7 @@
 }
 - (IBAction)addGroup:(id)sender {
     NSString *tmp;
-    NSMutableArray *tmpUserRelList = [[NSMutableArray alloc]init];
+    //NSMutableArray *tmpUserRelList = [[NSMutableArray alloc]init];
     for(int i=0; i < [_selectedGroupUsers count]; i++ ){
         NSIndexPath *loopPath = [NSIndexPath indexPathForRow:i inSection:0];
         ChatTableViewCell *cell = [_groupTable cellForRowAtIndexPath:loopPath];
@@ -90,7 +90,7 @@
             [_chatRef updateChildValues:childUpdates];
             NSMutableString * chatTitle;
             int counter = 0;
-            for(NSString* userName in tmpUserRelList){
+            for(NSString* userName in _myUserRelList){
                 for(FIRDataSnapshot *userRels in _myUserRels){
                     NSString *userId = userRels.key;
                     NSDictionary<NSString *, NSString *> *userRel = userRels.value;
@@ -116,12 +116,12 @@
         
     //For create new Chat
     }else if([self.openedBy isEqualToString:@"List"]){
-        [tmpUserRelList addObject:[FIRAuth auth].currentUser.uid];
+        [_myUserRelList addObject:[FIRAuth auth].currentUser.uid];
         NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
         NSDictionary *chatInfo = @{@"img": @"",
                                    @"lastMsg": @"",
                                    @"lastMsgTs": @"",
-                                   @"userlist": tmpUserRelList
+                                   @"userlist": _myUserRelList
                                    };
         NSDictionary *childUpdates = @{key: chatInfo};
         // add user to databse

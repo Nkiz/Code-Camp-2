@@ -172,7 +172,7 @@ static NSString *const kOK = @"OK";
 - (IBAction)registerTouchUpInside:(UIButton *)sender {
     [self.view endEditing:YES];
     
-    if(_registerEmailTextField.hasText && _registerNicknameTextField && _registerPasswordTextField.hasText) {
+    if(_registerEmailTextField.hasText && _registerNicknameTextField.hasText && _registerPasswordTextField.hasText) {
         [[FIRAuth auth] createUserWithEmail:_registerEmailTextField.text
                                    password:_registerPasswordTextField.text
                                  completion:^(FIRUser *_Nullable user,
