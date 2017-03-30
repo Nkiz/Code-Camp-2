@@ -461,7 +461,7 @@
     // open maps with location and username
     NSString *url = [NSString stringWithFormat:@"http://maps.apple.com/?t=m&q=%@&ll=%f,%f",  self.users[message[MessageUserID]], latitude, longitude];
     NSURL *targetURL = [NSURL URLWithString:url];
-    [[UIApplication sharedApplication] openURL:targetURL];
+    [[UIApplication sharedApplication] openURL:targetURL options:@{} completionHandler:nil];
 }
 
 /**

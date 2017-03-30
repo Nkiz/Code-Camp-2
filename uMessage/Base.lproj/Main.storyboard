@@ -12,7 +12,7 @@
         <!--Anmeldung-->
         <scene sceneID="snT-py-3hH">
             <objects>
-                <viewController storyboardIdentifier="DataViewController" title="Anmeldung" modalTransitionStyle="crossDissolve" id="S4R-Ja-viH" customClass="DataViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DataViewController" title="Anmeldung" modalTransitionStyle="crossDissolve" id="S4R-Ja-viH" customClass="LoginController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fXf-Jd-eTc"/>
                         <viewControllerLayoutGuide type="bottom" id="EPS-s9-h4K"/>

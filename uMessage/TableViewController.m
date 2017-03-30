@@ -10,7 +10,7 @@
 #import "ChatTableViewCell.h"
 #import "ChatViewController.h"
 #import "GroupViewController.h"
-#import "DataViewController.h"
+#import "LoginController.h"
 #import "ContactViewController.h"
 #import "SettingsViewController.h"
 
@@ -30,7 +30,7 @@
 @property (strong, nonatomic) NSMutableDictionary *myUserRel;
 @property (strong, nonatomic) NSMutableArray<NSString *> *userList;
 @property (strong, nonatomic) NSMutableArray<NSString *> *userArray;
-@property (strong, nonatomic) DataViewController *dv;
+@property (strong, nonatomic) LoginController *dv;
 @property (strong, nonatomic) IBOutlet UITabBar *uiBar;
 
 @property (weak, atomic) NSString *selectedChatId;
@@ -203,7 +203,7 @@
     //Handler for removed Chat from Chatslist
     [_chatRef observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
         NSString *chatId = snapshot.key;
-        NSString *chatData = snapshot.value;
+        //NSString *chatData = snapshot.value;
         int index = 0;
         for(int i=0; i < [_myMessages count]; i++){
             FIRDataSnapshot *chat = [_myMessages objectAtIndex:i];
@@ -319,7 +319,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     //Check if Chattable or Usertable
     if(tableView == _chatTableView){
-        BOOL myChat = false;
+        //BOOL myChat = false;
         // Dequeue cell
         ChatTableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"ChatTableViewCell"forIndexPath:indexPath];
         
@@ -464,10 +464,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
      if(tableView == _chatTableView){
-         NSString *selectedUser;
+         //NSString *selectedUser;
          // save selected chat id
          FIRDataSnapshot *messageSnapshot = _myMessages[indexPath.row];
-         NSMutableArray *userList = messageSnapshot.value[@"userlist"];
+         //NSMutableArray *userList = messageSnapshot.value[@"userlist"];
          /*if([userList count] == 2){
              selectedUser = [_myUserRels objectAtIndex:indexPath.row].key;
          }*/

@@ -6,12 +6,12 @@
 //  Copyright © 2017 Codecamp. All rights reserved.
 //
 
-#import "DataViewController.h"
+#import "LoginController.h"
 #import "TableViewController.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
 
-@interface DataViewController () <UITextFieldDelegate, UIScrollViewDelegate>
+@interface LoginController () <UITextFieldDelegate, UIScrollViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *uiView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -23,7 +23,7 @@
 
 @end
 
-@implementation DataViewController
+@implementation LoginController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -137,7 +137,6 @@
     }else{
         FIRUser *user = [FIRAuth auth].currentUser;
         NSLog(@"Loggin erfolgreich: UID %@", user.uid);
-        [self showMessagePrompt:@"Loggin erfolgreich"];
         /*printf(user.email.UTF8String);*/
         
         [[_userRef child:user.uid ] observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
@@ -199,8 +198,6 @@ static NSString *const kOK = @"OK";
                                          // add user to databse
                                          [[[_ref child:@"users"] child:user.uid] setValue:userInfo];
                                          NSLog(@"REGISTER: User added to database.");
-                                         
-                                         [self showMessagePrompt:@"User erstellt."];
                                      }
                                  }];
     }

@@ -119,7 +119,7 @@
     // save selected chat id
     NSArray *myUsers = [_myUserList allValues];
     NSArray *myUserIds = [_myUserList allKeys];
-    FIRDataSnapshot *userSnapshot = myUsers[indexPath.row];
+    //FIRDataSnapshot *userSnapshot = myUsers[indexPath.row];
     //self.selectedChatId     = userSnapshot.key;
     self.selectedChatTitle    = [myUsers objectAtIndex:indexPath.row];
     self.selectedUserId       = [myUserIds objectAtIndex:indexPath.row];

@@ -61,8 +61,8 @@
     NSString *tmp;
     //NSMutableArray *tmpUserRelList = [[NSMutableArray alloc]init];
     for(int i=0; i < [_selectedGroupUsers count]; i++ ){
-        NSIndexPath *loopPath = [NSIndexPath indexPathForRow:i inSection:0];
-        ChatTableViewCell *cell = [_groupTable cellForRowAtIndexPath:loopPath];
+        //NSIndexPath *loopPath = [NSIndexPath indexPathForRow:i inSection:0];
+        //ChatTableViewCell *cell = [_groupTable cellForRowAtIndexPath:loopPath];
         FIRDataSnapshot *snap = [_selectedGroupUsers objectAtIndex:i];
         
         NSString *userId = snap.key;
@@ -81,14 +81,13 @@
     if([self.openedBy isEqualToString:@"Chat"]){
         [[_chatRef child:_openedByChatId] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             NSDictionary<NSString *, NSString *> *userData = snapshot.value;
-            NSMutableArray<NSString*> *userDataList = [userData allValues];
             NSMutableArray *userList = snapshot.value[@"userlist"];
             [_myUserRelList addObjectsFromArray:userList];
             [userData setValue:_myUserRelList forKeyPath:@"userlist"];
             NSDictionary *childUpdates = @{_openedByChatId: userData};
             // add user to databse
             [_chatRef updateChildValues:childUpdates];
-            NSMutableString * chatTitle;
+            NSString *chatTitle;
             int counter = 0;
             for(NSString* userName in _myUserRelList){
                 for(FIRDataSnapshot *userRels in _myUserRels){
@@ -177,7 +176,7 @@
         for(int i=0; i < [_myUserRels count]; i++){
             FIRDataSnapshot *user = [_myUserRels objectAtIndex:i];
             NSString *userId = user.key;
-            NSDictionary<NSString *, NSString *> *userData = user.value;
+            //NSDictionary<NSString *, NSString *> *userData = user.value;
             if([userId isEqualToString:userRel]){
                 index = i;
                 break;
@@ -221,13 +220,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ChatTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    //ChatTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     FIRDataSnapshot *userSnapshot = _myUserRels[indexPath.row];
     [_selectedGroupUsers addObject:userSnapshot];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
-    ChatTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    //ChatTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     FIRDataSnapshot *userSnapshot = _myUserRels[indexPath.row];
     [_selectedGroupUsers removeObject:userSnapshot];
 }

@@ -14,7 +14,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *message;
 @property (strong, nonatomic) IBOutlet UIImageView *avatar;
 @property (strong, nonatomic) IBOutlet UILabel *date;
-@property (strong, nonatomic) IBOutlet UILabel *selected;
 
 - (void)setRead:(BOOL)read;
 @end

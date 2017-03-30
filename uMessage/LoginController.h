@@ -11,7 +11,7 @@
 @import Firebase;
 #import "Utils.h"
 
-@interface DataViewController : UIViewController
+@interface LoginController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UILabel *dataLabel;
 @property (strong, nonatomic) id dataObject;

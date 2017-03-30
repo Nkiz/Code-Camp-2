@@ -20,12 +20,14 @@
     {
       "orientation" : "portrait",
       "idiom" : "iphone",
+      "filename" : "iPhone 7 Copy 3@2x-2.png",
       "minimum-system-version" : "7.0",
       "scale" : "2x"
     },
     {
       "orientation" : "portrait",
       "idiom" : "iphone",
+      "filename" : "iPhone 7 Copy 3@2x-1.png",
       "minimum-system-version" : "7.0",
       "subtype" : "retina4",
       "scale" : "2x"
