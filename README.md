@@ -1,13 +1,8 @@
 # Code-Camp-2
 Repo for Java Code Camp2
 
-uMessage
+Instant-Messaging-System "uMessage"
 
-Hi Jungs! Da Daniel es mehrmals betonnte, habe ich jetzt die Testroutine übernommen. Ich will keinem aufn Kecks gehen aber es 
-sind schon schlimme Fehler in den Funktionalitäten. 
+Die gesamte Entwicklung fand unter macOS Sierra (Version 10.12.3) statt. Außerdem kam  Xcode der Version 8.2.1 als Entwicklungsumgebung zum Einsatz. Dabei wurde für alle Testvorgänge im eingebauten Xcode-Simulator ausschließlich das iPhone 7 mit iOS 10.2 verwendet, das auch als Ziel-Deployment und Zielgerät im Xcode-Projekt definiert sind.
 
-Im Moment bin ich mit meinen Tests komplett durch. Alles was ich gefunden habe, habe ich in Issues notiert und Issues selbst 
-als "bug" gesetzt.
-
-Beim ersten Test am Anfang stürtzte die App ab, wenn ich den "Nida"-User abmelden wollte. Den Fehler konnte ich aber nicht 
-erneut erzwingen, deswegen lasse ich es nur als Info hier stehen.
+Es wurden hauptsächlich die in einem einfachen Messenger-Applikation meist benötigten Funktionalitäten implementiert.
