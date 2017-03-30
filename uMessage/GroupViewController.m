@@ -59,10 +59,8 @@
 }
 - (IBAction)addGroup:(id)sender {
     NSString *tmp;
-    //NSMutableArray *tmpUserRelList = [[NSMutableArray alloc]init];
+    
     for(int i=0; i < [_selectedGroupUsers count]; i++ ){
-        //NSIndexPath *loopPath = [NSIndexPath indexPathForRow:i inSection:0];
-        //ChatTableViewCell *cell = [_groupTable cellForRowAtIndexPath:loopPath];
         FIRDataSnapshot *snap = [_selectedGroupUsers objectAtIndex:i];
         
         NSString *userId = snap.key;
@@ -75,7 +73,6 @@
             tmp = [tmp stringByAppendingString:[userRel valueForKey:@"username"]];
         }
     }
-    //tmpUserRelList = _myUserRelList;
     
     //For add User in existing Chat
     if([self.openedBy isEqualToString:@"Chat"]){
@@ -85,7 +82,8 @@
             [_myUserRelList addObjectsFromArray:userList];
             [userData setValue:_myUserRelList forKeyPath:@"userlist"];
             NSDictionary *childUpdates = @{_openedByChatId: userData};
-            // add user to databse
+            
+            // add user to database
             [_chatRef updateChildValues:childUpdates];
             NSString *chatTitle;
             int counter = 0;
@@ -109,8 +107,7 @@
             self.selectedUserId = [FIRAuth auth].currentUser.uid;
             self.selectedRow = 1;
             
-            //[self performSegueWithIdentifier:@"GroupToChat" sender:self];
-            [self performSegueWithIdentifier:@"GroupToList" sender:self]; // TEST: back to chat
+            [self performSegueWithIdentifier:@"GroupToList" sender:self]; // back to chat
         }];
         
     //For create new Chat
@@ -123,7 +120,7 @@
                                    @"userlist": _myUserRelList
                                    };
         NSDictionary *childUpdates = @{key: chatInfo};
-        // add user to databse
+        // add user to database
         [_chatRef updateChildValues:childUpdates];
         
         self.selectedChatId     = key;
@@ -145,14 +142,6 @@
         controller.chatTitle = _selectedChatTitle;
         controller.messageUser = _selectedUserId;
         controller.chatUserlist = _myUserRelList;
-        /*if(_selectedRow < [_myMessages count]){
-            controller.chatUserlist = _myMessages[_selectedRow].value[@"userlist"];
-        }else{
-            NSMutableArray *chatInfo = [[NSMutableArray alloc] init];
-            [chatInfo addObject:_selectedUserId];
-            [chatInfo addObject:[FIRAuth auth].currentUser.uid];
-            controller.chatUserlist = chatInfo;
-        }*/
     }
 }
 
@@ -176,7 +165,7 @@
         for(int i=0; i < [_myUserRels count]; i++){
             FIRDataSnapshot *user = [_myUserRels objectAtIndex:i];
             NSString *userId = user.key;
-            //NSDictionary<NSString *, NSString *> *userData = user.value;
+            
             if([userId isEqualToString:userRel]){
                 index = i;
                 break;
@@ -220,13 +209,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //ChatTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     FIRDataSnapshot *userSnapshot = _myUserRels[indexPath.row];
     [_selectedGroupUsers addObject:userSnapshot];
 }
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
-    //ChatTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     FIRDataSnapshot *userSnapshot = _myUserRels[indexPath.row];
     [_selectedGroupUsers removeObject:userSnapshot];
 }

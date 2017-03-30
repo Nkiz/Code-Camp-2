@@ -71,55 +71,43 @@
 
 - (void)loginTap:(UIGestureRecognizer *)gestureRecognizer
 {
+    // switch to login view
     _uiView.hidden = YES;
     _registerView.hidden = NO;
 }
 - (void)registerTap:(UIGestureRecognizer *)gestureRecognizer
 {
+    // switch to register view
     _registerView.hidden = YES;
     _uiView.hidden = NO;
     
 }
-
 
 -(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
     NSLog(@"Login unwind");
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+    // reset text input
     self.loginEmailTextField.text       = @"";
     self.loginPasswordTextField.text    = @"";
     self.registerEmailTextField.text    = @"";
     self.registerNicknameTextField.text = @"";
     self.registerPasswordTextField.text = @"";
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)dealloc {
     [[FIRAuth auth] removeAuthStateDidChangeListener:_handle];
-
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.dataLabel.text = [self.dataObject description];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWasShown:)
-                                                 name:UIKeyboardDidShowNotification object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillBeHidden:)
-                                                 name:UIKeyboardWillHideNotification object:nil];
-    
 }
 
 //Login Button clicked
@@ -154,7 +142,7 @@
 
 static NSString *const kOK = @"OK";
 
-// Zeige Popup Fenster mit OK Button an
+// Show Popup with OK button
 - (void)showMessagePrompt:(NSString *)message {
     UIAlertController *alert =
     [UIAlertController alertControllerWithTitle:nil
@@ -204,49 +192,10 @@ static NSString *const kOK = @"OK";
 }
 
 // hide keyboard if you touch outside
-// not working with ScrollView
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     NSLog(@"TouchEvent: end editing.");
     [self.view endEditing:YES];
     [super touchesBegan:touches withEvent:event];
-}
-
-- (void)keyboardWasShown:(NSNotification*)aNotification
-{
-    NSLog(@"Keyboard was shown.");
-    NSDictionary* info = [aNotification userInfo];
-    CGSize kbSize = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-    
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, kbSize.height, 0.0);
-    
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
-    
-    NSLog(@"Keyboard height is %f / %f", kbSize.height, self.uiView.frame.size.height);
-    
-    // If active text field is hidden by keyboard, scroll it so it's visible
-    // Your app might not need or want this behavior.
-    CGRect aRect = self.view.frame;
-    aRect.size.height -= kbSize.height;
-    
-    NSLog(@"Rectangle: %f , %f", aRect.origin.x, aRect.origin.y);
-    
-    NSLog(@"MailField: %f , %f", _activeField.frame.origin.x, _activeField.frame.origin.y);
-    
-    if (!CGRectContainsPoint(aRect, _activeField.frame.origin) ) {
-        NSLog(@"TextField hidden by keyboard");
-        // TODO: scroll to activeField
-        [self.scrollView scrollRectToVisible:_activeField.frame animated:YES];
-    }
-}
-
-// Called when the UIKeyboardWillHideNotification is sent
-- (void)keyboardWillBeHidden:(NSNotification*)aNotification
-{
-    NSLog(@"Keyboard will be hidden.");
-    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
-    self.scrollView.contentInset = contentInsets;
-    self.scrollView.scrollIndicatorInsets = contentInsets;
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -257,7 +206,7 @@ static NSString *const kOK = @"OK";
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    NSLog(@"TextField should return.");
+    // switch to next text field or send action
     if(textField == _registerEmailTextField) {
         [_registerNicknameTextField becomeFirstResponder];
     } else if(textField == _registerNicknameTextField) {

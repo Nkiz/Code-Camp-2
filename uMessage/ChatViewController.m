@@ -126,7 +126,6 @@
     }
     
     [self getUsernames];
-    //[self checkNewChat];
 }
 
 /**
@@ -184,7 +183,6 @@
     
     // show as navigation bar title
     self.navigationBar.topItem.title = title;
-    //self.navigationBar.topItem.title = _chatTitle;
 }
 
 - (void)checkNewUsers
@@ -197,7 +195,7 @@
     
     [[[_allChatsRef child:_chatId] child:@"userlist"] observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         // Bug: Firebase sends wrong userID
-        // Reload complete userList and find new users
+        // Reload complete userList and remove users
         [self reloadUserList];
     }];
 }
@@ -339,7 +337,7 @@
 // Show menu, when add new contact button in alert dialog is pressed.
 */
 - (IBAction)addButtonPressed:(id)sender {
-    //opened Bye
+    //opened By
     [self performSegueWithIdentifier:@"ChatToGroup" sender:self];
     NSLog(@"AddButton pressed");
 }
@@ -350,13 +348,14 @@
 - (IBAction)leaveGroup:(id)sender {
     [[_allChatsRef child:_chatId] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         NSDictionary<NSString *, NSString *> *userData = snapshot.value;
-        //NSMutableArray<NSString*> *userDataList = [userData allValues];
+        
+        // remove my id from userlist
         NSMutableArray *userList = snapshot.value[@"userlist"];
-        //[tmpUserRelList addObjectsFromArray:userList];
         [userList removeObject:[FIRAuth auth].currentUser.uid];
         [userData setValue:userList forKeyPath:@"userlist"];
+        
         NSDictionary *childUpdates = @{_chatId: userData};
-        // add user to databse
+        // update chat in database
         [_allChatsRef updateChildValues:childUpdates];
         [self performSegueWithIdentifier:@"unwindToList" sender:self];
         [self.allChatsRef removeObserverWithHandle:_refAddChatHandle];
@@ -394,26 +393,6 @@
     [self.chatMsg becomeFirstResponder];
 }
 
-/**
- Send Message to Database
- */
-/*
-- (void)checkNewChat{
-    //[] self.chatId
-    _refAddChatHandle = [self.allChatsRef observeEventType:FIRDataEventTypeChildAdded withBlock:^(FIRDataSnapshot *snapshot) {
-        NSDictionary<NSString *, NSString *> *chat = snapshot.value;
-        NSArray *userListArr = [ chat objectForKey:@"userlist"];
-        NSString *lstMsg     = [ chat objectForKey:@"lastMsg"];
-        
-        if(userListArr == nil){
-            NSDictionary *userList =  @{@"0":_messageUser,
-                                        @"1": [FIRAuth auth].currentUser.uid};
-            NSDictionary *childUpdates = @{[NSString stringWithFormat:@"/chats/%@/userlist/", self.chatId]: userList};
-            [self.ref updateChildValues:childUpdates];
-        }
-    }];
-}
- */
 - (void)sendMessage:(NSDictionary *)msg withTimestamp:(NSString *)timestamp
 {
     // add message to databse
@@ -549,6 +528,7 @@
                                                  timeStyle:NSDateFormatterNoStyle];
     }
     
+    // add check mark if msg is read
     if(myMsg && [self checkIsReadByAll:messageSnapshot]) {
         timeStr = [@"✓ " stringByAppendingString:timeStr];
     }
@@ -573,15 +553,18 @@
 // Download image to documents
 -(void)getImage:(NSString *)url withImageView:(UIImageView *)imageView
 {
+    // get folder and file name
     //   0   1 2                          3                            4             5
     // @""gs://umessage-80185.appspot.com/DNZPu76tgmb5bvPJAvDMiq6RhYb2/1487939843972/asset.JPG"";
     NSArray *urlComponents = [url componentsSeparatedByString:@"/"];
     
+    // get local path
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = paths[0];
     NSString *filePath = [NSString stringWithFormat:@"file:%@/%@/%@/%@", documentsDirectory, urlComponents[3], urlComponents[4], urlComponents[5]];
     NSURL *fileURL = [NSURL URLWithString:filePath];
     
+    // load from documents or download image is file does not exist
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
         NSLog(@"Load image from documents");
         imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
@@ -746,18 +729,6 @@
                                 // close menu
                                 [view dismissViewControllerAnimated:YES completion:nil];
                             }];
-    /*
-    // send voice message
-    UIAlertAction *voice = [UIAlertAction
-                            actionWithTitle:SendVoiceString
-                            style:UIAlertActionStyleDefault
-                            handler:^(UIAlertAction *action) {
-                                // TODO: voice msg
-                                
-                                // close menu
-                                [view dismissViewControllerAnimated:YES completion:nil];
-                            }];
-    */
      
     // send current location
     UIAlertAction *location = [UIAlertAction
@@ -1005,9 +976,7 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info {
     if ([[segue identifier] isEqualToString:@"GroupToSettings"])
     {
         GroupSettingsViewController *controller = [segue destinationViewController];
-        //controller.openedBy = @"Chat";
         controller.openedByChatId = self.chatId;
-        //controller.chatUserlist = self.chatUserlist;
     }
 }
 

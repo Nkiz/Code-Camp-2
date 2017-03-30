@@ -70,6 +70,7 @@
     _myUserRels = [[NSMutableArray alloc] init];
     _myChatList = [[NSMutableArray alloc] init];
     _myUserList = [NSMutableDictionary dictionary];
+    
     [_chatTableView registerClass:[ChatTableViewCell class]forCellReuseIdentifier:@"ChatTableViewCell"];
     [_contactTableView registerClass:[ChatTableViewCell class]forCellReuseIdentifier:@"ChatTableViewCell"];
     [self fillContactList];
@@ -81,10 +82,6 @@
 {
     return UIStatusBarStyleLightContent;
 }
-
-/*-(void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    NSLog(@"test");
-}*/
 
 -(void)tabBar:(UITabBar *)uiBar didSelectItem:(UITabBarItem *)item{
     if([item.title isEqualToString:@"Chats"]){
@@ -155,7 +152,7 @@
                         // Get user value
                         
                         NSDictionary<NSString *, NSString *> *userData = snapshot.value;
-                        //NSString *tmpUser = snapshot.key;
+
                         [_myUserList setObject:[userData objectForKey:@"username"] forKey:snapshot.key];
                         if([_myUserList count] == [_myUserIdList count]){
                             [self fillChatList];
@@ -203,7 +200,6 @@
     //Handler for removed Chat from Chatslist
     [_chatRef observeEventType:FIRDataEventTypeChildRemoved withBlock:^(FIRDataSnapshot *snapshot) {
         NSString *chatId = snapshot.key;
-        //NSString *chatData = snapshot.value;
         int index = 0;
         for(int i=0; i < [_myMessages count]; i++){
             FIRDataSnapshot *chat = [_myMessages objectAtIndex:i];
@@ -297,7 +293,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -319,7 +314,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     //Check if Chattable or Usertable
     if(tableView == _chatTableView){
-        //BOOL myChat = false;
         // Dequeue cell
         ChatTableViewCell *cell = [_chatTableView dequeueReusableCellWithIdentifier:@"ChatTableViewCell"forIndexPath:indexPath];
         
@@ -389,15 +383,18 @@
 
 +(void)getAvatar:(NSString *)url withImageView:(UIImageView *)imageView
 {
+    // get folder and file name
     //   0   1 2                         3       4
     // @"gs://umessage-80185.appspot.com/avatars/THb9zYI7DPbtOieCFXLn0TmPLfh1.png";
     NSArray *urlComponents = [url componentsSeparatedByString:@"/"];
     
+    // get local path
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = paths[0];
     NSString *filePath = [NSString stringWithFormat:@"file:%@/%@/%@", documentsDirectory, urlComponents[3], urlComponents[4]];
     NSURL *fileURL = [NSURL URLWithString:filePath];
     
+    // use local image or download if file not found
     if ([[NSFileManager defaultManager] fileExistsAtPath:fileURL.path]) {
         imageView.image = [UIImage imageWithContentsOfFile:fileURL.path];
     } else {
@@ -464,17 +461,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
      if(tableView == _chatTableView){
-         //NSString *selectedUser;
          // save selected chat id
          FIRDataSnapshot *messageSnapshot = _myMessages[indexPath.row];
-         //NSMutableArray *userList = messageSnapshot.value[@"userlist"];
-         /*if([userList count] == 2){
-             selectedUser = [_myUserRels objectAtIndex:indexPath.row].key;
-         }*/
-         //NSString *selectedUser = messageSnapshot.value[@"userlist"];
          self.selectedChatId     = messageSnapshot.key;
          self.selectedChatTitle  = [_userList objectAtIndex:indexPath.row];
-         //self.selectedUserId = selectedUser;
          self.selectedRow = indexPath.row;
     
          // open chat
@@ -496,7 +486,7 @@
                      self.selectedChatId = [_myMessages objectAtIndex: i].key;
                      self.selectedChatTitle = selectedUserName;
                      self.selectedUserId = selectedUser;
-                     self.selectedRow = i; //indexPath.row;
+                     self.selectedRow = i;
                      break;
                  }
              }
@@ -507,7 +497,6 @@
          //If new User than create new Chat
          if(!findChat){
              NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
-            ;
              
              NSDictionary *chatInfo = @{@"img": @"",
                                         @"lastMsg": @"",
@@ -516,13 +505,13 @@
                                                         @"1": [FIRAuth auth].currentUser.uid}
                                         };
              
-             // add user to databse
+             // add chat to database
              [[[_ref child:@"chats"] child:key] setValue:chatInfo];
              
              self.selectedChatId = key;
              self.selectedChatTitle = selectedUserName;
              self.selectedUserId = selectedUser;
-             self.selectedRow = 9999; // fix? //indexPath.row;
+             self.selectedRow = 9999;
          }
          [self performSegueWithIdentifier:@"ListToChat" sender:self];
          
@@ -561,8 +550,7 @@
     }
     if([[segue identifier] isEqualToString:@"ListToSettings"])
     {
-        //SettingsViewController *controller = [segue destinationViewController];
-        //controller.openedBy = @"Settings";
+        // do nothing
     }
     
 }
@@ -578,7 +566,6 @@
                              style:UIAlertActionStyleDefault
                              handler:^(UIAlertAction * action)
                              {
-                                 // TODO: New Contact
                                  [self performSegueWithIdentifier: @"ListToContact" sender: self];
                                  // close menu
                                  [view dismissViewControllerAnimated:YES completion:nil];
@@ -591,7 +578,6 @@
                                  style:UIAlertActionStyleDefault
                                  handler:^(UIAlertAction * action)
                                  {
-                                     // TODO: New Group
                                      [self performSegueWithIdentifier: @"ListToGroup" sender: self];
                                      // close menu
                                      [view dismissViewControllerAnimated:YES completion:nil];
@@ -601,7 +587,6 @@
                                style:UIAlertActionStyleDefault
                                handler:^(UIAlertAction * action)
                                {
-                                   // TODO: Settings
                                    [self performSegueWithIdentifier: @"ListToSettings" sender: self];
                                    
                                    // close menu

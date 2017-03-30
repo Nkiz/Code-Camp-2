@@ -119,8 +119,6 @@
     // save selected chat id
     NSArray *myUsers = [_myUserList allValues];
     NSArray *myUserIds = [_myUserList allKeys];
-    //FIRDataSnapshot *userSnapshot = myUsers[indexPath.row];
-    //self.selectedChatId     = userSnapshot.key;
     self.selectedChatTitle    = [myUsers objectAtIndex:indexPath.row];
     self.selectedUserId       = [myUserIds objectAtIndex:indexPath.row];
     
@@ -169,13 +167,9 @@
             }
         }
         if(!findChat){
-            //Todo neuer Chat
             NSString *key = [[_chatRef child:@"chats"] childByAutoId].key;
             controller.chatId = key;
-            //controller.chatTitle = @"test";
-            /*NSDictionary *userListForChat = @{@"0": _selectedUserId,
-                                              @"1": [FIRAuth auth].currentUser.uid
-                                              };*/
+            
             NSMutableArray *tmpUserList = [[NSMutableArray alloc] init];
             [tmpUserList addObject:_selectedUserId];
             [tmpUserList addObject:[FIRAuth auth].currentUser.uid];
@@ -189,7 +183,7 @@
                                                @"1": [FIRAuth auth].currentUser.uid}
                                        };
             NSDictionary *childUpdates = @{key: chatInfo};
-            // add user to databse
+            // add chat to database
             [_chatRef updateChildValues:childUpdates];
 
         }

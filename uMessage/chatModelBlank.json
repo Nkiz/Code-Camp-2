@@ -1,24 +1,32 @@
 {
     "chats": {
-        "chatId": {
-            "userlist": ["",""],
-            "messageList": {
-                "msgId": {
-                    "msgText": "",
-                    "msgTs": "",
-                    "userId": "",
-                    "imgUrl": "",
-                    "vidUrl": "",
-                    "attUrl": "",
-                    "voiceUrl": "",
-                    "gpsCoord": "",
-                    "readList": ["",""]
-                }
+        "CHATID": {
+            "userlist": ["USERID","USERID2"],
+            "lastMsg": "",
+            "lastMsgTs": "",
+            "img": ""
+        }
+    },
+    "messages": {
+        "CHATID": {
+            "MSGID": {
+                "msgText": "",
+                "msgTs": "",
+                "imgUrl": "",
+                "gpsCoord": "",
+                "userid": "",
+                "readList": ["USERID","USERID2"]
             }
         }
     },
+    "userRel": {
+        "USERID": {
+            "USERID2": "true",
+            "USERID3": "true"
+        }
+    },
     "users": {
-        "userId": {
+        "USERID": {
             "email": "",
             "username": "",
             "profileImg": "",
